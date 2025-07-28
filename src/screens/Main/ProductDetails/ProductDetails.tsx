@@ -20,8 +20,14 @@ import {
   BottomSheetView,
   BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet';
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
-import {Header, SectionItem, SectionView} from '../../../components';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { Header, SectionItem, SectionView } from '../../../components';
 import Colors from '../../../Theme/Colors';
 import {
   useGetProductDetails,
@@ -36,20 +42,20 @@ import {
   useGetRelatedProducts,
   useGetProductVideo,
 } from '../../../Api/hooks';
-import {getHeight, getWidth} from '../../../Theme/Constants';
+import { getHeight, getWidth, lightenColor } from '../../../Theme/Constants';
 import PagerView from 'react-native-pager-view';
 import CommonStyles from '../../../Theme/CommonStyles';
 import images from '../../../assets/Images';
 import QuantityModal from './QuantityModal';
 import screens from '../../../Navigation/screens';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../../../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 import RenderHtml from 'react-native-render-html';
-import {Toast} from 'react-native-toast-message/lib/src/Toast';
+import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import NotifyMeModal from './NotifyMeModal';
-import {useTranslation} from 'react-i18next';
-import {formatPrice} from '../../../Utils';
+import { useTranslation } from 'react-i18next';
+import { formatPrice } from '../../../Utils';
 import SvgIcon from '../../../assets/SvgIcon';
 import icons from '../../../assets/icons';
 import RNPickerSelect from 'react-native-picker-select';
@@ -67,29 +73,30 @@ import BottomSheet from '../MyOrder/BottomSheetOrderTrack';
 import AnimatedLottieView from 'lottie-react-native';
 import Animations from '../../../assets/Animations';
 import Translation from '../../../assets/i18n/Translation';
-import {Dropdown} from 'react-native-element-dropdown';
+import { Dropdown } from 'react-native-element-dropdown';
 import strings from '../../../assets/i18n/strings';
-import {AppEventsLogger} from 'react-native-fbsdk-next';
-import {ImageZoom} from '@likashefqet/react-native-image-zoom';
+import { AppEventsLogger } from 'react-native-fbsdk-next';
+import { ImageZoom } from '@likashefqet/react-native-image-zoom';
 import filterUniqueItem from '../../../helpers/filterUniqueItem';
 import UltraOptimizedBanner from '../../../test';
+import LinearGradient from 'react-native-linear-gradient';
 
-const ProductDetails = ({route, navigation}: any) => {
-  const tabRef = useRef<any>();
+const ProductDetails = ({ route, navigation }: any) => {
+  const tabRef = useRef<any>('');
   const {
     handle = '',
     selectedVariantId = null,
     pageNavigation = '',
   } = route?.params ? route?.params : {};
 
-  const {productImages}: any = useGetProductImages(handle);
-  const {productDetails, loading}: any = useGetProductDetails(handle);
-  const {productVideo}: any = useGetProductVideo(productDetails?.id);
-  const {frequentlyBroughtItem, getFrequentlyBroughtItem}: any =
+  const { productImages }: any = useGetProductImages(handle);
+  const { productDetails, loading }: any = useGetProductDetails(handle);
+  const { productVideo }: any = useGetProductVideo(productDetails?.id);
+  const { frequentlyBroughtItem, getFrequentlyBroughtItem }: any =
     useFetchFrequenltyBroughtItem();
-  const {response, notify}: any = useNotifiyMe();
-  const {dealLoading, deals, getDeals, setDeals}: any = useDealBlock();
-  const {addCartData, addToCart, addToCartFrequentlyBought}: any =
+  const { response, notify }: any = useNotifiyMe();
+  const { dealLoading, deals, getDeals, setDeals }: any = useDealBlock();
+  const { addCartData, addToCart, addToCartFrequentlyBought }: any =
     useAddToCart();
   const [selectedIndex, setSelectedIndex] = useState<any>(0);
   const [quantityModal, setModalOpen] = useState(false);
@@ -114,9 +121,9 @@ const ProductDetails = ({route, navigation}: any) => {
     useState<any>(false);
   const [freqItems, setFreqItems] = useState<any>([]);
   const [addOnList, setAddOnList] = useState<any>([]);
-  const {cartDetails, getCartData}: any = useGetCart();
-  const {count} = useSelector((state: RootState) => state.CartReducer);
-  const {t} = useTranslation();
+  const { cartDetails, getCartData }: any = useGetCart();
+  const { count } = useSelector((state: RootState) => state.CartReducer);
+  const { t } = useTranslation();
   const flatListRef0 = useRef(null);
   const flatListRef = useRef(null);
   const [webViewHeight, setWebViewHeight] = useState(300);
@@ -125,7 +132,7 @@ const ProductDetails = ({route, navigation}: any) => {
   const [variantColor, setVariantColor] = useState('');
   const [variantSize, setVariantSize] = useState('');
   const [handleId, setHandleId] = useState<string>('');
-  const {relatedProducts, getRelatedProducts}: any = useGetRelatedProducts();
+  const { relatedProducts, getRelatedProducts }: any = useGetRelatedProducts();
   const [isPlaying, setIsPlaying] = useState(true);
   const [value, setValue] = useState(null);
   const [bundleModal, setBundleModal] = useState(false);
@@ -276,10 +283,10 @@ const ProductDetails = ({route, navigation}: any) => {
   useEffect(() => {
     if (deals) {
       const newArray = deals.dealBars.map((item: any, i: any) => {
-        return {...item, selected: quantity === item.quantity};
+        return { ...item, selected: quantity === item.quantity };
       });
 
-      setDeals({...deals, dealBars: newArray});
+      setDeals({ ...deals, dealBars: newArray });
     }
   }, [quantity]);
 
@@ -447,7 +454,7 @@ const ProductDetails = ({route, navigation}: any) => {
   };
   const addToCartWithAddOn = async () => {
     // Initialize lineItems as an array
-    const lineItems: {merchandiseId: string; quantity: number}[] = [];
+    const lineItems: { merchandiseId: string; quantity: number }[] = [];
 
     // Add the main product to lineItems
     lineItems.push({
@@ -600,13 +607,13 @@ const ProductDetails = ({route, navigation}: any) => {
   }, [variantList, variantLists]);
 
   const selectVariantItem = useCallback(
-    ({value = null, name = 'Color', selected = []}: any) => {
+    ({ value = null, name = 'Color', selected = [] }: any) => {
       let options = [...selected?.node?.selectedOptions];
       let variantOptionIndex = selected?.node?.selectedOptions.findIndex(
         (option: any) => option?.name == name,
       );
       if (variantOptionIndex !== -1) {
-        options[variantOptionIndex] = {name: name, value: value};
+        options[variantOptionIndex] = { name: name, value: value };
       }
       let variantIndex = variantList.findIndex(
         (variantItem: any) =>
@@ -688,8 +695,19 @@ const ProductDetails = ({route, navigation}: any) => {
   return (
     <BottomSheetModalProvider>
       <View
-        style={[CommonStyles.containerFlex1, {backgroundColor: Colors.white}]}>
-        <View style={styles.container}>
+        style={[CommonStyles.containerFlex1, { backgroundColor: Colors.white }]}
+      >
+        <LinearGradient
+          colors={[
+            lightenColor(Colors.yellow, 10),
+
+            lightenColor(Colors.yellow, 80),
+          ]}
+          style={{
+            minHeight: getHeight(10),
+            paddingTop: getWidth(10),
+          }}
+        >
           <Header
             title={productDetails?.title}
             cartCount={count}
@@ -697,6 +715,8 @@ const ProductDetails = ({route, navigation}: any) => {
             page="details"
             pageNavigation={pageNavigation}
           />
+        </LinearGradient>
+        <View style={styles.container}>
           {(variant != undefined || variant != null) && (
             <>
               {!loading ? (
@@ -704,13 +724,15 @@ const ProductDetails = ({route, navigation}: any) => {
                   showsHorizontalScrollIndicator={false}
                   showsVerticalScrollIndicator={false}
                   nestedScrollEnabled
-                  contentContainerStyle={{paddingBottom: getHeight(7)}}>
+                  contentContainerStyle={{ paddingBottom: getHeight(7) }}
+                >
                   <PagerView
                     style={styles.imageContainer}
                     onPageSelected={e => {
                       setSelectedIndex(e.nativeEvent.position);
                     }}
-                    ref={tabRef}>
+                    ref={tabRef}
+                  >
                     {productImages &&
                       productImages.map((item: any, index: number) => {
                         if (item?.node?.mediaContentType === 'IMAGE') {
@@ -719,7 +741,8 @@ const ProductDetails = ({route, navigation}: any) => {
                               style={{
                                 position: 'relative',
                                 height: '100%',
-                              }}>
+                              }}
+                            >
                               <ImageZoom
                                 uri={item?.node?.image?.url}
                                 key={index}
@@ -745,7 +768,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                   right: 0,
                                   display: 'flex',
                                   alignItems: 'flex-end',
-                                }}>
+                                }}
+                              >
                                 <TouchableOpacity
                                   style={{
                                     marginTop: getWidth(35),
@@ -754,10 +778,11 @@ const ProductDetails = ({route, navigation}: any) => {
                                     borderRadius: 8,
                                     backgroundColor: '#FCFBFA',
                                   }}
-                                  onPress={() => onShare()}>
+                                  onPress={() => onShare()}
+                                >
                                   <Image
                                     source={images?.share3}
-                                    style={{width: 25, height: 25}}
+                                    style={{ width: 25, height: 25 }}
                                   />
                                 </TouchableOpacity>
                               </View>
@@ -769,7 +794,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                     left: 0,
                                     right: 0,
                                     bottom: 0,
-                                  }}>
+                                  }}
+                                >
                                   <UltraOptimizedBanner
                                     paddingHorizontal={5.5}
                                     paddingVertical={2.5}
@@ -806,25 +832,28 @@ const ProductDetails = ({route, navigation}: any) => {
                       })}
                   </View>
                   <Text style={styles.titleTxt}>{productDetails?.title}</Text>
-                  <View style={[{marginTop: 16}]}>
+                  <View style={[{ marginTop: 16 }]}>
                     {variantToShow?.node?.selectedOptions?.map(
                       (item: any, idx: number) =>
                         item?.name !== 'Size' ? (
                           <View
                             key={idx}
-                            style={{flexDirection: 'row', marginRight: 6}}>
+                            style={{ flexDirection: 'row', marginRight: 6 }}
+                          >
                             <Text
                               style={[
                                 styles.variantTitle,
-                                {fontWeight: '500'},
-                              ]}>
+                                { fontWeight: '500' },
+                              ]}
+                            >
                               {item?.name != 'Title' ? item?.name : ''}{' '}
                             </Text>
                             <Text
                               style={[
                                 styles.variantValue,
-                                {fontWeight: '500'},
-                              ]}>
+                                { fontWeight: '500' },
+                              ]}
+                            >
                               {item?.value != 'Default Title'
                                 ? item?.value
                                 : ''}
@@ -837,7 +866,7 @@ const ProductDetails = ({route, navigation}: any) => {
                     variantList.length > 1 &&
                     variantToShow?.length >= 0 &&
                     productHasVariantSize(variantList, 'Color') && (
-                      <View style={[{marginTop: 16}]}>
+                      <View style={[{ marginTop: 16 }]}>
                         {variant?.node?.selectedOptions.map((item: any) => (
                           <>
                             {item?.name === 'Color' ? (
@@ -845,20 +874,23 @@ const ProductDetails = ({route, navigation}: any) => {
                                 style={{
                                   flexDirection: 'row',
                                   marginRight: 6,
-                                }}>
+                                }}
+                              >
                                 <Text
                                   style={[
                                     styles.variantTitle,
-                                    {fontWeight: '500'},
-                                  ]}>
+                                    { fontWeight: '500' },
+                                  ]}
+                                >
                                   {item?.name != 'Title' ? item?.name : ''}
                                   {''}:
                                 </Text>
                                 <Text
                                   style={[
                                     styles.variantValue,
-                                    {fontWeight: '500'},
-                                  ]}>
+                                    { fontWeight: '500' },
+                                  ]}
+                                >
                                   {item?.value != 'Default Title'
                                     ? item?.value
                                     : ''}
@@ -873,7 +905,7 @@ const ProductDetails = ({route, navigation}: any) => {
                     <FlatList
                       horizontal
                       data={variantToShow}
-                      renderItem={({item, index}) => {
+                      renderItem={({ item, index }) => {
                         let color = item?.node?.selectedOptions.find(
                           (variantOptions: any) =>
                             variantOptions.name == 'Color',
@@ -894,7 +926,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                     selected: variant,
                                   })
                                 : setSelectedVariant(index)
-                            }>
+                            }
+                          >
                             <View
                               style={{
                                 borderWidth:
@@ -911,7 +944,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                 margin: getWidth(50),
                                 opacity:
                                   item?.node?.quantityAvailable > 0 ? 1 : 0.5,
-                              }}>
+                              }}
+                            >
                               <Image
                                 resizeMode="stretch"
                                 style={styles.varientImage}
@@ -931,7 +965,7 @@ const ProductDetails = ({route, navigation}: any) => {
                     pcsToShow.length >= 0 &&
                     productHasVariantSize(variantList, 'PCS') && (
                       <>
-                        <View style={[{marginTop: 16}]}>
+                        <View style={[{ marginTop: 16 }]}>
                           {variant?.node?.selectedOptions.map((item: any) => (
                             <>
                               {item?.name === 'PCS' ? (
@@ -939,20 +973,23 @@ const ProductDetails = ({route, navigation}: any) => {
                                   style={{
                                     flexDirection: 'row',
                                     marginRight: 6,
-                                  }}>
+                                  }}
+                                >
                                   <Text
                                     style={[
                                       styles.variantTitle,
-                                      {fontWeight: '500'},
-                                    ]}>
+                                      { fontWeight: '500' },
+                                    ]}
+                                  >
                                     {item?.name != 'Title' ? item?.name : ''}
                                     {''}
                                   </Text>
                                   <Text
                                     style={[
                                       styles.variantValue,
-                                      {fontWeight: '500'},
-                                    ]}>
+                                      { fontWeight: '500' },
+                                    ]}
+                                  >
                                     {item?.value != 'Default Title'
                                       ? item?.value
                                       : ''}
@@ -967,7 +1004,7 @@ const ProductDetails = ({route, navigation}: any) => {
                           horizontal
                           showsHorizontalScrollIndicator={false}
                           data={pcsToShow}
-                          renderItem={({item, index}) => {
+                          renderItem={({ item, index }) => {
                             let PCS = item?.node?.selectedOptions.find(
                               (variantOptions: any) =>
                                 variantOptions.name === 'PCS',
@@ -986,7 +1023,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                     name: 'PCS',
                                     selected: variant,
                                   });
-                                }}>
+                                }}
+                              >
                                 <View
                                   style={{
                                     borderWidth: 2,
@@ -1006,8 +1044,9 @@ const ProductDetails = ({route, navigation}: any) => {
                                       item?.node?.quantityAvailable > 0
                                         ? 1
                                         : 0.5,
-                                  }}>
-                                  <Text style={{color: Colors.black}}>
+                                  }}
+                                >
+                                  <Text style={{ color: Colors.black }}>
                                     {PCS}
                                   </Text>
                                 </View>
@@ -1022,7 +1061,7 @@ const ProductDetails = ({route, navigation}: any) => {
                     sizeToShow.length >= 0 &&
                     productHasVariantSize(variantList, 'Size') && (
                       <>
-                        <View style={[{marginTop: 16}]}>
+                        <View style={[{ marginTop: 16 }]}>
                           {variant?.node?.selectedOptions.map((item: any) => (
                             <>
                               {item?.name === 'Size' ? (
@@ -1030,20 +1069,23 @@ const ProductDetails = ({route, navigation}: any) => {
                                   style={{
                                     flexDirection: 'row',
                                     marginRight: 6,
-                                  }}>
+                                  }}
+                                >
                                   <Text
                                     style={[
                                       styles.variantTitle,
-                                      {fontWeight: '500'},
-                                    ]}>
+                                      { fontWeight: '500' },
+                                    ]}
+                                  >
                                     {item?.name != 'Title' ? item?.name : ''}
                                     {''}
                                   </Text>
                                   <Text
                                     style={[
                                       styles.variantValue,
-                                      {fontWeight: '500'},
-                                    ]}>
+                                      { fontWeight: '500' },
+                                    ]}
+                                  >
                                     {item?.value != 'Default Title'
                                       ? item?.value
                                       : ''}
@@ -1058,7 +1100,7 @@ const ProductDetails = ({route, navigation}: any) => {
                           horizontal
                           showsHorizontalScrollIndicator={false}
                           data={sizeToShow}
-                          renderItem={({item, index}) => {
+                          renderItem={({ item, index }) => {
                             let size = item?.node?.selectedOptions.find(
                               (variantOptions: any) =>
                                 variantOptions.name === 'Size',
@@ -1077,7 +1119,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                     name: 'Size',
                                     selected: variant,
                                   });
-                                }}>
+                                }}
+                              >
                                 <View
                                   style={{
                                     borderWidth: 2,
@@ -1097,8 +1140,9 @@ const ProductDetails = ({route, navigation}: any) => {
                                       item?.node?.quantityAvailable > 0
                                         ? 1
                                         : 0.5,
-                                  }}>
-                                  <Text style={{color: Colors.black}}>
+                                  }}
+                                >
+                                  <Text style={{ color: Colors.black }}>
                                     {size}
                                   </Text>
                                 </View>
@@ -1113,7 +1157,7 @@ const ProductDetails = ({route, navigation}: any) => {
                     layerToShow?.length >= 0 &&
                     productHasVariantSize(variantList, 'Layer') && (
                       <>
-                        <View style={[{marginTop: 16}]}>
+                        <View style={[{ marginTop: 16 }]}>
                           {variant?.node?.selectedOptions.map((item: any) => (
                             <>
                               {item?.name === 'Layer' ? (
@@ -1121,20 +1165,23 @@ const ProductDetails = ({route, navigation}: any) => {
                                   style={{
                                     flexDirection: 'row',
                                     marginRight: 6,
-                                  }}>
+                                  }}
+                                >
                                   <Text
                                     style={[
                                       styles.variantTitle,
-                                      {fontWeight: '500'},
-                                    ]}>
+                                      { fontWeight: '500' },
+                                    ]}
+                                  >
                                     {item?.name != 'Title' ? item?.name : 'nsb'}
                                     {''}
                                   </Text>
                                   <Text
                                     style={[
                                       styles.variantValue,
-                                      {fontWeight: '500'},
-                                    ]}>
+                                      { fontWeight: '500' },
+                                    ]}
+                                  >
                                     {item?.value != 'Default Title'
                                       ? item?.value
                                       : ''}
@@ -1149,7 +1196,7 @@ const ProductDetails = ({route, navigation}: any) => {
                           horizontal
                           showsHorizontalScrollIndicator={false}
                           data={layerToShow}
-                          renderItem={({item, index}) => {
+                          renderItem={({ item, index }) => {
                             let Layer = item?.node?.selectedOptions.find(
                               (variantOptions: any) =>
                                 variantOptions.name === 'Layer',
@@ -1168,7 +1215,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                     name: 'Layer',
                                     selected: variant,
                                   });
-                                }}>
+                                }}
+                              >
                                 <View
                                   style={{
                                     borderWidth: 2,
@@ -1188,8 +1236,9 @@ const ProductDetails = ({route, navigation}: any) => {
                                       item?.node?.quantityAvailable > 0
                                         ? 1
                                         : 0.5,
-                                  }}>
-                                  <Text style={{color: Colors.black}}>
+                                  }}
+                                >
+                                  <Text style={{ color: Colors.black }}>
                                     {Layer}
                                   </Text>
                                 </View>
@@ -1205,7 +1254,7 @@ const ProductDetails = ({route, navigation}: any) => {
                     modelToShow?.length >= 0 &&
                     productHasVariantSize(variantList, 'Model') && (
                       <>
-                        <View style={[{marginTop: 16}]}>
+                        <View style={[{ marginTop: 16 }]}>
                           {variant?.node?.selectedOptions.map((item: any) => (
                             <>
                               {item?.name === 'Model' ? (
@@ -1213,20 +1262,23 @@ const ProductDetails = ({route, navigation}: any) => {
                                   style={{
                                     flexDirection: 'row',
                                     marginRight: 6,
-                                  }}>
+                                  }}
+                                >
                                   <Text
                                     style={[
                                       styles.variantTitle,
-                                      {fontWeight: '500'},
-                                    ]}>
+                                      { fontWeight: '500' },
+                                    ]}
+                                  >
                                     {item?.name != 'Title' ? item?.name : 'nsb'}
                                     {''}
                                   </Text>
                                   <Text
                                     style={[
                                       styles.variantValue,
-                                      {fontWeight: '500'},
-                                    ]}>
+                                      { fontWeight: '500' },
+                                    ]}
+                                  >
                                     {item?.value != 'Default Title'
                                       ? item?.value
                                       : ''}
@@ -1241,7 +1293,7 @@ const ProductDetails = ({route, navigation}: any) => {
                           horizontal
                           showsHorizontalScrollIndicator={false}
                           data={modelToShow}
-                          renderItem={({item, index}) => {
+                          renderItem={({ item, index }) => {
                             let Model = item?.node?.selectedOptions.find(
                               (variantOptions: any) =>
                                 variantOptions.name === 'Model',
@@ -1260,7 +1312,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                     name: 'Model',
                                     selected: variant,
                                   });
-                                }}>
+                                }}
+                              >
                                 <View
                                   style={{
                                     borderWidth: 2,
@@ -1280,8 +1333,9 @@ const ProductDetails = ({route, navigation}: any) => {
                                       item?.node?.quantityAvailable > 0
                                         ? 1
                                         : 0.5,
-                                  }}>
-                                  <Text style={{color: Colors.black}}>
+                                  }}
+                                >
+                                  <Text style={{ color: Colors.black }}>
                                     {Model}
                                   </Text>
                                 </View>
@@ -1296,7 +1350,7 @@ const ProductDetails = ({route, navigation}: any) => {
                     designToShow?.length >= 0 &&
                     productHasVariantSize(variantList, 'Design') && (
                       <>
-                        <View style={[{marginTop: 16}]}>
+                        <View style={[{ marginTop: 16 }]}>
                           {variant?.node?.selectedOptions.map((item: any) => (
                             <>
                               {item?.name === 'Design' ? (
@@ -1304,20 +1358,23 @@ const ProductDetails = ({route, navigation}: any) => {
                                   style={{
                                     flexDirection: 'row',
                                     marginRight: 6,
-                                  }}>
+                                  }}
+                                >
                                   <Text
                                     style={[
                                       styles.variantTitle,
-                                      {fontWeight: '500'},
-                                    ]}>
+                                      { fontWeight: '500' },
+                                    ]}
+                                  >
                                     {item?.name != 'Title' ? item?.name : 'nsb'}
                                     {''}
                                   </Text>
                                   <Text
                                     style={[
                                       styles.variantValue,
-                                      {fontWeight: '500'},
-                                    ]}>
+                                      { fontWeight: '500' },
+                                    ]}
+                                  >
                                     {item?.value != 'Default Title'
                                       ? item?.value
                                       : ''}
@@ -1332,7 +1389,7 @@ const ProductDetails = ({route, navigation}: any) => {
                           horizontal
                           showsHorizontalScrollIndicator={false}
                           data={designToShow}
-                          renderItem={({item, index}) => {
+                          renderItem={({ item, index }) => {
                             let Design = item?.node?.selectedOptions.find(
                               (variantOptions: any) =>
                                 variantOptions.name === 'Design',
@@ -1351,7 +1408,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                     name: 'Design',
                                     selected: variant,
                                   });
-                                }}>
+                                }}
+                              >
                                 <View
                                   style={{
                                     borderWidth: 2,
@@ -1371,8 +1429,9 @@ const ProductDetails = ({route, navigation}: any) => {
                                       item?.node?.quantityAvailable > 0
                                         ? 1
                                         : 0.5,
-                                  }}>
-                                  <Text style={{color: Colors.black}}>
+                                  }}
+                                >
+                                  <Text style={{ color: Colors.black }}>
                                     {Design}
                                   </Text>
                                 </View>
@@ -1387,7 +1446,7 @@ const ProductDetails = ({route, navigation}: any) => {
                     capacityToShow?.length >= 0 &&
                     productHasVariantSize(variantList, 'Capacity') && (
                       <>
-                        <View style={[{marginTop: 16}]}>
+                        <View style={[{ marginTop: 16 }]}>
                           {variant?.node?.selectedOptions.map((item: any) => (
                             <>
                               {item?.name === 'Capacity' ? (
@@ -1395,20 +1454,23 @@ const ProductDetails = ({route, navigation}: any) => {
                                   style={{
                                     flexDirection: 'row',
                                     marginRight: 6,
-                                  }}>
+                                  }}
+                                >
                                   <Text
                                     style={[
                                       styles.variantTitle,
-                                      {fontWeight: '500'},
-                                    ]}>
+                                      { fontWeight: '500' },
+                                    ]}
+                                  >
                                     {item?.name != 'Title' ? item?.name : 'nsb'}
                                     {''}
                                   </Text>
                                   <Text
                                     style={[
                                       styles.variantValue,
-                                      {fontWeight: '500'},
-                                    ]}>
+                                      { fontWeight: '500' },
+                                    ]}
+                                  >
                                     {item?.value != 'Default Title'
                                       ? item?.value
                                       : ''}
@@ -1423,7 +1485,7 @@ const ProductDetails = ({route, navigation}: any) => {
                           horizontal
                           showsHorizontalScrollIndicator={false}
                           data={capacityToShow}
-                          renderItem={({item, index}) => {
+                          renderItem={({ item, index }) => {
                             let Capacity = item?.node?.selectedOptions.find(
                               (variantOptions: any) =>
                                 variantOptions.name === 'Capacity',
@@ -1442,7 +1504,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                     name: 'Capacity',
                                     selected: variant,
                                   });
-                                }}>
+                                }}
+                              >
                                 <View
                                   style={{
                                     borderWidth: 2,
@@ -1462,8 +1525,9 @@ const ProductDetails = ({route, navigation}: any) => {
                                       item?.node?.quantityAvailable > 0
                                         ? 1
                                         : 0.5,
-                                  }}>
-                                  <Text style={{color: Colors.black}}>
+                                  }}
+                                >
+                                  <Text style={{ color: Colors.black }}>
                                     {Capacity}
                                   </Text>
                                 </View>
@@ -1478,7 +1542,7 @@ const ProductDetails = ({route, navigation}: any) => {
                     styleToShow?.length >= 0 &&
                     productHasVariantSize(variantList, 'Style') && (
                       <>
-                        <View style={[{marginTop: 16}]}>
+                        <View style={[{ marginTop: 16 }]}>
                           {variant?.node?.selectedOptions.map((item: any) => (
                             <>
                               {item?.name === 'Style' ? (
@@ -1486,20 +1550,23 @@ const ProductDetails = ({route, navigation}: any) => {
                                   style={{
                                     flexDirection: 'row',
                                     marginRight: 6,
-                                  }}>
+                                  }}
+                                >
                                   <Text
                                     style={[
                                       styles.variantTitle,
-                                      {fontWeight: '500'},
-                                    ]}>
+                                      { fontWeight: '500' },
+                                    ]}
+                                  >
                                     {item?.name != 'Title' ? item?.name : 'nsb'}
                                     {''}
                                   </Text>
                                   <Text
                                     style={[
                                       styles.variantValue,
-                                      {fontWeight: '500'},
-                                    ]}>
+                                      { fontWeight: '500' },
+                                    ]}
+                                  >
                                     {item?.value != 'Default Title'
                                       ? item?.value
                                       : ''}
@@ -1514,7 +1581,7 @@ const ProductDetails = ({route, navigation}: any) => {
                           horizontal
                           showsHorizontalScrollIndicator={false}
                           data={styleToShow}
-                          renderItem={({item, index}) => {
+                          renderItem={({ item, index }) => {
                             let Style = item?.node?.selectedOptions.find(
                               (variantOptions: any) =>
                                 variantOptions.name === 'Style',
@@ -1533,7 +1600,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                     name: 'Style',
                                     selected: variant,
                                   });
-                                }}>
+                                }}
+                              >
                                 <View
                                   style={{
                                     borderWidth: 2,
@@ -1553,8 +1621,9 @@ const ProductDetails = ({route, navigation}: any) => {
                                       item?.node?.quantityAvailable > 0
                                         ? 1
                                         : 0.5,
-                                  }}>
-                                  <Text style={{color: Colors.black}}>
+                                  }}
+                                >
+                                  <Text style={{ color: Colors.black }}>
                                     {Style}
                                   </Text>
                                 </View>
@@ -1571,7 +1640,8 @@ const ProductDetails = ({route, navigation}: any) => {
                         fontWeight: '600',
                         paddingLeft: 5,
                         fontSize: 18,
-                      }}>
+                      }}
+                    >
                       {formatPrice(Number(variant?.node?.price?.amount))}{' '}
                     </Text>
                     {!Number.isNaN(
@@ -1585,7 +1655,8 @@ const ProductDetails = ({route, navigation}: any) => {
                             fontSize: 14,
                             color: 'black',
                             textDecorationLine: 'line-through',
-                          }}>
+                          }}
+                        >
                           QAR{' '}
                           {formatPrice(
                             Number(variant?.node?.compareAtPrice?.amount),
@@ -1612,8 +1683,8 @@ const ProductDetails = ({route, navigation}: any) => {
                   {addOnList && addOnList.length > 0 && (
                     <FlatList
                       data={addOnList}
-                      style={{padding: 6}}
-                      renderItem={({item, index}) => {
+                      style={{ padding: 6 }}
+                      renderItem={({ item, index }) => {
                         return (
                           <>
                             {item && (
@@ -1635,23 +1706,27 @@ const ProductDetails = ({route, navigation}: any) => {
                                   marginTop: index == 0 ? 16 : 0,
                                   marginBottom:
                                     index == addOnList.length - 1 ? 16 : 0,
-                                }}>
+                                }}
+                              >
                                 <Text
                                   style={{
                                     fontWeight: '500',
                                     color: Colors.black,
-                                  }}>
+                                  }}
+                                >
                                   {JSON.parse(item?.value)?.data?.ymq1?.label}
                                 </Text>
                                 <View
-                                  style={{flexDirection: 'row', marginTop: 6}}>
+                                  style={{ flexDirection: 'row', marginTop: 6 }}
+                                >
                                   <View
                                     style={{
                                       borderWidth: 0.5,
                                       width: 20,
                                       height: 20,
                                       justifyContent: 'center',
-                                    }}>
+                                    }}
+                                  >
                                     {item.selected && (
                                       <Image
                                         style={{
@@ -1671,7 +1746,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                       fontSize: 12,
                                       marginLeft: 6,
                                       flex: 1,
-                                    }}>
+                                    }}
+                                  >
                                     Yes + QAR{' '}
                                     {JSON.parse(item?.value)?.data?.ymq1
                                       ?.options?.['1_1']?.variant_id == 0
@@ -1687,18 +1763,20 @@ const ProductDetails = ({route, navigation}: any) => {
                                   item.selected && (
                                     <TouchableOpacity
                                       onPress={() => setAddOnModalOpen(true)}
-                                      style={styles.quantitySelectorAddOn}>
+                                      style={styles.quantitySelectorAddOn}
+                                    >
                                       <Text
                                         style={{
                                           fontSize: getHeight(55),
                                           flex: 2,
                                           color: Colors.black,
-                                        }}>
+                                        }}
+                                      >
                                         {' '}
                                         {quantityAddOn}
                                       </Text>
                                       <Image
-                                        style={{height: '50%', width: '50%'}}
+                                        style={{ height: '50%', width: '50%' }}
                                         source={images.arrowDown}
                                       />
                                     </TouchableOpacity>
@@ -1717,18 +1795,20 @@ const ProductDetails = ({route, navigation}: any) => {
                       <Text style={styles.quantityTxt}>{t('quantity')}</Text>
                       <TouchableOpacity
                         onPress={() => setModalOpen(true)}
-                        style={styles.quantitySelector}>
+                        style={styles.quantitySelector}
+                      >
                         <Text
                           style={{
                             fontSize: getHeight(55),
                             flex: 2,
                             color: Colors.black,
-                          }}>
+                          }}
+                        >
                           {' '}
                           {quantity}
                         </Text>
                         <Image
-                          style={{height: '50%', width: '50%'}}
+                          style={{ height: '50%', width: '50%' }}
                           source={images.arrowDown}
                         />
                       </TouchableOpacity>
@@ -1742,7 +1822,8 @@ const ProductDetails = ({route, navigation}: any) => {
                         borderTopWidth: 0.5,
                         marginTop: 24,
                         borderColor: 'grey',
-                      }}>
+                      }}
+                    >
                       <Text style={[styles.subTitle]}>{deals?.blockTitle}</Text>
                       <View
                         style={{
@@ -1753,10 +1834,11 @@ const ProductDetails = ({route, navigation}: any) => {
                               : '#6d71f9',
                           padding: 6,
                           marginTop: 24,
-                        }}>
+                        }}
+                      >
                         <FlatList
                           data={deals?.dealBars}
-                          renderItem={({item, index}) => (
+                          renderItem={({ item, index }) => (
                             <TouchableOpacity
                               onPress={() => {
                                 setArryIndex(index);
@@ -1778,7 +1860,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                 alignItems: 'center',
                                 // backgroundColor:'red'
                               }}
-                              key={index}>
+                              key={index}
+                            >
                               {index === selectedDealIndex ? (
                                 <View
                                   style={{
@@ -1793,7 +1876,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                         : '#6d71f9',
                                     marginRight: 16,
                                     borderRadius: 12,
-                                  }}>
+                                  }}
+                                >
                                   <View
                                     style={{
                                       alignSelf: 'center',
@@ -1807,7 +1891,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                           : '#6d71f9',
 
                                       borderRadius: 10,
-                                    }}></View>
+                                    }}
+                                  ></View>
                                 </View>
                               ) : (
                                 <View
@@ -1823,16 +1908,18 @@ const ProductDetails = ({route, navigation}: any) => {
                                         : '#6d71f9',
                                     marginRight: 16,
                                     borderRadius: 12,
-                                  }}></View>
+                                  }}
+                                ></View>
                               )}
 
-                              <View style={{flex: 1}}>
+                              <View style={{ flex: 1 }}>
                                 <View
                                   style={{
                                     flexDirection: 'row',
                                     alignItems: 'center',
                                     alignContent: 'center',
-                                  }}>
+                                  }}
+                                >
                                   <Text
                                     style={{
                                       fontWeight: '600',
@@ -1840,7 +1927,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                         item?.dealBarType !== 'bxgy'
                                           ? Colors.primary
                                           : '#6d71f9',
-                                    }}>
+                                    }}
+                                  >
                                     {item?.title}
                                   </Text>
                                   <View
@@ -1853,7 +1941,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                       height: getHeight(50),
                                       borderRadius: 10,
                                       marginLeft: getWidth(70),
-                                    }}>
+                                    }}
+                                  >
                                     <Text
                                       style={{
                                         fontWeight: '400',
@@ -1861,7 +1950,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                         marginLeft: 6,
                                         fontSize: 9,
                                         alignSelf: 'center',
-                                      }}>
+                                      }}
+                                    >
                                       {item?.dealBarType !== 'bxgy'
                                         ? `${item?.label}`
                                         : `SAVE ${Math.round(
@@ -1878,7 +1968,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                   style={{
                                     fontWeight: '400',
                                     color: Colors.black,
-                                  }}>
+                                  }}
+                                >
                                   {/* {item?.subtitle} */}
                                   {index === 0
                                     ? `${item?.subtitle}`
@@ -1900,7 +1991,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                       fontSize: 12,
                                       color: 'red',
                                       marginTop: getHeight(70),
-                                    }}>
+                                    }}
+                                  >
                                     {variant?.node?.selectedOptions[0]?.name !==
                                     'Title'
                                       ? variant?.node?.selectedOptions[0]?.name
@@ -1947,7 +2039,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                                     : '#6d71f9',
                                                 borderRadius: 4,
                                                 paddingHorizontal: 6,
-                                              }}>
+                                              }}
+                                            >
                                               <Text
                                                 style={{
                                                   fontSize: 12,
@@ -1957,11 +2050,12 @@ const ProductDetails = ({route, navigation}: any) => {
                                                       ? Colors.primary
                                                       : '#6d71f9',
                                                   marginRight: 6,
-                                                }}>
+                                                }}
+                                              >
                                                 {quantityIndex + 1}
                                               </Text>
 
-                                              <View style={{flex: 1}}>
+                                              <View style={{ flex: 1 }}>
                                                 <Text
                                                   // key={idx}
                                                   numberOfLines={1}
@@ -1970,7 +2064,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                                     color: 'black',
                                                     fontSize: 12,
                                                     fontWeight: '500',
-                                                  }}>
+                                                  }}
+                                                >
                                                   {/* {bundleDeals?.variants
                                                   ?.length &&
                                                 bundleDeals?.selected
@@ -1992,7 +2087,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                                   color: 'black',
                                                   fontSize: 12,
                                                   paddingLeft: 6,
-                                                }}>
+                                                }}
+                                              >
                                                 ▼
                                               </Text>
                                             </TouchableOpacity>
@@ -2011,7 +2107,7 @@ const ProductDetails = ({route, navigation}: any) => {
                                   </>
                                 )}
                               </View>
-                              <View style={{justifyContent: 'center'}}>
+                              <View style={{ justifyContent: 'center' }}>
                                 {deals?.mostPopularDealBarId &&
                                   deals?.mostPopularDealBarId == item?.id && (
                                     <Text
@@ -2025,7 +2121,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                         paddingBottom: 3,
                                         borderRadius: 6,
                                         fontWeight: '500',
-                                      }}>
+                                      }}
+                                    >
                                       {t('most_Popular')}
                                     </Text>
                                   )}
@@ -2035,7 +2132,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                     color: Colors.black,
                                     fontSize: 16,
                                     alignSelf: 'center',
-                                  }}>
+                                  }}
+                                >
                                   {variant?.node?.price?.currencyCode}{' '}
                                   {item?.dealBarType !== 'bxgy'
                                     ? formatPrice(
@@ -2062,7 +2160,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                         fontSize: 12,
                                         alignSelf: 'center',
                                         textDecorationLine: 'line-through',
-                                      }}>
+                                      }}
+                                    >
                                       {variant?.node?.price?.currencyCode}{' '}
                                       {formatPrice(
                                         Number(
@@ -2080,7 +2179,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                       fontSize: 12,
                                       alignSelf: 'center',
                                       textDecorationLine: 'line-through',
-                                    }}>
+                                    }}
+                                  >
                                     {' '}
                                     {variant?.node?.price?.currencyCode}{' '}
                                     {formatPrice(
@@ -2103,8 +2203,9 @@ const ProductDetails = ({route, navigation}: any) => {
                   <Text
                     style={[
                       styles.subTitle,
-                      {marginTop: 16, marginBottom: 16},
-                    ]}>
+                      { marginTop: 16, marginBottom: 16 },
+                    ]}
+                  >
                     {t('description')}
                   </Text>
 
@@ -2149,11 +2250,12 @@ const ProductDetails = ({route, navigation}: any) => {
                         width: '95%',
                         alignSelf: 'center',
                         marginBottom: 10,
-                      }}>
+                      }}
+                    >
                       <RenderHtml
                         contentWidth={getWidth(1)}
-                        source={{html: productDetails?.descriptionHtml}}
-                        baseStyle={{color: 'black', fontSize: getWidth(25)}}
+                        source={{ html: productDetails?.descriptionHtml }}
+                        baseStyle={{ color: 'black', fontSize: getWidth(25) }}
                       />
                     </View>
                   ) : null}
@@ -2161,7 +2263,7 @@ const ProductDetails = ({route, navigation}: any) => {
                   {productVideo?.value ? (
                     <YoutubePlayer
                       height={200}
-                      webViewStyle={{opacity: 0.99, backgroundColor: 'red'}}
+                      webViewStyle={{ opacity: 0.99, backgroundColor: 'red' }}
                       // play={playing}
 
                       videoId={getYouTubeVideoId(productVideo?.value)}
@@ -2177,8 +2279,9 @@ const ProductDetails = ({route, navigation}: any) => {
                           borderTopWidth: 0.5,
                           marginTop: 24,
                           borderColor: 'grey',
-                        }}>
-                        <Text style={[styles.subTitle, {marginTop: 16}]}>
+                        }}
+                      >
+                        <Text style={[styles.subTitle, { marginTop: 16 }]}>
                           {t('freq')}
                         </Text>
                         <View
@@ -2187,14 +2290,18 @@ const ProductDetails = ({route, navigation}: any) => {
                             borderColor: Colors.primary,
                             padding: 6,
                             marginTop: 24,
-                          }}>
+                          }}
+                        >
                           <FlatList
-                            style={{marginTop: 24}}
+                            style={{ marginTop: 24 }}
                             horizontal
                             nestedScrollEnabled
                             data={freqItems}
-                            renderItem={({item, index}) => (
-                              <View style={{flexDirection: 'row'}} key={index}>
+                            renderItem={({ item, index }) => (
+                              <View
+                                style={{ flexDirection: 'row' }}
+                                key={index}
+                              >
                                 <TouchableOpacity
                                   onPress={() => {
                                     console.log(
@@ -2207,7 +2314,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                       id: `gid://shopify/Product/${item.productId}`,
                                       handle: item.handle,
                                     });
-                                  }}>
+                                  }}
+                                >
                                   <View
                                     style={{
                                       height: 100,
@@ -2217,11 +2325,12 @@ const ProductDetails = ({route, navigation}: any) => {
                                       borderRadius: 8,
                                       marginLeft: 8,
                                       marginRight: 8,
-                                    }}>
+                                    }}
+                                  >
                                     <Image
                                       style={styles.image}
                                       resizeMode="cover"
-                                      source={{uri: item?.image}}
+                                      source={{ uri: item?.image }}
                                     />
                                   </View>
                                 </TouchableOpacity>
@@ -2232,7 +2341,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                       alignSelf: 'center',
                                       fontSize: 16,
                                       fontWeight: '600',
-                                    }}>
+                                    }}
+                                  >
                                     +
                                   </Text>
                                 )}
@@ -2241,9 +2351,9 @@ const ProductDetails = ({route, navigation}: any) => {
                             keyExtractor={item => item.id}
                           />
                           <FlatList
-                            style={{marginTop: 24}}
+                            style={{ marginTop: 24 }}
                             data={freqItems}
-                            renderItem={({item, index}) => (
+                            renderItem={({ item, index }) => (
                               <View
                                 key={index}
                                 style={{
@@ -2251,8 +2361,9 @@ const ProductDetails = ({route, navigation}: any) => {
                                   paddingBottom: getHeight(45),
                                   borderBottomWidth: 0.5,
                                   borderColor: 'grey',
-                                }}>
-                                <View style={{flexDirection: 'row'}}>
+                                }}
+                              >
+                                <View style={{ flexDirection: 'row' }}>
                                   <TouchableOpacity
                                     onPress={() => {
                                       let array = [...freqItems];
@@ -2260,7 +2371,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                         !array[index].selected;
                                       setFreqItems(array);
                                     }}
-                                    style={{justifyContent: 'center'}}>
+                                    style={{ justifyContent: 'center' }}
+                                  >
                                     {item.selected ? (
                                       <Image
                                         style={{
@@ -2283,16 +2395,18 @@ const ProductDetails = ({route, navigation}: any) => {
                                           borderColor: Colors.primary,
                                           marginRight: 16,
                                           borderRadius: 3,
-                                        }}></View>
+                                        }}
+                                      ></View>
                                     )}
                                   </TouchableOpacity>
-                                  <View style={{flex: 1}}>
+                                  <View style={{ flex: 1 }}>
                                     <Text
                                       numberOfLines={2}
                                       style={[
                                         styles.nameText,
-                                        {fontWeight: '400'},
-                                      ]}>
+                                        { fontWeight: '400' },
+                                      ]}
+                                    >
                                       {index == 0 && `${t('thisItem')}: `}
                                       {item?.name}
                                     </Text>
@@ -2320,7 +2434,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                                     ? 0.5
                                                     : 0.0,
                                                 marginTop: 3,
-                                              }}>
+                                              }}
+                                            >
                                               <Text
                                                 numberOfLines={1}
                                                 ellipsizeMode={'tail'}
@@ -2334,7 +2449,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                                   fontSize: 12,
                                                   fontWeight: '500',
                                                   alignSelf: 'center',
-                                                }}>
+                                                }}
+                                              >
                                                 {variant?.node?.selectedOptions.map(
                                                   (item: any) => (
                                                     <Text
@@ -2348,7 +2464,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                                         fontSize: 12,
                                                         fontWeight: '500',
                                                         alignSelf: 'center',
-                                                      }}>
+                                                      }}
+                                                    >
                                                       {item?.value}
                                                     </Text>
                                                   ),
@@ -2364,7 +2481,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                                     paddingBottom: 3,
                                                     fontSize: 12,
                                                     paddingRight: 6,
-                                                  }}>
+                                                  }}
+                                                >
                                                   ▼
                                                 </Text>
                                               )}
@@ -2389,7 +2507,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                                 ? 0.5
                                                 : 0,
                                             marginTop: 3,
-                                          }}>
+                                          }}
+                                        >
                                           <Text
                                             numberOfLines={1}
                                             ellipsizeMode={'tail'}
@@ -2406,7 +2525,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                               fontSize: 12,
                                               fontWeight: '500',
                                               alignSelf: 'center',
-                                            }}>
+                                            }}
+                                          >
                                             {/* frq */}
                                             {
                                               item?.variants.filter(
@@ -2429,7 +2549,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                                   paddingBottom: 3,
                                                   fontSize: 12,
                                                   paddingRight: 6,
-                                                }}>
+                                                }}
+                                              >
                                                 ▼
                                               </Text>
                                             )}
@@ -2462,13 +2583,15 @@ const ProductDetails = ({route, navigation}: any) => {
                                   fontWeight: '800',
                                   padding: 8,
                                   color: 'grey',
-                                }}>
+                                }}
+                              >
                                 {t('totalPrice')} :{' '}
                                 <Text
                                   style={{
                                     color: Colors.primary,
                                     fontWeight: '800',
-                                  }}>
+                                  }}
+                                >
                                   QAR{' '}
                                   {formatPrice(
                                     Number(
@@ -2492,7 +2615,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                       position: 'bottom',
                                     });
                                   }
-                                }}>
+                                }}
+                              >
                                 <Text
                                   style={{
                                     alignSelf: 'center',
@@ -2504,7 +2628,8 @@ const ProductDetails = ({route, navigation}: any) => {
                                     color: 'white',
                                     fontWeight: '600',
                                     borderRadius: 100,
-                                  }}>
+                                  }}
+                                >
                                   {t('addSelectedToCart')}
                                 </Text>
                               </TouchableOpacity>
@@ -2532,18 +2657,19 @@ const ProductDetails = ({route, navigation}: any) => {
                 <View style={styles.btnContainer}>
                   <TouchableOpacity
                     onPress={() => {
-
                       orderByWhatsapp(
                         `I want to buy ✨:\n\n${productDetails?.title}\n${productDetails?.onlineStoreUrl}`,
                       );
                     }}
                     style={[
                       styles.btnStyle,
-                      {backgroundColor: Colors.green, flexDirection: 'row'},
-                    ]}>
+                      { backgroundColor: Colors.green, flexDirection: 'row' },
+                    ]}
+                  >
                     <Image
-                      style={{height: 22, width: 22}}
-                      source={images.whatsapp}></Image>
+                      style={{ height: 22, width: 22 }}
+                      source={images.whatsapp}
+                    ></Image>
                     <Text style={styles.btnText}>
                       {' '}
                       {t('orderBy')}
@@ -2561,8 +2687,9 @@ const ProductDetails = ({route, navigation}: any) => {
                     }}
                     style={[
                       styles.btnStyle,
-                      {backgroundColor: Colors.primary, flexDirection: 'row'},
-                    ]}>
+                      { backgroundColor: Colors.primary, flexDirection: 'row' },
+                    ]}
+                  >
                     <SvgIcon.CartIcon
                       height={25}
                       width={25}
@@ -2573,13 +2700,16 @@ const ProductDetails = ({route, navigation}: any) => {
                   </TouchableOpacity>
                 </View>
               ) : (
-                <View style={[styles.btnContainer, {justifyContent: 'center'}]}>
+                <View
+                  style={[styles.btnContainer, { justifyContent: 'center' }]}
+                >
                   <TouchableOpacity
                     onPress={() => setNotifyModalOpen(true)}
                     style={[
                       styles.btnStyle,
-                      {backgroundColor: Colors.primary, alignSelf: 'center'},
-                    ]}>
+                      { backgroundColor: Colors.primary, alignSelf: 'center' },
+                    ]}
+                  >
                     <Text style={styles.btnText}>{t('notify')}</Text>
                   </TouchableOpacity>
                 </View>
@@ -2643,13 +2773,15 @@ const ProductDetails = ({route, navigation}: any) => {
         <Modal
           visible={freqItemVariantModalOpen}
           transparent
-          onRequestClose={() => setFreqItemVariantModalOpen(false)}>
+          onRequestClose={() => setFreqItemVariantModalOpen(false)}
+        >
           <View
             style={{
               backgroundColor: Colors.transparentBlack,
               flex: 1,
               justifyContent: 'center',
-            }}>
+            }}
+          >
             <View
               style={{
                 backgroundColor: 'white',
@@ -2659,14 +2791,16 @@ const ProductDetails = ({route, navigation}: any) => {
                 alignSelf: 'center',
                 borderRadius: 10,
                 paddingBottom: 16,
-              }}>
+              }}
+            >
               <TouchableOpacity
                 onPress={() => setFreqItemVariantModalOpen(false)}
                 style={{
                   justifyContent: 'center',
                   alignItems: 'flex-end',
                   padding: 16,
-                }}>
+                }}
+              >
                 <Image
                   style={{
                     height: getHeight(55),
@@ -2680,9 +2814,9 @@ const ProductDetails = ({route, navigation}: any) => {
                   freqItem?.variants.length >= 1 && (
                     <FlatList
                       ref={flatListRef0}
-                      style={{marginTop: 6}}
+                      style={{ marginTop: 6 }}
                       data={freqItem?.variants}
-                      renderItem={({item}) => (
+                      renderItem={({ item }) => (
                         <>
                           {item && (
                             <TouchableOpacity
@@ -2706,14 +2840,16 @@ const ProductDetails = ({route, navigation}: any) => {
                                 borderWidth: 0.5,
                                 width: getWidth(1.5),
                                 alignSelf: 'center',
-                              }}>
+                              }}
+                            >
                               {item?.node?.selectedOptions.map((item: any) => (
                                 <Text
                                   numberOfLines={1}
                                   style={{
                                     color: Colors.black,
                                     fontWeight: '500',
-                                  }}>
+                                  }}
+                                >
                                   {item?.value}
                                 </Text>
                               ))}
@@ -2728,9 +2864,9 @@ const ProductDetails = ({route, navigation}: any) => {
                   freqItem?.variants.length >= 1 && (
                     <FlatList
                       ref={flatListRef}
-                      style={{marginTop: 6}}
+                      style={{ marginTop: 6 }}
                       data={freqItem?.variants}
-                      renderItem={({item}) => (
+                      renderItem={({ item }) => (
                         <>
                           {item && (
                             <TouchableOpacity
@@ -2756,14 +2892,16 @@ const ProductDetails = ({route, navigation}: any) => {
                                 alignSelf: 'center',
 
                                 //width: getItemWidth(item.label.length),
-                              }}>
+                              }}
+                            >
                               <Text
                                 style={{
                                   color: Colors.black,
                                   fontWeight: '500',
                                   alignSelf: 'center',
                                   textAlign: 'left',
-                                }}>
+                                }}
+                              >
                                 {item?.label}
                               </Text>
                             </TouchableOpacity>
@@ -2782,13 +2920,15 @@ const ProductDetails = ({route, navigation}: any) => {
         <Modal
           visible={bundleModal}
           transparent
-          onRequestClose={() => setBundleModal(false)}>
+          onRequestClose={() => setBundleModal(false)}
+        >
           <View
             style={{
               backgroundColor: Colors.transparentBlack,
               flex: 1,
               justifyContent: 'center',
-            }}>
+            }}
+          >
             <View
               style={{
                 backgroundColor: 'white',
@@ -2798,14 +2938,16 @@ const ProductDetails = ({route, navigation}: any) => {
                 alignSelf: 'center',
                 borderRadius: 10,
                 paddingBottom: 16,
-              }}>
+              }}
+            >
               <TouchableOpacity
                 onPress={() => setBundleModal(false)}
                 style={{
                   justifyContent: 'center',
                   alignItems: 'flex-end',
                   padding: 16,
-                }}>
+                }}
+              >
                 <Image
                   style={{
                     height: getHeight(55),
@@ -2817,9 +2959,9 @@ const ProductDetails = ({route, navigation}: any) => {
 
               <FlatList
                 // ref={flatListRef0}
-                style={{marginTop: 6}}
+                style={{ marginTop: 6 }}
                 data={variantList}
-                renderItem={({item}) => (
+                renderItem={({ item }) => (
                   <>
                     {item && item?.node.quantityAvailable >= 2 && (
                       <TouchableOpacity
@@ -2840,14 +2982,16 @@ const ProductDetails = ({route, navigation}: any) => {
                           borderWidth: 0.5,
                           width: getWidth(1.5),
                           alignSelf: 'center',
-                        }}>
+                        }}
+                      >
                         {item?.node?.selectedOptions.map((item: any) => (
                           <Text
                             numberOfLines={1}
                             style={{
                               color: Colors.black,
                               fontWeight: '500',
-                            }}>
+                            }}
+                          >
                             {item?.value}
                           </Text>
                         ))}
@@ -2873,14 +3017,16 @@ const ProductDetails = ({route, navigation}: any) => {
           ref={bottomSheetModalRef}
           index={1}
           snapPoints={snapPoints}
-          onChange={handleSheetChanges}>
+          onChange={handleSheetChanges}
+        >
           <BottomSheetView style={styles.contentContainer}>
             <View
               style={{
                 display: 'flex',
                 flexDirection: 'row',
                 // backgroundColor:"red"
-              }}>
+              }}
+            >
               <View
                 style={{
                   flex: 1,
@@ -2889,20 +3035,22 @@ const ProductDetails = ({route, navigation}: any) => {
                   // height: getHeight(20),
                   // backgroundColor: "red",
                   // justifyContent: "flex-start",
-                }}>
+                }}
+              >
                 <AnimatedLottieView
                   source={require('../../../assets/Animations/cartAnimation.json')}
-                  style={{width: getWidth(9), marginLeft: getWidth(90)}}
+                  style={{ width: getWidth(9), marginLeft: getWidth(90) }}
                   autoPlay={isPlaying}
                   loop={false}
                   onAnimationFinish={() => setIsPlaying(false)}
                 />
               </View>
-              <View style={{width: getWidth(1.2)}}>
+              <View style={{ width: getWidth(1.2) }}>
                 <Text
                   style={styles.titleTxt}
                   numberOfLines={1}
-                  ellipsizeMode={'tail'}>
+                  ellipsizeMode={'tail'}
+                >
                   {productDetails?.title}
                 </Text>
               </View>
@@ -2913,7 +3061,8 @@ const ProductDetails = ({route, navigation}: any) => {
                 alignItems: 'center',
                 gap: 20,
                 marginTop: getHeight(90),
-              }}>
+              }}
+            >
               {/* <View>
                 <Text>jiu</Text>
                 <Text>87</Text>
@@ -2930,8 +3079,9 @@ const ProductDetails = ({route, navigation}: any) => {
                   borderWidth: 2,
                   borderRadius: 10,
                 }}
-                onPress={handleContinueShopping}>
-                <Text style={{color: Colors.primary, fontWeight: 'bold'}}>
+                onPress={handleContinueShopping}
+              >
+                <Text style={{ color: Colors.primary, fontWeight: 'bold' }}>
                   <Translation textKey={strings.CONTINUESHOPPING} />
                 </Text>
               </TouchableOpacity>
@@ -2945,8 +3095,9 @@ const ProductDetails = ({route, navigation}: any) => {
                   justifyContent: 'center',
                   borderRadius: 10,
                 }}
-                onPress={() => navigation.navigate(screens.cart)}>
-                <Text style={{color: Colors.white, fontWeight: 'bold'}}>
+                onPress={() => navigation.navigate(screens.cart)}
+              >
+                <Text style={{ color: Colors.white, fontWeight: 'bold' }}>
                   <Translation textKey={strings.ViewCart} />
                 </Text>
               </TouchableOpacity>

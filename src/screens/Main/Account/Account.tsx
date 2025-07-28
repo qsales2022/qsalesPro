@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -13,34 +13,35 @@ import {
 } from 'react-native';
 import Colors from '../../../Theme/Colors';
 import CommonStyles from '../../../Theme/CommonStyles';
-import {getHeight, getWidth} from '../../../Theme/Constants';
+import { getHeight, getWidth, lightenColor } from '../../../Theme/Constants';
 import SvgIcon from '../../../assets/SvgIcon';
 import BottomSheetLogin from '../../../components/BottomSheet/BottomSheetLogin';
 import BottomSheetSignup from '../../../components/BottomSheet/BottomSheetSignup';
-import {getLogin, setLogin} from '../../../AsyncStorage/StorageUtil';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import { getLogin, setLogin } from '../../../AsyncStorage/StorageUtil';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import screens from '../../../Navigation/screens';
-import {useGetLogIn} from '../../../Api/hooks';
+import { useGetLogIn } from '../../../Api/hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {LanguageModel} from '../../../components';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../../redux/store';
+import { LanguageModel } from '../../../components';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 import RefundPolicy from '../../../assets/HtmlContent/RefundPolicy';
 import ShippingPolicy from '../../../assets/HtmlContent/ShippingPolicy';
 import PrivacyPolicy from '../../../assets/HtmlContent/PrivacyPolicy';
 import TermsOfUse from '../../../assets/HtmlContent/TermsOfUse';
 import AboutUs from '../../../assets/HtmlContent/AboutUs';
-import {t} from 'i18next';
+import { t } from 'i18next';
 import BottomSheetForgotPassword from '../../../components/BottomSheet/BottomSheetForgotPassword';
-import {AppEventsLogger} from 'react-native-fbsdk-next';
+import { AppEventsLogger } from 'react-native-fbsdk-next';
+import LinearGradient from 'react-native-linear-gradient';
 
-const Account = ({navigation}: any) => {
+const Account = ({ navigation }: any) => {
   const [loginModalVisible, setLoginModalVisible] = useState(false);
   const [signupModalVisible, setSignupModalVisible] = useState(false);
   const [forgotModalVisible, setForgotModalVisible] = useState(false);
   const [languageVisible, setLanguageVisible] = useState(false);
 
-  const {data, user}: any = useGetLogIn();
+  const { data, user }: any = useGetLogIn();
   const isFocused = useIsFocused();
   const [token, setToken] = useState(null);
   useEffect(() => {
@@ -65,23 +66,40 @@ const Account = ({navigation}: any) => {
 
   return (
     <View
-      style={[CommonStyles.containerFlex1, {backgroundColor: Colors.white}]}>
+      style={[CommonStyles.containerFlex1, { backgroundColor: Colors.white }]}
+    >
       <View style={styles.container}>
-        <View
-          style={[
-            CommonStyles.flexRowContainer,
-            {marginTop: getHeight(80), marginBottom: getHeight(80)},
-          ]}>
-          <Text
-            style={{
-              color: Colors.black,
-              fontSize: getHeight(35),
-              marginRight: 10,
-              alignSelf: 'center',
-            }}>
-            {t('account')}
-          </Text>
-        </View>
+        <LinearGradient
+          colors={[
+            lightenColor(Colors.yellow, 10),
+
+            lightenColor(Colors.yellow, 80),
+          ]}
+          style={{
+            minWidth: '500%',
+            minHeight: getHeight(10),
+            left: -getWidth(1) * 0.025,
+          }}
+        >
+          <View
+            style={[
+              CommonStyles.flexRowContainer,
+              { marginTop: getHeight(80), marginBottom: getHeight(80) },
+            ]}
+          >
+            <Text
+              style={{
+                color: Colors.black,
+                fontSize: getHeight(35),
+                alignSelf: 'center',
+                marginLeft: getWidth(60),
+                marginTop:getWidth(50)
+              }}
+            >
+              {t('account')}
+            </Text>
+          </View>
+        </LinearGradient>
         {token && data && (
           <View
             style={{
@@ -91,7 +109,8 @@ const Account = ({navigation}: any) => {
               paddingBottom: 16,
               paddingLeft: 6,
               paddingRight: 6,
-            }}>
+            }}
+          >
             <View
               style={{
                 width: 50,
@@ -100,20 +119,23 @@ const Account = ({navigation}: any) => {
                 backgroundColor: '#DEA7BA',
                 marginRight: 16,
                 justifyContent: 'center',
-              }}>
-              <View style={{alignSelf: 'center'}}>
+              }}
+            >
+              <View style={{ alignSelf: 'center' }}>
                 <SvgIcon.PersonIcon />
               </View>
             </View>
             <View style={{}}>
-              <Text style={{color: 'black', fontWeight: '600', fontSize: 18}}>
+              <Text style={{ color: 'black', fontWeight: '600', fontSize: 18 }}>
                 {data.customer?.firstName} {data.customer?.lastName}
               </Text>
-              <Text style={{color: 'grey', fontWeight: '400', fontSize: 14}}>
+              <Text style={{ color: 'grey', fontWeight: '400', fontSize: 14 }}>
                 {data.customer?.email}
               </Text>
               {data.customer?.phone && (
-                <Text style={{color: 'grey', fontWeight: '400', fontSize: 14}}>
+                <Text
+                  style={{ color: 'grey', fontWeight: '400', fontSize: 14 }}
+                >
                   {data.customer?.phone}
                 </Text>
               )}
@@ -121,7 +143,7 @@ const Account = ({navigation}: any) => {
           </View>
         )}
         {!token && (
-          <View style={{marginTop: 16, marginBottom: 24}}>
+          <View style={{ marginTop: 16, marginBottom: 24 }}>
             <SvgIcon.QsalesIcon width={getWidth(12)} height={getWidth(12)} />
             <Text
               style={{
@@ -129,13 +151,14 @@ const Account = ({navigation}: any) => {
                 fontWeight: '600',
                 fontSize: 18,
                 marginBottom: 6,
-              }}>
+              }}
+            >
               {t('exploreBestShopping')}
             </Text>
-            <Text style={{color: 'black', marginBottom: 16}}>
+            <Text style={{ color: 'black', marginBottom: 16 }}>
               {t('loginToAccount')}
             </Text>
-            <View style={{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity
                 onPress={() => setLoginModalVisible(true)}
                 style={{
@@ -144,13 +167,15 @@ const Account = ({navigation}: any) => {
                   justifyContent: 'center',
                   height: 40,
                   borderRadius: 20,
-                }}>
+                }}
+              >
                 <Text
                   style={{
                     color: 'white',
                     alignSelf: 'center',
                     fontWeight: '500',
-                  }}>
+                  }}
+                >
                   {t('login')}
                 </Text>
               </TouchableOpacity>
@@ -164,13 +189,15 @@ const Account = ({navigation}: any) => {
                   height: 40,
                   borderRadius: 20,
                   marginLeft: 6,
-                }}>
+                }}
+              >
                 <Text
                   style={{
                     color: Colors.primary,
                     alignSelf: 'center',
                     fontWeight: '500',
-                  }}>
+                  }}
+                >
                   {t('signup')}
                 </Text>
               </TouchableOpacity>
@@ -178,24 +205,27 @@ const Account = ({navigation}: any) => {
           </View>
         )}
 
-        <ScrollView style={{marginTop: 24}}>
+        <ScrollView style={{ marginTop: 24 }}>
           <View>
             {token && (
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate(screens.myOrder);
                 }}
-                style={{flexDirection: 'row', marginTop: 16}}>
+                style={{ flexDirection: 'row', marginTop: 16 }}
+              >
                 <SvgIcon.OrderIcon width={getWidth(11)} height={getWidth(11)} />
-                <View style={{marginLeft: 10, flex: 1}}>
+                <View style={{ marginLeft: 10, flex: 1 }}>
                   <Text
-                    style={{fontWeight: '600', color: 'black', fontSize: 16}}>
+                    style={{ fontWeight: '600', color: 'black', fontSize: 16 }}
+                  >
                     {t('orders')}
                   </Text>
                   <Text
                     numberOfLines={1}
                     ellipsizeMode={'tail'}
-                    style={{color: 'grey'}}>
+                    style={{ color: 'grey' }}
+                  >
                     {t('orderSub')}
                   </Text>
                 </View>
@@ -222,38 +252,46 @@ const Account = ({navigation}: any) => {
 
             <TouchableOpacity
               onPress={() => setLanguageVisible(true)}
-              style={{flexDirection: 'row', marginTop: 24}}>
+              style={{ flexDirection: 'row', marginTop: 24 }}
+            >
               <SvgIcon.SelectLanguageIcon
                 width={getWidth(11)}
                 height={getWidth(11)}
               />
-              <View style={{marginLeft: 10, flex: 1}}>
-                <Text style={{fontWeight: '600', color: 'black', fontSize: 16}}>
+              <View style={{ marginLeft: 10, flex: 1 }}>
+                <Text
+                  style={{ fontWeight: '600', color: 'black', fontSize: 16 }}
+                >
                   {t('language')}
                 </Text>
                 <Text
                   numberOfLines={1}
                   ellipsizeMode={'tail'}
-                  style={{color: 'grey'}}>
+                  style={{ color: 'grey' }}
+                >
                   {t('languageSub')}
                 </Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => navigation.navigate(screens.helpCenter)}
-              style={{flexDirection: 'row', marginTop: 24}}>
+              style={{ flexDirection: 'row', marginTop: 24 }}
+            >
               <SvgIcon.HelpCenterIcon
                 width={getWidth(11)}
                 height={getWidth(11)}
               />
-              <View style={{marginLeft: 10, flex: 1}}>
-                <Text style={{fontWeight: '600', color: 'black', fontSize: 16}}>
+              <View style={{ marginLeft: 10, flex: 1 }}>
+                <Text
+                  style={{ fontWeight: '600', color: 'black', fontSize: 16 }}
+                >
                   {t('helpCenter')}
                 </Text>
                 <Text
                   numberOfLines={1}
                   ellipsizeMode={'tail'}
-                  style={{color: 'grey'}}>
+                  style={{ color: 'grey' }}
+                >
                   {t('helpCenterSub')}
                 </Text>
               </View>
@@ -265,14 +303,16 @@ const Account = ({navigation}: any) => {
                   title: `${t('aboutUs')}`,
                 })
               }
-              style={{marginTop: 24}}>
+              style={{ marginTop: 24 }}
+            >
               <Text
                 style={{
                   fontWeight: '500',
                   color: 'grey',
                   fontSize: 16,
                   marginLeft: 10,
-                }}>
+                }}
+              >
                 {t('aboutUs')}
               </Text>
             </TouchableOpacity>
@@ -283,14 +323,16 @@ const Account = ({navigation}: any) => {
                   title: 'Terms of service',
                 })
               }
-              style={{marginTop: 24}}>
+              style={{ marginTop: 24 }}
+            >
               <Text
                 style={{
                   fontWeight: '500',
                   color: 'grey',
                   fontSize: 16,
                   marginLeft: 10,
-                }}>
+                }}
+              >
                 {t('termsService')}
               </Text>
             </TouchableOpacity>
@@ -301,14 +343,16 @@ const Account = ({navigation}: any) => {
                   title: `${t('privacyPolicy')}`,
                 })
               }
-              style={{marginTop: 24}}>
+              style={{ marginTop: 24 }}
+            >
               <Text
                 style={{
                   fontWeight: '500',
                   color: 'grey',
                   fontSize: 16,
                   marginLeft: 10,
-                }}>
+                }}
+              >
                 {t('privacyPolicy')}
               </Text>
             </TouchableOpacity>
@@ -319,14 +363,16 @@ const Account = ({navigation}: any) => {
                   title: `${t('shippingPolicy')}`,
                 })
               }
-              style={{marginTop: 24}}>
+              style={{ marginTop: 24 }}
+            >
               <Text
                 style={{
                   fontWeight: '500',
                   color: 'grey',
                   fontSize: 16,
                   marginLeft: 10,
-                }}>
+                }}
+              >
                 {t('shippingPolicy')}
               </Text>
             </TouchableOpacity>
@@ -337,14 +383,16 @@ const Account = ({navigation}: any) => {
                   title: `${t('refundPolicy')}`,
                 })
               }
-              style={{marginTop: 24}}>
+              style={{ marginTop: 24 }}
+            >
               <Text
                 style={{
                   fontWeight: '500',
                   color: 'grey',
                   fontSize: 16,
                   marginLeft: 10,
-                }}>
+                }}
+              >
                 {t('refundPolicy')}
               </Text>
             </TouchableOpacity>
@@ -373,7 +421,8 @@ const Account = ({navigation}: any) => {
                     ],
                   );
                 }}
-                style={{marginTop: 24}}>
+                style={{ marginTop: 24 }}
+              >
                 <Text
                   style={{
                     fontWeight: '500',
@@ -381,7 +430,8 @@ const Account = ({navigation}: any) => {
                     fontSize: 16,
                     marginLeft: 10,
                     textDecorationLine: 'underline',
-                  }}>
+                  }}
+                >
                   {t('deleteAccount')}
                 </Text>
               </TouchableOpacity>
@@ -405,7 +455,8 @@ const Account = ({navigation}: any) => {
                     },
                   ]);
                 }}
-                style={{marginTop: 24, marginBottom: 24}}>
+                style={{ marginTop: 24, marginBottom: 24 }}
+              >
                 <Text
                   style={{
                     fontWeight: '500',
@@ -413,7 +464,8 @@ const Account = ({navigation}: any) => {
                     fontSize: 16,
                     marginLeft: 10,
                     textDecorationLine: 'underline',
-                  }}>
+                  }}
+                >
                   {t('logout')}
                 </Text>
               </TouchableOpacity>
@@ -423,7 +475,8 @@ const Account = ({navigation}: any) => {
                 marginTop: 16,
                 justifyContent: 'center',
                 marginBottom: 16,
-              }}>
+              }}
+            >
               <Image
                 source={require('../../../assets/Images/badgeSuccess.png')}
                 style={{
@@ -438,7 +491,8 @@ const Account = ({navigation}: any) => {
                   alignSelf: 'center',
                   marginTop: 6,
                   fontSize: 9,
-                }}>
+                }}
+              >
                 Made with ❤️ in Qatar
               </Text>
               <Image
@@ -472,21 +526,17 @@ const Account = ({navigation}: any) => {
               data.customerAccessTokenCreate.customerUserErrors &&
               data.customerAccessTokenCreate.customerUserErrors.length > 0
             ) {
-              Alert.alert(
-                '',
-                "user not found",
-                [
-                  {
-                    text: `${t('cancel')}`,
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
-                  },
-                  {
-                    text: `${t('ok')}`,
-                    onPress: () => console.log('OK Pressed'),
-                  },
-                ],
-              );
+              Alert.alert('', 'user not found', [
+                {
+                  text: `${t('cancel')}`,
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {
+                  text: `${t('ok')}`,
+                  onPress: () => console.log('OK Pressed'),
+                },
+              ]);
             } else {
               if (data.customerAccessTokenCreate.customerAccessToken) {
                 setLogin(
@@ -529,7 +579,7 @@ const Account = ({navigation}: any) => {
                 onPress: () => console.log('Cancel Pressed'),
                 style: 'cancel',
               },
-              {text: `${t('ok')}`, onPress: () => console.log('OK Pressed')},
+              { text: `${t('ok')}`, onPress: () => console.log('OK Pressed') },
             ]);
           }
         }}
@@ -577,7 +627,7 @@ const Account = ({navigation}: any) => {
                 onPress: () => console.log('Cancel Pressed'),
                 style: 'cancel',
               },
-              {text: `${t('ok')}`, onPress: () => console.log('OK Pressed')},
+              { text: `${t('ok')}`, onPress: () => console.log('OK Pressed') },
             ]);
           }
         }}
@@ -634,7 +684,7 @@ const Account = ({navigation}: any) => {
                 onPress: () => console.log('Cancel Pressed'),
                 style: 'cancel',
               },
-              {text: `${t('ok')}`, onPress: () => console.log('OK Pressed')},
+              { text: `${t('ok')}`, onPress: () => console.log('OK Pressed') },
             ]);
           }
         }}

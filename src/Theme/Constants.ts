@@ -10,6 +10,7 @@ export const getWidth = (percent: number) => {
   
   return percent === 0 ? 0 : Dimensions.get('window').width / percent;
 };
+
 export const lightenColor = (hex:any, percent:any) => {
   const num = parseInt(hex.replace('#', ''), 16);
   const r = (num >> 16) + Math.round((255 - (num >> 16)) * percent / 100);

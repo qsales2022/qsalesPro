@@ -1,6 +1,6 @@
 const Colors = {
   primary: '#A01C63',
-  accent:'#FDF5FF',
+  accent: '#FDF5FF',
   lightPink: '#E2CEDD',
   black: '#000000',
   white: '#FFFFFF',
@@ -21,7 +21,8 @@ const Colors = {
   formBackground: '#F8F8FA',
   successGreen: '#67c23a',
   green: '#1CA650',
-  red:'red'
+  red: 'red',
+  yellow: '#FFFF00',
 };
 
 export default Colors;

@@ -40,10 +40,10 @@ const MainNavigation = () => {
     <>
       <SafeAreaView
         style={[CommonStyles.containerFlex1, {backgroundColor: Colors.white}]}>
-        <StatusBar
+        {/* <StatusBar
           barStyle={'dark-content'}
           backgroundColor={Colors.successGreen}
-        />
+        /> */}
         <Stack.Navigator
           screenOptions={{
             headerShown: false,

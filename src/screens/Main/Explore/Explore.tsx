@@ -4,7 +4,7 @@ import {FlatList, ScrollView, StyleSheet, View} from 'react-native';
 import Colors from '../../../Theme/Colors';
 import strings from '../../../assets/i18n/strings';
 import {useGetCollections} from '../../../Api/hooks';
-import {getHeight} from '../../../Theme/Constants';
+import {getHeight, lightenColor} from '../../../Theme/Constants';
 import {ParamListBase, useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import screens from '../../../Navigation/screens';
@@ -13,6 +13,7 @@ import {RootState} from '../../../redux/store';
 import ExploreItems from './ExploreItems';
 import SkeletonCard from '../../../components/skeletonCard/SkeletonCard';
 import {AppEventsLogger} from 'react-native-fbsdk-next';
+import LinearGradient from 'react-native-linear-gradient';
 
 const Explore = () => {
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
@@ -184,7 +185,12 @@ const Explore = () => {
   }, []);
   return (
     <>
-      <View style={{backgroundColor: Colors.white}}>
+     <LinearGradient
+      colors={[lightenColor(Colors.yellow, 10), lightenColor(Colors.yellow, 80)]}
+
+      style={styles.container}
+    >
+      <View>
         <Header
           title={strings.categories}
           cartCount={count}
@@ -223,6 +229,7 @@ const Explore = () => {
           }}
         /> */}
       </View>
+      </LinearGradient>
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
@@ -358,6 +365,16 @@ const styles = StyleSheet.create({
     paddingRight: getHeight(45),
     paddingBottom: getHeight(5),
     alignSelf: 'center',
+  },
+  container: {
+    height: getHeight(8),
+    width: '100%',
+
+    paddingTop: getHeight(20),
+    paddingBottom: getHeight(20),
+    display:"flex",
+    justifyContent: "space-between",
+    // alignItems:"center"
   },
 });
 export default Explore;

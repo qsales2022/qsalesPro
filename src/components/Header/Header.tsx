@@ -216,7 +216,7 @@ export default Header;
 const styles = StyleSheet.create({
   container: {
     height: getHeight(15),
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     flexDirection: 'row',
     paddingLeft: 5,
     paddingRight: 5,

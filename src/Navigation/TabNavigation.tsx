@@ -1,27 +1,36 @@
-import React, {useEffect, useState} from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {SafeAreaView, StatusBar, ToastAndroid} from 'react-native';
-import {Account, Cart, Explore, Home} from '../screens';
+import React, { useEffect, useState } from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  ToastAndroid,
+} from 'react-native';
+import { Account, Cart, Explore, Home } from '../screens';
 import CustomTab from './CustomTab';
 import CommonStyles from '../Theme/CommonStyles';
-import {HomeHeader} from '../components';
+import { HomeHeader } from '../components';
 import Colors from '../Theme/Colors';
-import {useIsFocused} from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useCreateCart, useGetCart} from '../Api/hooks';
-import {useDispatch, useSelector} from 'react-redux';
-import {RootState} from '../redux/store';
-import {updateCount} from '../redux/reducers/CartReducer';
-import {updateLaunch} from '../redux/reducers/GlobalReducer';
+import { useCreateCart, useGetCart } from '../Api/hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import { updateCount } from '../redux/reducers/CartReducer';
+import { updateLaunch } from '../redux/reducers/GlobalReducer';
+import LinearGradient from 'react-native-linear-gradient';
+import { View } from 'react-native-animatable';
+import { getHeight, lightenColor } from '../Theme/Constants';
+
 
 const HomeTabs = () => {
   const isFocused = useIsFocused();
   const Tab = createBottomTabNavigator();
-  const {cartDetails, getCartData}: any = useGetCart();
-  const {cart, createCart}: any = useCreateCart();
+  const { cartDetails, getCartData }: any = useGetCart();
+  const { cart, createCart }: any = useCreateCart();
   const dispatch = useDispatch();
   //const [count, setCount] = useState<any>(0);
-  const {count} = useSelector((state: RootState) => state.CartReducer);
+  const { count } = useSelector((state: RootState) => state.CartReducer);
   const customTabMenu = (props: any) => {
     return <CustomTab cartCount={count} />;
   };
@@ -45,16 +54,14 @@ const HomeTabs = () => {
 
   const getCheckoutId = async () => {
     try {
-      
       const value = await AsyncStorage.getItem('checkoutId');
 
       if (value !== null) {
-
         getCartData();
       } else {
         //create cart if no checkoutId present
         await AsyncStorage.removeItem('checkoutId');
-         
+
         createCart();
       }
     } catch (e) {
@@ -73,27 +80,45 @@ const HomeTabs = () => {
   return (
     <>
       {/* <SafeAreaView style={CommonStyles.containerFlex1}> */}
-      <StatusBar
-        barStyle={'dark-content'}
-        backgroundColor={Colors.backgroundGray}
-      />
-      <Tab.Navigator
-        // screenOptions={{headerShown: false}}
-        screenOptions={{header: () => null}}
-        tabBar={customTabMenu}>
-        <Tab.Screen
-          options={{header: props => setHomeHeader(props)}}
-          name="HOME"
-          component={Home}
+      <View style={styles.container}>
+        {/* Transparent StatusBar */}
+        <StatusBar
+          translucent
+          backgroundColor="transparent"
+          barStyle="dark-content"
         />
 
-        <Tab.Screen name="EXPLORE" component={Explore} />
-        {/* <Tab.Screen name="Message" component={Explore} /> */}
-        <Tab.Screen name="CART" component={Cart} />
-        <Tab.Screen name="ACCOUNT" component={Account} />
-      </Tab.Navigator>
+        {/* Gradient background for the top */}
+     
+
+        {/* Your Tab Navigator */}
+        <Tab.Navigator
+          screenOptions={{
+            header: () => null,
+            tabBarStyle: styles.tabBar,
+          }}
+          tabBar={customTabMenu}
+        >
+          <Tab.Screen
+            options={{ header: props => setHomeHeader(props) }}
+            name="HOME"
+            component={Home}
+          />
+          <Tab.Screen name="EXPLORE" component={Explore} />
+          <Tab.Screen name="CART" component={Cart} />
+          <Tab.Screen name="ACCOUNT" component={Account} />
+        </Tab.Navigator>
+      </View>
       {/* </SafeAreaView> */}
     </>
   );
 };
 export default HomeTabs;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    height: getHeight(1),
+  },
+ 
+});
