@@ -13,6 +13,7 @@ import {
   Platform,
   Share,
   Alert,
+  StatusBar,
 } from 'react-native';
 
 import {
@@ -80,6 +81,7 @@ import { ImageZoom } from '@likashefqet/react-native-image-zoom';
 import filterUniqueItem from '../../../helpers/filterUniqueItem';
 import UltraOptimizedBanner from '../../../test';
 import LinearGradient from 'react-native-linear-gradient';
+import { trigger } from 'react-native-haptic-feedback';
 
 const ProductDetails = ({ route, navigation }: any) => {
   const tabRef = useRef<any>('');
@@ -320,7 +322,7 @@ const ProductDetails = ({ route, navigation }: any) => {
       if (firstAvailableIndex !== -1) {
         setSelectedVariant(firstAvailableIndex);
       } else {
-        setSelectedVariant(0); // fallback to first if none available
+        setSelectedVariant(0);
       }
     }
   }, [variantList, productDetails]);
@@ -697,24 +699,30 @@ const ProductDetails = ({ route, navigation }: any) => {
       <View
         style={[CommonStyles.containerFlex1, { backgroundColor: Colors.white }]}
       >
+        <StatusBar
+          backgroundColor={'transparent'}
+          barStyle="dark-content"
+          // translucent={false}
+        />
         <LinearGradient
           colors={[
-            lightenColor(Colors.yellow, 10),
-
-            lightenColor(Colors.yellow, 80),
+            lightenColor(Colors.skyBlue, 50),
+            lightenColor(Colors.skyBlue, 90),
           ]}
           style={{
-            minHeight: getHeight(10),
-            paddingTop: getWidth(10),
+            minHeight: getHeight(8),
+            // paddingTop: getWidth(13),
           }}
         >
-          <Header
-            title={productDetails?.title}
-            cartCount={count}
-            hideSearch={true}
-            page="details"
-            pageNavigation={pageNavigation}
-          />
+          <View style={{ marginTop: getHeight(13) }}>
+            <Header
+              title={productDetails?.title}
+              cartCount={count}
+              hideSearch={true}
+              page="details"
+              pageNavigation={pageNavigation}
+            />
+          </View>
         </LinearGradient>
         <View style={styles.container}>
           {(variant != undefined || variant != null) && (
@@ -1793,25 +1801,76 @@ const ProductDetails = ({ route, navigation }: any) => {
                   {variant?.node?.quantityAvailable > 0 && (
                     <View style={styles.quantityContainer}>
                       <Text style={styles.quantityTxt}>{t('quantity')}</Text>
-                      <TouchableOpacity
-                        onPress={() => setModalOpen(true)}
-                        style={styles.quantitySelector}
-                      >
-                        <Text
+                      <View style={styles.quantitySelector}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            trigger('impactMedium');
+                            quantity > 1
+                              ? setQuantity(quantity - 1)
+                              : setQuantity(1);
+                          }}
                           style={{
-                            fontSize: getHeight(55),
-                            flex: 2,
-                            color: Colors.black,
+                            width: getHeight(28),
+                            height: getHeight(28),
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: 4,
+                            backgroundColor: Colors.white,
                           }}
                         >
-                          {' '}
+                          <Text
+                            style={{
+                              fontSize: getHeight(45),
+                              color: Colors.primary,
+                              fontWeight: '600',
+                            }}
+                          >
+                            -
+                          </Text>
+                        </TouchableOpacity>
+
+                        <Text
+                          style={{
+                            fontSize: getHeight(45),
+                            color: Colors.black,
+                            paddingHorizontal: 12,
+                            fontWeight: '500',
+                          }}
+                        >
                           {quantity}
                         </Text>
-                        <Image
-                          style={{ height: '50%', width: '50%' }}
-                          source={images.arrowDown}
-                        />
-                      </TouchableOpacity>
+
+                        <TouchableOpacity
+                          onPress={() => {
+                            trigger('notificationWarning');
+                            variant?.node?.quantityAvailable > quantity
+                              ? setQuantity(quantity + 1)
+                              : Toast.show({
+                                  type: 'warning',
+                                  text1: `Not enough stock to add this item to your cart`,
+                                  position: 'bottom',
+                                });
+                          }}
+                          style={{
+                            width: getHeight(28),
+                            height: getHeight(28),
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            borderRadius: 4,
+                            backgroundColor: Colors.white,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              fontSize: getHeight(45),
+                              color: Colors.primary,
+                              fontWeight: '600',
+                            }}
+                          >
+                            +
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   )}
 
@@ -2721,6 +2780,16 @@ const ProductDetails = ({ route, navigation }: any) => {
         <QuantityModal
           maxValue={variant?.node?.quantityAvailable}
           onSubmit={(value: any) => {
+            if (value > variant?.node?.quantityAvailable) {
+              Vibration.vibrate(100);
+              Toast.show({
+                type: 'error',
+                text1: 'Invalid Quantity',
+                text2: `Only ${variant?.node?.quantityAvailable} items available in stock`,
+                position: 'bottom',
+              });
+              return;
+            }
             setQuantity(value);
             setModalOpen(false);
           }}
@@ -3104,8 +3173,6 @@ const ProductDetails = ({ route, navigation }: any) => {
             </View>
           </BottomSheetView>
         </BottomSheetModal>
-
-        {/* </View> */}
       </View>
     </BottomSheetModalProvider>
   );
@@ -3155,28 +3222,39 @@ const styles = StyleSheet.create({
     color: Colors.primary,
   },
   quantityTxt: {
-    fontSize: getHeight(50),
+    fontSize: getHeight(45),
     color: Colors.primary,
+    fontWeight: '600',
+    marginRight: 8,
   },
   quantityContainer: {
     width: '95%',
     alignSelf: 'center',
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 10,
+    marginTop: 5,
   },
   quantitySelector: {
-    minWidth: getWidth(7),
-    maxWidth: getWidth(2.5),
-    left: getHeight(55),
-    backgroundColor: '#FDF5FF',
-    height: getHeight(30),
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#E2CEDD',
+    minWidth: getWidth(6),
+    backgroundColor: '#FFFFFF',
+    height: getHeight(25),
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: Colors.primary,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingLeft: 4,
-    paddingRight: 4,
+    justifyContent: 'space-between',
+    marginLeft: getHeight(55),
+    paddingHorizontal: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
   },
   quantitySelectorAddOn: {
     width: 80,

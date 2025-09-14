@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   ToastAndroid,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import Colors from '../../../Theme/Colors';
 import { getHeight, getWidth, lightenColor } from '../../../Theme/Constants';
@@ -129,96 +130,99 @@ const Cart = ({ navigation }: any) => {
   }, [cartDetails]);
   return (
     <>
-      <SafeAreaView
-        style={[CommonStyles.containerFlex1, { backgroundColor: Colors.white }]}
-      >
-        <View style={styles.container}>
-          <LinearGradient
-            colors={[
-              lightenColor(Colors.yellow, 10),
-            
-              lightenColor(Colors.yellow, 80),
+      <View style={styles.container}>
+        <LinearGradient
+          colors={[
+            lightenColor(Colors.primary, 50),
+            lightenColor(Colors.primary, 90),
+          ]}
+          style={{ minWidth: getWidth(1), minHeight: getHeight(8) }}
+        >
+          <View
+            style={[
+              CommonStyles.flexRowContainer,
+              {
+                marginTop:
+                  Platform.OS == 'android' ? getHeight(30) : getHeight(20),
+                marginBottom: getHeight(80),
+              },
             ]}
-            style={{minWidth:getWidth(1),minHeight:getHeight(10)}}
           >
-            <View
-              style={[
-                CommonStyles.flexRowContainer,
-                { marginTop: getHeight(30), marginBottom: getHeight(80) },
-              ]}
-            >
-              <Text
-                style={{
-                  color: Colors.black,
-                  fontSize: getHeight(35),
-                  marginRight: 10,
-                  alignSelf: 'center',
-                  marginLeft: 16,
-                }}
-              >
-                {t('cart')}
-              </Text>
-
-              <View
-                style={{
-                  backgroundColor: Colors.primary,
-                  borderRadius: 100,
-                  height: getHeight(35),
-                  minWidth: getHeight(25),
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  alignSelf: 'center',
-                }}
-              >
-                <Text style={styles.badgeText}>
-                  {cartDetails?.cart?.lines?.edges?.length}
-                </Text>
-              </View>
-            </View>
-          </LinearGradient>
-          {!loading ? (
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={cartDetails?.cart?.lines?.edges}
-              renderItem={({ item, index }: any) => {
-                return (
-                  <CartItem
-                    key={index}
-                    product={item?.node}
-                    checkoutId={checkoutId}
-                    updateCallBack={() => {
-                      getCartData();
-                    }}
-                    removedCallBack={() => {
-                      Toast.show({
-                        type: 'success',
-                        text1: `${t('cartItemRemoved')}`,
-                        position: 'bottom',
-                      });
-                      getCartData();
-                    }}
-                  />
-                );
+            <Text
+              style={{
+                color: Colors.black,
+                fontSize: getHeight(35),
+                marginRight: 10,
+                alignSelf: 'center',
+                marginLeft: 16,
               }}
-              ListEmptyComponent={() => {
-                return (
-                  <View
-                    style={{
-                      height: getHeight(1.2),
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <LottieView
-                      source={require('../../../assets/Animations/EmptyAnimation.json')}
-                      autoPlay
-                      loop
-                      style={{ width: getWidth(4), height: getHeight(4) }}
-                      colorFilters={[
-                        { keypath: 'LayerName', color: '#FF0000' },
-                      ]}
-                    />
-                    {/* <View
+            >
+              {t('cart')}
+            </Text>
+
+            <View
+              style={{
+                backgroundColor: Colors.primary,
+                borderRadius: 100,
+                height: getHeight(35),
+                minWidth: getHeight(25),
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignSelf: 'center',
+              }}
+            >
+              <Text style={styles.badgeText}>
+                {cartDetails?.cart?.lines?.edges?.length}
+              </Text>
+            </View>
+          </View>
+        </LinearGradient>
+        {!loading ? (
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={cartDetails?.cart?.lines?.edges}
+            renderItem={({ item, index }: any) => {
+              return (
+                <CartItem
+                  key={index}
+                  product={item?.node}
+                  checkoutId={checkoutId}
+                  updateCallBack={() => {
+                    getCartData();
+                  }}
+                  removedCallBack={() => {
+                    Toast.show({
+                      type: 'success',
+                      text1: `${t('cartItemRemoved')}`,
+                      position: 'bottom',
+                    });
+                    getCartData();
+                  }}
+                />
+              );
+            }}
+            ListEmptyComponent={() => {
+              return (
+                <View
+                  style={{
+                    height: getHeight(1.2),
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+           
+                 
+                  <LottieView
+                    source={require('../../../assets/Animations/EmptyAnimation.json')}
+                    autoPlay
+                    loop
+                    style={{ width: getWidth(4), height: getHeight(4) }}
+                    colorFilters={[{ keypath: 'LayerName', color: '#FF0000' }]}
+                  
+
+                  />
+               
+                  {/* <View
                       style={{
                         justifyContent: 'center',
                         width: getHeight(10),
@@ -236,150 +240,149 @@ const Cart = ({ navigation }: any) => {
                       />
                     </View> */}
 
+                  <Text
+                    style={{
+                      color: Colors.black,
+                      alignSelf: 'center',
+                      fontSize: getHeight(40),
+                      fontWeight: '600',
+                      marginTop: 10,
+                    }}
+                  >
+                    {t('cartEmpty')}
+                  </Text>
+                  <Text
+                    style={{
+                      color: Colors.black,
+                      alignSelf: 'center',
+                      fontSize: getHeight(50),
+                      fontWeight: '400',
+                      width: getWidth(1.5),
+                      marginTop: 10,
+                      textAlign: 'center',
+                    }}
+                  >
+                    {t('cartEmptySub')}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate(screens.home)}
+                  >
                     <Text
                       style={{
-                        color: Colors.black,
+                        color: Colors.primary,
                         alignSelf: 'center',
                         fontSize: getHeight(40),
                         fontWeight: '600',
-                        marginTop: 10,
-                      }}
-                    >
-                      {t('cartEmpty')}
-                    </Text>
-                    <Text
-                      style={{
-                        color: Colors.black,
-                        alignSelf: 'center',
-                        fontSize: getHeight(50),
-                        fontWeight: '400',
                         width: getWidth(1.5),
                         marginTop: 10,
                         textAlign: 'center',
+                        textDecorationLine: 'underline',
                       }}
                     >
-                      {t('cartEmptySub')}
+                      {t('shopOurProduct')}
                     </Text>
-                    <TouchableOpacity
-                      onPress={() => navigation.navigate(screens.home)}
+                  </TouchableOpacity>
+                </View>
+              );
+            }}
+            ListFooterComponent={() => {
+              return (
+                <>
+                  {cartDetails?.cart?.lines?.edges?.length > 0 && (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        paddingBottom: 24,
+                        paddingTop: 24,
+                        elevation: 6,
+                        backgroundColor: 'white',
+                        padding: 16,
+                        borderTopWidth: 6,
+                        borderColor: Colors.transparentBlack,
+                      }}
                     >
-                      <Text
-                        style={{
-                          color: Colors.primary,
-                          alignSelf: 'center',
-                          fontSize: getHeight(40),
-                          fontWeight: '600',
-                          width: getWidth(1.5),
-                          marginTop: 10,
-                          textAlign: 'center',
-                          textDecorationLine: 'underline',
-                        }}
-                      >
-                        {t('shopOurProduct')}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                );
-              }}
-              ListFooterComponent={() => {
-                return (
-                  <>
-                    {cartDetails?.cart?.lines?.edges?.length > 0 && (
                       <View
                         style={{
-                          flexDirection: 'row',
-                          paddingBottom: 24,
-                          paddingTop: 24,
-                          elevation: 6,
-                          backgroundColor: 'white',
-                          padding: 16,
-                          borderTopWidth: 6,
-                          borderColor: Colors.transparentBlack,
+                          flex: 1,
+                          justifyContent: 'center',
                         }}
                       >
-                        <View
-                          style={{
-                            flex: 1,
-                            justifyContent: 'center',
-                          }}
-                        >
-                          {totalDiscount !== 0 && (
-                            <Text
-                              style={{
-                                textDecorationLine: 'line-through',
-                                color: 'grey',
-                                fontWeight: '600',
-                              }}
-                            >
-                              {formatPrice(
-                                Number(
-                                  cartDetails?.cart?.cost?.totalAmount?.amount,
-                                ) + totalDiscount,
-                              )}{' '}
-                              {
-                                cartDetails?.cart?.cost?.subtotalAmount
-                                  ?.currencyCode
-                              }
-                            </Text>
-                          )}
-
+                        {totalDiscount !== 0 && (
                           <Text
                             style={{
-                              color: Colors.black,
+                              textDecorationLine: 'line-through',
+                              color: 'grey',
                               fontWeight: '600',
                             }}
                           >
                             {formatPrice(
                               Number(
                                 cartDetails?.cart?.cost?.totalAmount?.amount,
-                              ),
+                              ) + totalDiscount,
                             )}{' '}
-                            {cartDetails?.cart?.cost?.totalAmount?.currencyCode}
+                            {
+                              cartDetails?.cart?.cost?.subtotalAmount
+                                ?.currencyCode
+                            }
                           </Text>
-                        </View>
+                        )}
 
-                        <TouchableOpacity
-                          onPress={() => {
-                            next();
-                          }}
+                        <Text
                           style={{
-                            backgroundColor: Colors.primary,
-                            alignSelf: 'center',
-                            borderRadius: 10,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            paddingLeft: 20,
-                            paddingRight: 20,
-                            paddingTop: 8,
-                            paddingBottom: 8,
-                            flex: 1,
+                            color: Colors.black,
+                            fontWeight: '600',
                           }}
                         >
-                          {!checkLoading ? (
-                            <Text
-                              style={{
-                                color: Colors.white,
-                                fontWeight: '500',
-                                fontSize: 16,
-                              }}
-                            >
-                              {t('placeOrder')}
-                            </Text>
-                          ) : (
-                            <ActivityIndicator size="small" color="#FFFFFF" />
-                          )}
-                        </TouchableOpacity>
+                          {formatPrice(
+                            Number(
+                              cartDetails?.cart?.cost?.totalAmount?.amount,
+                            ),
+                          )}{' '}
+                          {cartDetails?.cart?.cost?.totalAmount?.currencyCode}
+                        </Text>
                       </View>
-                    )}
-                  </>
-                );
-              }}
-            />
-          ) : (
-            <CartSeklton />
-          )}
-        </View>
-      </SafeAreaView>
+
+                      <TouchableOpacity
+                        onPress={() => {
+                          next();
+                        }}
+                        style={{
+                          backgroundColor: Colors.primary,
+                          alignSelf: 'center',
+                          borderRadius: 10,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          paddingLeft: 20,
+                          paddingRight: 20,
+                          paddingTop: 8,
+                          paddingBottom: 8,
+                          flex: 1,
+                        }}
+                      >
+                        {!checkLoading ? (
+                          <Text
+                            style={{
+                              color: Colors.white,
+                              fontWeight: '500',
+                              fontSize: 16,
+                            }}
+                          >
+                            {t('placeOrder')}
+                          </Text>
+                        ) : (
+                          <ActivityIndicator size="small" color="#FFFFFF" />
+                        )}
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </>
+              );
+            }}
+          />
+        ) : (
+          <CartSeklton />
+        )}
+      </View>
     </>
   );
 };

@@ -23,6 +23,8 @@ const Colors = {
   green: '#1CA650',
   red: 'red',
   yellow: '#FFFF00',
+
+  skyBlue: '#87CEEB',
 };
 
 export default Colors;

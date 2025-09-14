@@ -1,3 +1,5 @@
+import ReactNativeHapticFeedback, { HapticFeedbackTypes } from 'react-native-haptic-feedback';
+
 export function formatPrice(price: number): string {
   const priceStr = price.toString();
   return price % 1 === 0 ? priceStr.split('.')[0] : priceStr;
@@ -54,3 +56,35 @@ export const logger = {
 
 export default formateDate;
 
+// utils/haptic.ts
+
+export type HapticType =
+  | 'selection'
+  | 'impactLight'
+  | 'impactMedium'
+  | 'impactHeavy'
+  | 'notificationSuccess'
+  | 'notificationWarning'
+  | 'notificationError'
+  | 'clockTick'
+  | 'contextClick'
+  | 'keyboardPress'
+  | 'keyboardRelease'
+  | 'keyboardTap'
+  | 'longPress'
+  | 'textHandleMove'
+  | 'virtualKey'
+  | 'virtualKeyRelease';
+
+const hapticOptions = {
+  enableVibrateFallback: true,
+  ignoreAndroidSystemSettings: false,
+};
+
+/**
+ * Triggers haptic feedback of a given type.
+ * @param type - One of the supported Haptic types.
+ */
+export const triggerHaptic = (type: HapticType = 'selection') => {
+  ReactNativeHapticFeedback.trigger(type, hapticOptions);
+};

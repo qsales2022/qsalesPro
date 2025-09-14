@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {CategoryItem, Header} from '../../../components';
-import {FlatList, ScrollView, StyleSheet, View} from 'react-native';
+import {FlatList, ScrollView, StyleSheet, View, StatusBar, Platform} from 'react-native';
 import Colors from '../../../Theme/Colors';
 import strings from '../../../assets/i18n/strings';
 import {useGetCollections} from '../../../Api/hooks';
@@ -185,11 +185,15 @@ const Explore = () => {
   }, []);
   return (
     <>
-     <LinearGradient
-      colors={[lightenColor(Colors.yellow, 10), lightenColor(Colors.yellow, 80)]}
-
-      style={styles.container}
-    >
+      <StatusBar
+        backgroundColor={ Platform.OS=="ios" ?lightenColor(Colors.skyBlue, 50):"transparent"}
+        barStyle="dark-content"
+        // translucent={false}
+      />
+      <LinearGradient
+        colors={[lightenColor(Colors.skyBlue, 50), lightenColor(Colors.skyBlue, 90)]}
+        style={styles.container}
+      >
       <View>
         <Header
           title={strings.categories}
@@ -369,12 +373,8 @@ const styles = StyleSheet.create({
   container: {
     height: getHeight(8),
     width: '100%',
-
-    paddingTop: getHeight(20),
-    paddingBottom: getHeight(20),
-    display:"flex",
-    justifyContent: "space-between",
-    // alignItems:"center"
+    display: "flex",
+    justifyContent: "center",
   },
 });
 export default Explore;

@@ -10,6 +10,8 @@ import {
   Alert,
   Image,
   Linking,
+  StatusBar,
+  Platform,
 } from 'react-native';
 import Colors from '../../../Theme/Colors';
 import CommonStyles from '../../../Theme/CommonStyles';
@@ -34,6 +36,7 @@ import { t } from 'i18next';
 import BottomSheetForgotPassword from '../../../components/BottomSheet/BottomSheetForgotPassword';
 import { AppEventsLogger } from 'react-native-fbsdk-next';
 import LinearGradient from 'react-native-linear-gradient';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Account = ({ navigation }: any) => {
   const [loginModalVisible, setLoginModalVisible] = useState(false);
@@ -65,22 +68,13 @@ const Account = ({ navigation }: any) => {
   }, []);
 
   return (
-    <View
+    
+    <SafeAreaView
       style={[CommonStyles.containerFlex1, { backgroundColor: Colors.white }]}
     >
+   
       <View style={styles.container}>
-        <LinearGradient
-          colors={[
-            lightenColor(Colors.yellow, 10),
-
-            lightenColor(Colors.yellow, 80),
-          ]}
-          style={{
-            minWidth: '500%',
-            minHeight: getHeight(10),
-            left: -getWidth(1) * 0.025,
-          }}
-        >
+  
           <View
             style={[
               CommonStyles.flexRowContainer,
@@ -99,7 +93,7 @@ const Account = ({ navigation }: any) => {
               {t('account')}
             </Text>
           </View>
-        </LinearGradient>
+   
         {token && data && (
           <View
             style={{
@@ -696,7 +690,7 @@ const Account = ({ navigation }: any) => {
         }}
         visible={languageVisible}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

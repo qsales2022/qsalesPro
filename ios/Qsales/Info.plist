@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>9.5</string>
+	<string>10.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -43,10 +43,6 @@
 			</array>
 		</dict>
 		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>com.qsales</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>fb1282934382523657</string>
@@ -55,11 +51,12 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>25</string>
-	<key>FacebookAdvertiserIDCollectionEnabled</key>
-	<true/>
+
 	<key>FacebookAppID</key>
 	<string>1282934382523657</string>
 	<key>FacebookAutoLogAppEventsEnabled</key>
+	<true/>
+	<key>FacebookAdvertiserIDCollectionEnabled</key>
 	<true/>
 	<key>FacebookClientToken</key>
 	<string>cdfc1be82fe6ecd4889c3ab2c91c9d43e4ab4f0e7638d190ae1169b008981444</string>
@@ -67,7 +64,12 @@
 	<string>Qsales</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>instagram</string>
+		<string>facebook</string>
 		<string>fbapi</string>
+		<string>fb-messenger-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
 		<string>fb-messenger-share-api</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
@@ -97,7 +99,7 @@
 	<array>
 		<dict>
 			<key>SKAdNetworkIdentifier</key>
-			<string>cDkw7geqH3.skadnetwork</string>
+			<string>v9wttpbfk9.skadnetwork</string>
 		</dict>
 		<dict>
 			<key>SKAdNetworkIdentifier</key>

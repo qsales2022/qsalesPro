@@ -9,6 +9,7 @@ import {
   FlatList,
   StyleSheet,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native';
 import React, {FC, useEffect, useState} from 'react';
 import Colors from '../../../Theme/Colors';
@@ -26,6 +27,7 @@ import SectionItem from '../../../components/SectionItem/SectionItem';
 import {useNavigation} from '@react-navigation/native';
 import screens from '../../../Navigation/screens';
 import {AppEventsLogger} from 'react-native-fbsdk-next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Search = ({route, navigation}: any) => {
   const {language} = useSelector((state: RootState) => state.AuthReducer);
@@ -49,13 +51,17 @@ const Search = ({route, navigation}: any) => {
     });
   }, []);
   return (
-    <View
+    <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: Colors.transparentBlack,
-
+        backgroundColor: Colors.white,
         justifyContent: 'flex-end',
       }}>
+         <StatusBar
+        backgroundColor={ "white"}
+        barStyle="dark-content"
+        // translucent={false}
+      />
       <View
         style={{
           flex: 1,
@@ -190,7 +196,7 @@ const Search = ({route, navigation}: any) => {
           }}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 const styles = StyleSheet.create({

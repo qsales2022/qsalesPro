@@ -1,6 +1,6 @@
 {
   "name": "Qsales",
-  "version": "5.1.5",
+  "version": "6.1.1",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -35,7 +35,8 @@
     "i18next": "^22.5.0",
     "install": "^0.13.0",
     "intl-pluralrules": "^2.0.1",
-    "lottie-react-native": "^5.1.6",
+    "lottie-ios": "4.5.0",
+    "lottie-react-native": "7.3.2",
     "moment": "^2.29.4",
     "npm": "^10.8.0",
     "react": "19.1.0",
@@ -48,6 +49,7 @@
     "react-native-fast-image": "^8.6.3",
     "react-native-fbsdk-next": "^13.4.1",
     "react-native-gesture-handler": "^2.27.2",
+    "react-native-haptic-feedback": "^2.3.3",
     "react-native-in-app-review": "^4.3.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-linear-gradient": "^2.8.3",

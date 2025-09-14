@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
+  Platform,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -21,7 +22,6 @@ import { updateLaunch } from '../redux/reducers/GlobalReducer';
 import LinearGradient from 'react-native-linear-gradient';
 import { View } from 'react-native-animatable';
 import { getHeight, lightenColor } from '../Theme/Constants';
-
 
 const HomeTabs = () => {
   const isFocused = useIsFocused();
@@ -79,23 +79,22 @@ const HomeTabs = () => {
 
   return (
     <>
-      {/* <SafeAreaView style={CommonStyles.containerFlex1}> */}
+ 
       <View style={styles.container}>
         {/* Transparent StatusBar */}
         <StatusBar
+          barStyle="dark-content"
           translucent
           backgroundColor="transparent"
-          barStyle="dark-content"
         />
 
         {/* Gradient background for the top */}
-     
 
         {/* Your Tab Navigator */}
         <Tab.Navigator
           screenOptions={{
             header: () => null,
-            tabBarStyle: styles.tabBar,
+            // tabBarStyle: styles.tabBar,
           }}
           tabBar={customTabMenu}
         >
@@ -109,7 +108,7 @@ const HomeTabs = () => {
           <Tab.Screen name="ACCOUNT" component={Account} />
         </Tab.Navigator>
       </View>
-      {/* </SafeAreaView> */}
+
     </>
   );
 };
@@ -120,5 +119,4 @@ const styles = StyleSheet.create({
     flex: 1,
     height: getHeight(1),
   },
- 
 });

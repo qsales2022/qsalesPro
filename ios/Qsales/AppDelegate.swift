@@ -1,53 +1,3 @@
-// import UIKit
-// import React
-// import React_RCTAppDelegate
-// import ReactAppDependencyProvider
-
-// @main
-// class AppDelegate: UIResponder, UIApplicationDelegate {
-//   var window: UIWindow?
-
-//   var reactNativeDelegate: ReactNativeDelegate?
-//   var reactNativeFactory: RCTReactNativeFactory?
-
-//   func application(
-//     _ application: UIApplication,
-//     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
-//   ) -> Bool {
-//     let delegate = ReactNativeDelegate()
-//     let factory = RCTReactNativeFactory(delegate: delegate)
-//     delegate.dependencyProvider = RCTAppDependencyProvider()
-
-//     reactNativeDelegate = delegate
-//     reactNativeFactory = factory
-
-//     window = UIWindow(frame: UIScreen.main.bounds)
-
-//     factory.startReactNative(
-//       withModuleName: "Qsales",
-//       in: window,
-//       launchOptions: launchOptions
-//     )
-
-//     return true
-//   }
-// }
-
-// class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
-//   override func sourceURL(for bridge: RCTBridge) -> URL? {
-//     self.bundleURL()
-//   }
-
-//   override func bundleURL() -> URL? {
-// #if DEBUG
-//     RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
-// #else
-//     Bundle.main.url(forResource: "main", withExtension: "jsbundle")
-// #endif
-//   }
-// }
-
-
 import UIKit
 import React
 import React_RCTAppDelegate
@@ -70,13 +20,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
 
-  FirebaseApp.configure()
+    FirebaseApp.configure()
 
-    // 📱 Configure Facebook SDK with proper data processing options
-    ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
+    // 📱 Configure Facebook SDK - Official way
+    ApplicationDelegate.shared.application(
+      application,
+      didFinishLaunchingWithOptions: launchOptions
+    )
     
     // Set data processing options for CCPA compliance
-    // This should resolve the setDataProcessingOptions error
     Settings.shared.setDataProcessingOptions([], country: 0, state: 0)
     
     // Optional: Set additional Facebook settings
@@ -90,14 +42,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
           switch status {
           case .authorized:
             print("App Tracking Authorized")
+            Settings.shared.isAdvertiserTrackingEnabled = true
+
           case .denied:
             print("App Tracking Denied")
+            Settings.shared.isAdvertiserTrackingEnabled = false
+
           case .restricted:
             print("App Tracking Restricted")
+            Settings.shared.isAdvertiserTrackingEnabled = false
+
           case .notDetermined:
             print("App Tracking Not Determined")
+            Settings.shared.isAdvertiserTrackingEnabled = false
+
           @unknown default:
             print("App Tracking Unknown")
+            Settings.shared.isAdvertiserTrackingEnabled = false
           }
         }
       }
@@ -122,12 +83,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     return true
   }
 
-  // 📦 Handle deep links and Facebook Login redirects
-  func application(_ app: UIApplication, open url: URL,
-                   options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-
-    // Handle Facebook URL first
-    if ApplicationDelegate.shared.application(app, open: url, options: options) {
+  // 📦 Handle deep links and Facebook Login redirects - Official way
+  func application(
+    _ app: UIApplication,
+    open url: URL,
+    options: [UIApplication.OpenURLOptionsKey : Any] = [:]
+  ) -> Bool {
+    
+    // Handle Facebook URL using official method
+    let facebookHandled = ApplicationDelegate.shared.application(
+      app,
+      open: url,
+      sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
+      annotation: options[UIApplication.OpenURLOptionsKey.annotation]
+    )
+    
+    if facebookHandled {
       return true
     }
 
@@ -152,7 +123,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func application(_ application: UIApplication,
                    didFailToRegisterForRemoteNotificationsWithError error: Error) {
-    // Handle registration failure if using push notifications
     print("Failed to register for remote notifications: \(error)")
   }
 }

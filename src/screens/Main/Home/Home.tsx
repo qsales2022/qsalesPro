@@ -19,24 +19,23 @@ import React, {
   FC,
 } from 'react';
 import images from '../../../assets/Images';
-import {getHeight, getWidth} from '../../../Theme/Constants';
+import { getHeight, getWidth } from '../../../Theme/Constants';
 import Colors from '../../../Theme/Colors';
 import CategoryList from './CategoryList/CategoryList';
-import {BannerStrip, OfferView, SectionView} from '../../../components';
+import { BannerStrip, OfferView, SectionView } from '../../../components';
 import strings from '../../../assets/i18n/strings';
+
 import {
   useGetProducts,
   useGetCollections,
   useGetHomeBannerList,
-  useGetHomeSectionsFirst,
-  useGetHomeSectionsTwo,
   useGetCart,
   useCreateCart,
 } from '../../../Api/hooks';
 import screens from '../../../Navigation/screens';
 import Swiper from 'react-native-swiper';
-import {useIsFocused} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 import SpInAppUpdates, {
   NeedsUpdateResponse,
@@ -47,32 +46,31 @@ import {
   toggleLoader,
   updateSelectedTab,
 } from '../../../redux/reducers/GlobalReducer';
-import useToken from '../../../Api/hooks/useToken';
-import {View} from 'react-native-animatable';
+import { View } from 'react-native-animatable';
 import FastImage from 'react-native-fast-image';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {t} from 'i18next';
+import { t } from 'i18next';
 import i18n from 'i18next';
-import {requestNotifications} from 'react-native-permissions';
+import { requestNotifications } from 'react-native-permissions';
 import InAppReview from 'react-native-in-app-review';
 import messaging from '@react-native-firebase/messaging';
 import firebase from '@react-native-firebase/app';
-import useGetHomeSectionsThree from '../../../Api/hooks/useGetHomeSectionThree';
 import SkeletonCard from '../../../components/skeletonCard/SkeletonCard';
 import useGetCategoryProducts from '../../../Api/hooks/useGetCategoryProducts';
 import useGetHomeSection from '../../../Api/hooks/useGetHomeSection';
-import {homePush} from '../../../helpers/HomePush';
+import { homePush } from '../../../helpers/HomePush';
 import Translation from '../../../assets/i18n/Translation';
-import {RootState} from '../../../redux/store';
+import { RootState } from '../../../redux/store';
 import axios from 'axios';
-import {AppEventsLogger} from 'react-native-fbsdk-next';
-import {getReview, setReview} from '../../../AsyncStorage/StorageUtil';
+import { AppEventsLogger } from 'react-native-fbsdk-next';
+import { getReview, setReview } from '../../../AsyncStorage/StorageUtil';
 import useGetOffer from '../../../Api/hooks/useGetOffer';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RouteProp} from '@react-navigation/native';
-import {useStallionUpdate, restart} from 'react-native-stallion';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp } from '@react-navigation/native';
+import { useStallionUpdate, restart } from 'react-native-stallion';
 import AnimatedModal from '../../../components/animatedModal/AnimatedModal';
 import RestartModal from './RestartModal';
+import { triggerHaptic } from '../../../Utils';
 
 // Memoized constants to prevent recreation
 const MOUNTING_CATEGORY = [
@@ -86,7 +84,7 @@ const MOUNTING_CATEGORY = [
     category: 'new-arrivals',
     title: strings.newArrivals,
     item: [],
-    id: 1,
+    id: 2,
   },
   {
     category: 'camping-goods-supplies',
@@ -96,12 +94,12 @@ const MOUNTING_CATEGORY = [
     metaView: [],
     metaId: '15876423969',
   },
-  {category: 'add-more-save-more', title: 'comboDeals', item: [], id: 3},
+  { category: 'add-more-save-more', title: 'comboDeals', item: [], id: 4 },
   {
     category: 'qr-1-qr-29-deals',
     title: 'under30',
     item: [],
-    id: 4,
+    id: 5,
     metaView: [],
     metaId: '15876522273',
   },
@@ -109,40 +107,40 @@ const MOUNTING_CATEGORY = [
     category: 'kitchen-improvement',
     title: strings.kitchenImprovement,
     item: [],
-    id: 5,
+    id: 6,
   },
   {
     category: 'home-organization',
     title: strings.Homeorganization,
     item: [],
-    id: 6,
+    id: 7,
     metaView: [],
     metaId: '44402147617',
   },
-  {category: 'home-care', title: 'Home Care', item: [], id: 7},
+  { category: 'home-care', title: 'Home Care', item: [], id: 8 },
   {
     category: 'home-cleaning',
     title: strings.HomeCleaning,
     item: [],
-    id: 8,
+    id: 9,
     metaView: [],
     metaId: '44902088993',
   },
-  {category: 'racks-storage', title: strings.RacksStorage, item: [], id: 9},
+  { category: 'racks-storage', title: strings.RacksStorage, item: [], id: 10 },
   {
     category: 'cooking-appliances',
     title: strings.CookingAppliances,
     item: [],
     metaView: [],
     metaId: '44902220065',
-    id: 10,
+    id: 11,
   },
-  {category: 'bags-pouches', title: strings.Bags, item: [], id: 11},
+  { category: 'bags-pouches', title: strings.Bags, item: [], id: 12 },
   {
     category: 'bathroom-laundry-supplies',
     title: strings.BathCare,
     item: [],
-    id: 12,
+    id: 13,
     metaView: [],
     metaId: '44902252833',
   },
@@ -150,13 +148,13 @@ const MOUNTING_CATEGORY = [
     category: 'fitness-personal-care',
     title: strings.BeautyFitness,
     item: [],
-    id: 13,
+    id: 14,
   },
   {
     category: 'car-accessories',
     title: strings.CarAccessories,
     item: [],
-    id: 14,
+    id: 15,
   },
 ];
 
@@ -204,25 +202,13 @@ interface Category {
   metaId?: string;
 }
 
-interface SectionViewProps {
-  viewAllPress: () => void;
-  items: any[];
-  title: string;
-  page: string;
-  offerList?: any;
-}
-
-interface OfferViewProps {
-  data: any[];
-}
-
 interface HomeProps {
   navigation: NativeStackNavigationProp<any>;
 }
 
 // Memoized banner item component
 const BannerItem: FC<BannerItemProps> = React.memo(
-  ({item, index, navigation}) => {
+  ({ item, index, navigation }) => {
     const handlePress = useCallback(() => {
       if (item.type === 'collection') {
         if (item.target_handle === 'all') {
@@ -246,22 +232,22 @@ const BannerItem: FC<BannerItemProps> = React.memo(
         <Image
           resizeMode="stretch"
           style={styles.swiperContainer}
-          source={{uri: item?.image_url}}
+          source={{ uri: item?.image_url }}
         />
       </TouchableWithoutFeedback>
     );
   },
 );
 
-const Home: FC<HomeProps> = ({navigation}) => {
+const Home: FC<HomeProps> = ({ navigation }) => {
   // Hooks
-  const {collections} = useGetCollections(100);
-  const {offerList} = useGetOffer();
-  const {bannerImagesEN, bannerImagesAR} = useGetHomeBannerList();
-  const {getProducts} = useGetCategoryProducts();
-  const {cartDetails, getCartData} = useGetCart();
+  const { collections } = useGetCollections(100);
+  const { offerList } = useGetOffer();
+  const { bannerImagesEN, bannerImagesAR } = useGetHomeBannerList();
+  const { getProducts } = useGetCategoryProducts();
+  const { cartDetails, getCartData } = useGetCart();
   const getSectionData = useGetHomeSection();
-  const {cart, createCart} = useCreateCart();
+  const { cart, createCart } = useCreateCart();
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
 
@@ -269,16 +255,27 @@ const Home: FC<HomeProps> = ({navigation}) => {
   const [categories, setCategories] = useState<Category[]>(MOUNTING_CATEGORY);
   const [categoryList, setCategoryList] = useState<any[]>([]);
   const [categoryList1, setCategoryList1] = useState<any[]>([]);
-  const [categoryIndex, setCategoryIndex] = useState<number>(0);
   const [modalVisible, setModalVisible] = useState(true);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [categoriesLoading, setCategoriesLoading] = useState<boolean>(true);
   const [isRestartModalVisible, setIsRestartModalVisible] =
     useState<boolean>(false);
-  const [swiperData, setSwiperData]: [
-    'en' | 'ar',
-    (lang: 'en' | 'ar') => void,
-  ] = useState<'en' | 'ar'>('en');
+  const [swiperData, setSwiperData] = useState<'en' | 'ar'>('en');
+  const [flatListKey, setFlatListKey] = useState<string>('initial');
+
+  // State to track initial categories loading
+  const [initialCategoriesLoaded, setInitialCategoriesLoaded] = useState({
+    specialOffer: false,
+    newArrivals: false,
+  });
+
+  // const offerList = {
+  //   hasVisible: false,
+  // };
+  // State for parallel loading
+  const [isParallelLoading, setIsParallelLoading] = useState<boolean>(false);
+  const [parallelLoadingComplete, setParallelLoadingComplete] =
+    useState<boolean>(false);
 
   // Refs for performance
   const hasInitialized = useRef<boolean>(false);
@@ -288,14 +285,11 @@ const Home: FC<HomeProps> = ({navigation}) => {
   const language = useSelector((state: any) => state.AuthReducer.language);
   const launch = useSelector((state: any) => state.globalReducer.launch);
 
-  // Get new arrivals data
-  const newArrivals = useGetProducts(
-    offerList?.hasVisible ? 'special-offer' : 'new-arrivals',
-    12,
-    '',
-  );
+  // Product hooks for initial categories
+  const newArrivals = useGetProducts('new-arrivals', 12, '', 'CREATED_AT_DESC');
+  const specialOffers: any = useGetProducts('special-offer', 12, '');
 
-  const {isRestartRequired} = useStallionUpdate();
+  const { isRestartRequired } = useStallionUpdate();
 
   useEffect(() => {
     if (isRestartRequired) {
@@ -386,90 +380,373 @@ const Home: FC<HomeProps> = ({navigation}) => {
     };
   }, []);
 
-  // Update new arrivals list
-  const updateNewList = useCallback(() => {
-    if (!newArrivals?.products?.length || !categories.length) return;
+  // Parallel category fetching function
+  const fetchAllCategoriesInParallel = useCallback(async (): Promise<void> => {
+    if (isParallelLoading || parallelLoadingComplete) {
+      console.log('Skipping parallel fetch: already loading or complete');
+      return;
+    }
+
+    setIsParallelLoading(true);
+    setCategoriesLoading(true);
+
+    const categoriesToFetch = MOUNTING_CATEGORY.filter(
+      cat =>
+        cat.category !== 'special-offer' && cat.category !== 'new-arrivals',
+    );
+
+    try {
+      console.log(
+        'Starting parallel fetch for',
+        categoriesToFetch.length,
+        'categories',
+      );
+
+      const categoryPromises = categoriesToFetch.map(async category => {
+        try {
+          console.log(`Fetching products for: ${category.category}`);
+          const products = await getProducts(category.category, 12);
+          let metaView: any[] = [];
+          if (category.metaId) {
+            try {
+              metaView = (await getSectionData(category.metaId)) || [];
+              console.log(
+                `Fetched section data for ${category.category}:`,
+                metaView.length,
+              );
+            } catch (error) {
+              console.error(
+                `Section data error for ${category.category}:`,
+                error,
+              );
+            }
+          }
+
+          return {
+            ...category,
+            item: Array.isArray(products) ? products : [],
+            metaView: metaView,
+          };
+        } catch (error) {
+          console.error(`Error fetching ${category.category}:`, error);
+          return {
+            ...category,
+            item: [],
+            metaView: [],
+          };
+        }
+      });
+
+      console.log('Waiting for all category promises to resolve...');
+      const results = await Promise.all(categoryPromises);
+      console.log('All category promises resolved, updating state');
+
+      setCategories(prev => {
+        const updatedCategories = [...prev];
+
+        results.forEach(result => {
+          const findIndex = updatedCategories.findIndex(
+            cat => cat.category === result.category,
+          );
+          if (findIndex !== -1) {
+            updatedCategories[findIndex] = {
+              ...updatedCategories[findIndex],
+              item: result.item,
+              metaView: result.metaView || [],
+            };
+            console.log(
+              `Updated ${result.category} with ${
+                result.item.length
+              } products and ${result.metaView?.length || 0} meta items`,
+            );
+          }
+        });
+
+        console.log('Updated all categories with parallel fetch results');
+        return updatedCategories;
+      });
+
+      setParallelLoadingComplete(true);
+    } catch (error) {
+      console.error('Parallel category fetch error:', error);
+    } finally {
+      setCategoriesLoading(false);
+      setIsParallelLoading(false);
+    }
+  }, [getProducts, getSectionData, isParallelLoading, parallelLoadingComplete]);
+
+  // Optimized function to handle initial categories
+
+  // const updateInitialCategories = useCallback(() => {
+  //   console.log('Updating initial categories:', {
+  //     specialOffers: {
+  //       products: specialOffers?.products?.length || 0,
+  //       loading: specialOffers?.loading,
+  //       error: specialOffers?.error,
+  //     },
+  //     newArrivals: {
+  //       products: newArrivals?.products?.length || 0,
+  //       loading: newArrivals?.loading,
+  //       error: newArrivals?.error,
+  //     },
+  //     offerVisible: offerList?.hasVisible,
+  //   });
+
+  //   setCategories(prev => {
+  //     const updatedCategories = [...prev];
+  //     let hasUpdates = false;
+
+  //     // Update special-offer
+  //     if (
+  //       !initialCategoriesLoaded.specialOffer &&
+  //       offerList?.hasVisible !== undefined
+  //     ) {
+  //       const specialOfferIndex = updatedCategories.findIndex(
+  //         cat => cat.category === 'special-offer',
+  //       );
+  //       if (specialOfferIndex !== -1) {
+  //         if (offerList?.hasVisible === false) {
+  //           updatedCategories[specialOfferIndex] = {
+  //             ...updatedCategories[specialOfferIndex],
+  //             item: [],
+  //           };
+  //           console.log(
+  //             'Special-offer disabled (hasVisible=false), set empty array',
+  //           );
+  //           setInitialCategoriesLoaded(prev => ({
+  //             ...prev,
+  //             specialOffer: true,
+  //           }));
+  //           hasUpdates = true;
+  //         } else {
+  //           // Set products immediately, even if still loading
+  //           const products = Array.isArray(specialOffers?.products)
+  //             ? specialOffers?.products
+  //             : [];
+  //           updatedCategories[specialOfferIndex] = {
+  //             ...updatedCategories[specialOfferIndex],
+  //             item: products,
+  //           };
+  //           console.log(
+  //             'Special-offer enabled, set products:',
+  //             products.length,
+  //           );
+  //           setInitialCategoriesLoaded(prev => ({
+  //             ...prev,
+  //             specialOffer: true,
+  //           }));
+  //           hasUpdates = true;
+  //         }
+  //       }
+  //     }
+
+  //     // Update new-arrivals
+  //     if (!initialCategoriesLoaded.newArrivals && !newArrivals?.loading) {
+  //       const newArrivalsIndex = updatedCategories.findIndex(
+  //         cat => cat.category === 'new-arrivals',
+  //       );
+  //       if (newArrivalsIndex !== -1) {
+  //         const products = Array.isArray(newArrivals?.products)
+  //           ? newArrivals?.products
+  //           : [];
+  //         updatedCategories[newArrivalsIndex] = {
+  //           ...updatedCategories[newArrivalsIndex],
+  //           item: products,
+  //         };
+  //         console.log('Updated new-arrivals with', products.length, 'products');
+  //         setInitialCategoriesLoaded(prev => ({ ...prev, newArrivals: true }));
+  //         hasUpdates = true;
+  //       }
+  //     }
+
+  //     // Start parallel loading as soon as offer status is known and new-arrivals is done
+  //     if (
+  //       offerList?.hasVisible !== undefined &&
+  //       !newArrivals?.loading &&
+  //       !parallelLoadingComplete &&
+  //       !isParallelLoading
+  //     ) {
+  //       console.log(
+  //         'Starting parallel loading - offer status known:',
+  //         offerList?.hasVisible,
+  //       );
+  //       fetchAllCategoriesInParallel();
+  //     }
+
+  //     return hasUpdates ? updatedCategories : prev;
+  //   });
+  // }, [
+  //   newArrivals?.products,
+  //   newArrivals?.loading,
+  //   specialOffers?.products,
+  //   specialOffers?.loading,
+  //   offerList?.hasVisible,
+  //   initialCategoriesLoaded,
+  //   parallelLoadingComplete,
+  //   isParallelLoading,
+  //   fetchAllCategoriesInParallel,
+  // ]);
+
+  const updateInitialCategories = useCallback(() => {
+    console.log('Updating initial categories:', {
+      specialOffers: {
+        products: specialOffers?.products?.length || 0,
+        loading: specialOffers?.loading,
+        error: specialOffers?.error,
+      },
+      newArrivals: {
+        products: newArrivals?.products?.length || 0,
+        loading: newArrivals?.loading,
+        error: newArrivals?.error,
+      },
+      offerVisible: offerList?.hasVisible,
+    });
 
     setCategories(prev => {
       const updatedCategories = [...prev];
+      let hasUpdates = false;
 
-      if (offerList?.hasVisible) {
+      // Update special-offer - Fix the logic here
+      if (!initialCategoriesLoaded.specialOffer && !specialOffers?.loading) {
         const specialOfferIndex = updatedCategories.findIndex(
           cat => cat.category === 'special-offer',
         );
+
         if (specialOfferIndex !== -1) {
-          updatedCategories[specialOfferIndex].item = newArrivals.products;
+          // Check if offers are disabled
+          if (offerList?.hasVisible === false) {
+            updatedCategories[specialOfferIndex] = {
+              ...updatedCategories[specialOfferIndex],
+              item: [],
+            };
+            console.log(
+              'Special-offer disabled (hasVisible=false), set empty array',
+            );
+          } else {
+            // Set products if available
+            const products = Array.isArray(specialOffers?.products)
+              ? specialOffers?.products
+              : [];
+            updatedCategories[specialOfferIndex] = {
+              ...updatedCategories[specialOfferIndex],
+              item: products,
+            };
+            console.log(
+              'Special-offer enabled, set products:',
+              products.length,
+            );
+          }
+
+          setInitialCategoriesLoaded(prev => ({
+            ...prev,
+            specialOffer: true,
+          }));
+          hasUpdates = true;
         }
-        setCategoryIndex(1);
-      } else {
+      }
+
+      // Rest of your logic remains the same...
+      // Update new-arrivals
+      if (!initialCategoriesLoaded.newArrivals && !newArrivals?.loading) {
         const newArrivalsIndex = updatedCategories.findIndex(
           cat => cat.category === 'new-arrivals',
         );
         if (newArrivalsIndex !== -1) {
-          updatedCategories[newArrivalsIndex].item = newArrivals.products;
+          const products = Array.isArray(newArrivals?.products)
+            ? newArrivals?.products
+            : [];
+          updatedCategories[newArrivalsIndex] = {
+            ...updatedCategories[newArrivalsIndex],
+            item: products,
+          };
+          console.log('Updated new-arrivals with', products.length, 'products');
+          setInitialCategoriesLoaded(prev => ({ ...prev, newArrivals: true }));
+          hasUpdates = true;
         }
-        setCategoryIndex(2);
       }
-      return updatedCategories;
+
+      // Start parallel loading when both are ready
+      if (
+        !specialOffers?.loading &&
+        !newArrivals?.loading &&
+        !parallelLoadingComplete &&
+        !isParallelLoading
+      ) {
+        console.log('Starting parallel loading - initial categories loaded');
+        fetchAllCategoriesInParallel();
+      }
+
+      return hasUpdates ? updatedCategories : prev;
     });
+  }, [
+    newArrivals?.products,
+    newArrivals?.loading,
+    specialOffers?.products,
+    specialOffers?.loading,
+    offerList?.hasVisible,
+    initialCategoriesLoaded,
+    parallelLoadingComplete,
+    isParallelLoading,
+    fetchAllCategoriesInParallel,
+  ]);
 
-    setLoading(false);
-    setCategoriesLoading(false);
-  }, [newArrivals?.products, offerList?.hasVisible, categories.length]);
-
+  // Effect to update initial categories
   useEffect(() => {
-    updateNewList();
-  }, [updateNewList]);
+    updateInitialCategories();
+  }, [updateInitialCategories]);
 
-  // Optimized category loading
-  const getItem = useCallback(async () => {
-    if (loadingRef.current || categoryIndex >= MOUNTING_CATEGORY.length) return;
+  // Handle loading state
+  useEffect(() => {
+    if (
+      initialCategoriesLoaded.specialOffer &&
+      initialCategoriesLoaded.newArrivals &&
+      loading
+    ) {
+      setLoading(false);
+    }
+  }, [initialCategoriesLoaded, loading]);
 
-    loadingRef.current = true;
-    setCategoriesLoading(true);
-
-    try {
-      const products = await getProducts(
-        MOUNTING_CATEGORY[categoryIndex]?.category,
-        12,
-      );
-
-      const updatedCategories = [...categories];
-      const findCategoryIndex = updatedCategories.findIndex(
-        category =>
-          category?.category === MOUNTING_CATEGORY[categoryIndex]?.category,
-      );
-
-      if (findCategoryIndex !== -1) {
-        await homePush(updatedCategories, findCategoryIndex, products);
-
-        if (updatedCategories[findCategoryIndex]?.metaId) {
-          try {
-            const sectionList = await getSectionData(
-              updatedCategories[findCategoryIndex].metaId,
-            );
-            updatedCategories[findCategoryIndex].metaView = sectionList;
-          } catch (error) {
-            console.error('Section data error:', error);
-          }
+  // Timeout to prevent infinite loading
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (loading) {
+        console.warn(
+          'Initial categories loading timed out, forcing loading to false',
+        );
+        setLoading(false);
+        if (!parallelLoadingComplete && !isParallelLoading) {
+          fetchAllCategoriesInParallel();
         }
-
-        setCategories(updatedCategories);
-        setCategoryIndex(prev => prev + 1);
+        setCategories(prev => {
+          const updatedCategories = [...prev];
+          if (!initialCategoriesLoaded.specialOffer) {
+            const specialOfferIndex = updatedCategories.findIndex(
+              cat => cat.category === 'special-offer',
+            );
+            if (specialOfferIndex !== -1) {
+              updatedCategories[specialOfferIndex] = {
+                ...updatedCategories[specialOfferIndex],
+                item: [],
+              };
+              setInitialCategoriesLoaded(prev => ({
+                ...prev,
+                specialOffer: true,
+              }));
+              console.log('Timeout: Forced special-offer to empty array');
+            }
+          }
+          return updatedCategories;
+        });
+        setFlatListKey(`timeout-${Date.now()}`);
       }
-    } catch (error) {
-      console.error('Get item error:', error);
-    } finally {
-      setCategoriesLoading(false);
-      loadingRef.current = false;
-    }
-  }, [categoryIndex, categories, getProducts, getSectionData]);
-
-  const loadMoreCategory = useCallback(() => {
-    if (!categoriesLoading && !loadingRef.current) {
-      getItem();
-    }
-  }, [categoriesLoading, getItem]);
+    }, 8000);
+    return () => clearTimeout(timeout);
+  }, [
+    loading,
+    initialCategoriesLoaded,
+    parallelLoadingComplete,
+    isParallelLoading,
+  ]);
 
   // Async storage operations
   const storeCheckoutId = useCallback(async (value: string) => {
@@ -479,7 +756,6 @@ const Home: FC<HomeProps> = ({navigation}) => {
       console.error('Store checkout ID error:', error);
     }
   }, []);
-
   const getCheckoutId = useCallback(async () => {
     try {
       const value = await AsyncStorage.getItem('checkoutId');
@@ -516,7 +792,6 @@ const Home: FC<HomeProps> = ({navigation}) => {
           handleNotificationNavigation(remoteMessage);
         }
       });
-
     return () => {
       unsubscribeOnNotificationOpen();
       unsubscribeOnMessage();
@@ -525,7 +800,7 @@ const Home: FC<HomeProps> = ({navigation}) => {
 
   const handleNotificationNavigation = useCallback(
     (remoteMessage: any) => {
-      const {data} = remoteMessage;
+      const { data } = remoteMessage;
       if (data?.action_to === 'PRODUCT') {
         navigation.navigate(screens.productDetails, {
           handle: data.action_handle,
@@ -576,7 +851,6 @@ const Home: FC<HomeProps> = ({navigation}) => {
   }, []);
 
   const checkForUpdates = useCallback(async (useTestVersion = false) => {
-    // Set true for debug logs
     const inAppUpdates = new SpInAppUpdates(false);
 
     try {
@@ -588,14 +862,15 @@ const Home: FC<HomeProps> = ({navigation}) => {
 
       if (result.shouldUpdate) {
         const updateOptions =
-          Platform.OS === 'android' ? {updateType: IAUUpdateKind.FLEXIBLE} : {};
+          Platform.OS === 'android'
+            ? { updateType: IAUUpdateKind.FLEXIBLE }
+            : {};
 
         await inAppUpdates.startUpdate(updateOptions);
       }
     } catch (error: any) {
       const errorMessage = error?.message || '';
 
-      // Gracefully ignore "App not owned" error
       if (
         errorMessage.includes('ERROR_APP_NOT_OWNED') ||
         errorMessage.includes('Install Error(-10)')
@@ -608,6 +883,7 @@ const Home: FC<HomeProps> = ({navigation}) => {
       }
     }
   }, []);
+
   const checkAndRequestReview = useCallback(async () => {
     try {
       const hasReviewed = await getReview('hasReviewed');
@@ -628,20 +904,26 @@ const Home: FC<HomeProps> = ({navigation}) => {
 
   // Memoized render item
   const renderItem = useCallback(
-    ({item}: any) => {
-      if (!offerList?.hasVisible && item.category === 'special-offer') {
+    ({ item }: any) => {
+      if (
+        item.category === 'special-offer' &&
+        offerList?.hasVisible === false
+      ) {
+        console.log('Skipping special-offer render: hasVisible=false');
         return null;
       }
+
       return (
         <View key={item.id.toString()}>
           <SectionView
-            viewAllPress={() =>
+            viewAllPress={() => {
+              triggerHaptic('impactHeavy');
               navigation.navigate(screens.productList, {
                 title: item.title,
                 category: item.category,
                 offerList: offerList || {},
-              })
-            }
+              });
+            }}
             items={item.item}
             title={item.title}
             page="home"
@@ -670,7 +952,8 @@ const Home: FC<HomeProps> = ({navigation}) => {
       showsVerticalScrollIndicator={false}
       showsHorizontalScrollIndicator={false}
       nestedScrollEnabled
-      contentContainerStyle={styles.scrollContainer}>
+      contentContainerStyle={styles.scrollContainer}
+    >
       {/* Banner Swiper */}
       {bannerImages?.length > 0 && (
         <View>
@@ -680,7 +963,8 @@ const Home: FC<HomeProps> = ({navigation}) => {
             autoplayTimeout={6}
             style={styles.swiperContainer}
             dotColor={Colors.white}
-            activeDotColor={Colors.black}>
+            activeDotColor={Colors.black}
+          >
             {bannerImages.map((item, index) => (
               <BannerItem
                 key={index}
@@ -717,15 +1001,17 @@ const Home: FC<HomeProps> = ({navigation}) => {
               style={[
                 styles.title,
                 language === 'en'
-                  ? {marginRight: getWidth(16)}
-                  : {marginRight: getWidth(5)},
-              ]}>
+                  ? { marginRight: getWidth(16) }
+                  : { marginRight: getWidth(5) },
+              ]}
+            >
               <Translation textKey={strings.categories} />
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.viewAll}
-            onPress={() => navigation.navigate(screens.explore)}>
+            onPress={() => navigation.navigate(screens.explore)}
+          >
             <Text style={styles.viewTxt}>
               <Translation textKey="viewAll" />
             </Text>
@@ -750,19 +1036,7 @@ const Home: FC<HomeProps> = ({navigation}) => {
       </View>
 
       {/* Product Categories */}
-      {!loading ? (
-        <FlatList
-          data={categories}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => `${item.id}-${index}`}
-          onEndReached={loadMoreCategory}
-          onEndReachedThreshold={0.3}
-          removeClippedSubviews={true}
-          maxToRenderPerBatch={3}
-          windowSize={5}
-          initialNumToRender={3}
-        />
-      ) : (
+      {loading ? (
         <SkeletonCard
           data={[12, 34]}
           chaildVieWidth={2}
@@ -770,14 +1044,23 @@ const Home: FC<HomeProps> = ({navigation}) => {
           containerMarginTop={10}
           ContainerHeight={3}
         />
+      ) : (
+        <FlatList
+          data={categories}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => `${item.id}-${index}`}
+          key={flatListKey}
+          removeClippedSubviews={true}
+          maxToRenderPerBatch={5}
+          windowSize={7}
+          initialNumToRender={5}
+          ListFooterComponent={
+            categoriesLoading ? (
+              <ActivityIndicator size="large" color={Colors.primary} />
+            ) : null
+          }
+        />
       )}
-        {/* <AnimatedModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        title="BIG SALES"
-      >
-       
-      </AnimatedModal> */}
     </ScrollView>
   );
 };
@@ -857,7 +1140,6 @@ const styles = StyleSheet.create({
     color: '#666',
     lineHeight: 20,
   },
-  
 });
 
 export default React.memo(Home);

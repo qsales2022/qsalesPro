@@ -13,9 +13,6 @@ import analytics from '@react-native-firebase/analytics';
 // ✅ Facebook SDK Setup
 import { Settings } from 'react-native-fbsdk-next';
 
-// ✅ iOS Tracking Permission
-import { requestTrackingPermission } from 'react-native-tracking-transparency';
-
 // ✅ Initialize Facebook SDK
 Settings.initializeSDK();
 Settings.setAdvertiserTrackingEnabled(true);
@@ -29,18 +26,7 @@ if (Platform.OS === 'ios') {
   }
 }
 
-// ✅ Request App Tracking Permission on iOS 14+
-const requestTrackingPermissions = async () => {
-  try {
-    const status = await requestTrackingPermission();
-    if (status === 'authorized' || status === 'unavailable') {
-      Settings.setAdvertiserTrackingEnabled(true);
-    }
-  } catch (error) {
-    console.warn('Tracking permission request failed', error);
-  }
-};
-requestTrackingPermissions();
+
 
 // ✅ Importing analytics automatically uses configured native Firebase app
 analytics();

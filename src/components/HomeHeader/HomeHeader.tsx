@@ -1,6 +1,6 @@
-
 import {
   Image,
+  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -16,9 +16,7 @@ import { useNavigation } from '@react-navigation/native';
 import screens from '../../Navigation/screens';
 import { useTranslation } from 'react-i18next';
 import LinearGradient from 'react-native-linear-gradient';
-
-
-
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 
 const HomeHeader: React.FC = () => {
   const [languageVisible, setVisible] = useState<boolean>(false);
@@ -27,8 +25,10 @@ const HomeHeader: React.FC = () => {
 
   return (
     <LinearGradient
-      colors={[lightenColor(Colors.yellow, 10), lightenColor(Colors.yellow, 80)]}
-
+      colors={[
+        lightenColor(Colors.yellow, 50),
+        lightenColor(Colors.yellow, 90),
+      ]}
       style={styles.container}
     >
       <View style={styles.innerContainer}>
@@ -49,9 +49,7 @@ const HomeHeader: React.FC = () => {
             activeOpacity={0.8}
           >
             <SvgIcon.SearchIcon height={getHeight(35)} />
-            <Text style={styles.searchPlaceholder}>
-              {t('search')}
-            </Text>
+            <Text style={styles.searchPlaceholder}>{t('search')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -68,7 +66,7 @@ const HomeHeader: React.FC = () => {
 
         {/* Notification Button */}
         <View style={styles.actionContainer}>
-          <TouchableOpacity 
+          <TouchableOpacity
             onPress={() => navigation.navigate(screens.notification)}
             style={styles.notificationBtn}
             activeOpacity={0.8}
@@ -81,9 +79,9 @@ const HomeHeader: React.FC = () => {
         </View>
       </View>
 
-      <LanguageModel 
-        onClose={() => setVisible(false)} 
-        visible={languageVisible} 
+      <LanguageModel
+        onClose={() => setVisible(false)}
+        visible={languageVisible}
       />
     </LinearGradient>
   );
@@ -93,21 +91,19 @@ export default HomeHeader;
 
 const styles = StyleSheet.create({
   container: {
-    height: getHeight(8),
+    height: Platform.OS == 'android' ? getHeight(7) : getHeight(7),
     width: '100%',
-    paddingHorizontal: getWidth(20),
-    paddingTop: getHeight(20),
-    paddingBottom: getHeight(20),
-    display:"flex",
-    justifyContent: "space-between",
-    // alignItems:"center"
+    paddingTop: Platform.OS == 'android' ? getHeight(20) : getHeight(0),
   },
   innerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    display: 'flex',
     justifyContent: 'space-between',
+    // gap: getWidth(20),
     height: '100%',
-    paddingHorizontal: getWidth(40),
+    minWidth: getWidth(1),
+    marginTop: Platform.OS == 'ios' ? getHeight(80) : 0,
   },
   logoContainer: {
     flex: 2,
@@ -123,7 +119,7 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     flex: 4,
-    height: '90%',
+    height: '30%',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: getWidth(50),
@@ -131,7 +127,7 @@ const styles = StyleSheet.create({
   searchBox: {
     width: '100%',
     height: '100%',
-    backgroundColor: lightenColor(Colors.white,10),
+    backgroundColor: lightenColor(Colors.white, 10),
     borderRadius: getHeight(60),
     flexDirection: 'row',
     alignItems: 'center',

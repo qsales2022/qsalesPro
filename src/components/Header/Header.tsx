@@ -5,16 +5,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {FC, useEffect, useState} from 'react';
-import {getHeight, getWidth, lightenColor} from '../../Theme/Constants';
+import React, { FC, useEffect, useState } from 'react';
+import { getHeight, getWidth, lightenColor } from '../../Theme/Constants';
 import CommonStyles from '../../Theme/CommonStyles';
 import SvgIcon from '../../assets/SvgIcon';
 import Colors from '../../Theme/Colors';
-import {ParamListBase, useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import { ParamListBase, useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Translation from '../../assets/i18n/Translation';
 import screens from '../../Navigation/screens';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 interface HeaderInterface {
   title?: string;
   cartCount?: number;
@@ -44,19 +44,23 @@ const Header: FC<HeaderInterface> = ({
   const navigation = useNavigation<NativeStackNavigationProp<ParamListBase>>();
   const [isSearch, setIsSearch] = useState(false);
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   return hideSearch ? (
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() => {
           try {
-           // Log page navigation
+            // Log page navigation
 
             if (
               (page === 'details' && pageNavigation === '') ||
               page === 'list'
             ) {
-              navigation.push('MAIN');
+              if (navigation.canGoBack()) {
+                navigation.goBack();
+              } else {
+                navigation.push('MAIN');
+              }
             } else {
               if (navigation.canGoBack()) {
                 navigation.goBack(); // Only go back if it's possible
@@ -68,7 +72,8 @@ const Header: FC<HeaderInterface> = ({
             console.error('Error in navigation:', error); // Log any errors
           }
         }}
-        style={[CommonStyles.containerFlex1, CommonStyles.centerContainer]}>
+        style={[CommonStyles.containerFlex1, CommonStyles.centerContainer]}
+      >
         <SvgIcon.BackArrow
           width={getWidth(12)}
           height={getWidth(12)}
@@ -92,25 +97,27 @@ const Header: FC<HeaderInterface> = ({
             display: 'flex',
             alignItems: 'center',
             marginTop: getHeight(80),
-          }}>
+          }}
+        >
           <TouchableOpacity
             style={{
               paddingHorizontal: 23,
-              backgroundColor: lightenColor(Colors.primary,0),
+              backgroundColor: lightenColor(Colors.primary, 0),
               paddingVertical: 10,
               borderRadius: 10,
             }}
-            onPress={() => orderOpen?.()}>
-            <Text style={{color: 'white', fontSize: 14, fontWeight: 'bold'}}>
+            onPress={() => orderOpen?.()}
+          >
+            <Text style={{ color: 'white', fontSize: 14, fontWeight: 'bold' }}>
               Track
             </Text>
           </TouchableOpacity>
-          
         </View>
       )}
       {!hideCart && (
         <View
-          style={[CommonStyles.containerFlex1, CommonStyles.centerContainer]}>
+          style={[CommonStyles.containerFlex1, CommonStyles.centerContainer]}
+        >
           <TouchableOpacity onPress={() => navigation.navigate(screens.cart)}>
             <View style={styles.container2}>
               <SvgIcon.CartIcon width={getHeight(28)} height={getHeight(28)} />
@@ -128,7 +135,8 @@ const Header: FC<HeaderInterface> = ({
     <View style={styles.container}>
       <TouchableOpacity
         onPress={() => navigation.goBack()}
-        style={[CommonStyles.containerFlex1, CommonStyles.centerContainer]}>
+        style={[CommonStyles.containerFlex1, CommonStyles.centerContainer]}
+      >
         <SvgIcon.BackArrow
           width={getWidth(12)}
           height={getWidth(12)}
@@ -158,13 +166,14 @@ const Header: FC<HeaderInterface> = ({
             alignSelf: 'center',
             borderRadius: 18,
             justifyContent: 'center',
-          }}>
-          <View style={{alignSelf: 'center', padding: 6}}>
+          }}
+        >
+          <View style={{ alignSelf: 'center', padding: 6 }}>
             <SvgIcon.SearchIcon height={getHeight(35)} />
           </View>
 
           <TextInput
-            style={{flex: 1, color: Colors.black}}
+            style={{ flex: 1, color: Colors.black }}
             placeholderTextColor={'grey'}
             placeholder={`${t('search')}`}
             onChangeText={text => {
@@ -174,11 +183,12 @@ const Header: FC<HeaderInterface> = ({
           />
 
           <TouchableOpacity
-            style={{alignSelf: 'center', padding: 6}}
+            style={{ alignSelf: 'center', padding: 6 }}
             onPress={() => {
               setIsSearch(false);
               onCloseSearch();
-            }}>
+            }}
+          >
             <SvgIcon.CloseIcon height={getHeight(35)} />
           </TouchableOpacity>
         </View>
@@ -187,14 +197,16 @@ const Header: FC<HeaderInterface> = ({
       {!isSearch && (
         <TouchableOpacity onPress={() => setIsSearch(true)}>
           <View
-            style={[CommonStyles.containerFlex1, CommonStyles.centerContainer]}>
+            style={[CommonStyles.containerFlex1, CommonStyles.centerContainer]}
+          >
             <SvgIcon.SearchIcon height={getHeight(35)} />
           </View>
         </TouchableOpacity>
       )}
       {!hideCart && (
         <View
-          style={[CommonStyles.containerFlex1, CommonStyles.centerContainer]}>
+          style={[CommonStyles.containerFlex1, CommonStyles.centerContainer]}
+        >
           <TouchableOpacity onPress={() => navigation.navigate(screens.cart)}>
             <View style={styles.container2}>
               <SvgIcon.CartIcon width={getHeight(28)} height={getHeight(28)} />
@@ -255,5 +267,4 @@ const styles = StyleSheet.create({
     color: Colors.black,
     maxWidth: '90%',
   },
- 
 });
