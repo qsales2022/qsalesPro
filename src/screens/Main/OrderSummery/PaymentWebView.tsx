@@ -1,7 +1,7 @@
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/no-unstable-nested-components */
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -13,11 +13,11 @@ import {
   FlatList,
 } from 'react-native';
 import Colors from '../../../Theme/Colors';
-import {getHeight, getWidth} from '../../../Theme/Constants';
+import { getHeight, getWidth } from '../../../Theme/Constants';
 import CommonStyles from '../../../Theme/CommonStyles';
 import icons from '../../../assets/icons';
 import SvgIcon from '../../../assets/SvgIcon';
-import {RoundItem, TextInputBox} from '../../../components';
+import { RoundItem, TextInputBox } from '../../../components';
 import screens from '../../../Navigation/screens';
 import {
   useCheckout,
@@ -25,16 +25,16 @@ import {
   useGetCart,
   useGetCheckoutPriceDetails,
 } from '../../../Api/hooks';
-import {useRoute} from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import WebView from 'react-native-webview';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useDispatch} from 'react-redux';
-import {toggleLoader} from '../../../redux/reducers/GlobalReducer';
-import {AppEventsLogger} from 'react-native-fbsdk-next';
+import { useDispatch } from 'react-redux';
+import { toggleLoader } from '../../../redux/reducers/GlobalReducer';
+import { AppEventsLogger } from 'react-native-fbsdk-next';
 
-const PaymentWebView = ({route, navigation}: any) => {
-  const {cart, createCart}: any = useCreateCart();
-  const {url, eventPrice, eventId} = route.params;
+const PaymentWebView = ({ route, navigation }: any) => {
+  const { cart, createCart }: any = useCreateCart();
+  const { url, eventPrice, eventId } = route.params;
   const [checkoutCompleted, setCheckoutCompleted]: any = useState(false);
   const dispatch = useDispatch();
   // const {} =
@@ -95,7 +95,7 @@ const PaymentWebView = ({route, navigation}: any) => {
   return (
     <View style={styles.container}>
       <WebView
-        source={{uri: `${url}`}}
+        source={{ uri: `${url}` }}
         javaScriptEnabled={true}
         domStorageEnabled={true}
         onMessage={event => handleWebViewMessage(event.nativeEvent.data)}

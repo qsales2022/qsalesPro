@@ -1,19 +1,25 @@
 import * as React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Cart, Home, LogoSplash, ProductDetails, ProductList} from '../screens';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {
+  Cart,
+  Home,
+  LogoSplash,
+  ProductDetails,
+  ProductList,
+} from '../screens';
 import OnBoardingNavigation from './OnBoarding';
 import MainNavigation from './MainNavigation';
 
 import Test from '../components/TestUI/Test';
-import {RootState} from '../redux/store';
-import {useDispatch, useSelector} from 'react-redux';
-import {getFirstUserLaunch} from '../AsyncStorage/StorageUtil';
-import {updateLaunch} from '../redux/reducers/GlobalReducer';
+import { RootState } from '../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { getFirstUserLaunch } from '../AsyncStorage/StorageUtil';
+import { updateLaunch } from '../redux/reducers/GlobalReducer';
 import Loading from './loading/Loading';
 
 const Navigation = () => {
-  const {launch} = useSelector((state: RootState) => state.globalReducer);
+  const { launch } = useSelector((state: RootState) => state.globalReducer);
   const dispatch = useDispatch();
   const [loading, setLoading] = React.useState(true);
   const Stack = createNativeStackNavigator();
@@ -63,7 +69,8 @@ const Navigation = () => {
         screenOptions={{
           animation: 'flip',
           headerShown: false,
-        }}>
+        }}
+      >
         <Stack.Screen name="SPLASH" component={LogoSplash} />
 
         <Stack.Screen name="MAIN" component={MainNavigation} />

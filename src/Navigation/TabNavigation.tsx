@@ -46,6 +46,8 @@ const HomeTabs = () => {
 
   const storeCheckoutId = async (value: any) => {
     try {
+      console.log('Storing checkoutId:', value);
+
       await AsyncStorage.setItem('checkoutId', value);
     } catch (e) {
       // saving error
@@ -55,6 +57,7 @@ const HomeTabs = () => {
   const getCheckoutId = async () => {
     try {
       const value = await AsyncStorage.getItem('checkoutId');
+      console.log(value, 'valuevalue');
 
       if (value !== null) {
         getCartData();
@@ -79,7 +82,6 @@ const HomeTabs = () => {
 
   return (
     <>
- 
       <View style={styles.container}>
         {/* Transparent StatusBar */}
         <StatusBar
@@ -108,7 +110,6 @@ const HomeTabs = () => {
           <Tab.Screen name="ACCOUNT" component={Account} />
         </Tab.Navigator>
       </View>
-
     </>
   );
 };

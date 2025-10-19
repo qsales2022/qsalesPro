@@ -1,15 +1,15 @@
 /* eslint-disable no-catch-shadow */
 // useGetBestSelling.js
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import graphqlClient from '../interceptor';
-import {useDispatch, useSelector} from 'react-redux';
-import {updateCount} from '../../redux/reducers/CartReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateCount } from '../../redux/reducers/CartReducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {toggleLoader} from '../../redux/reducers/GlobalReducer';
-import {RootState} from '../../redux/store';
+import { toggleLoader } from '../../redux/reducers/GlobalReducer';
+import { RootState } from '../../redux/store';
 
 const useGetCart = () => {
-  const {language = 'EN'} = useSelector(
+  const { language = 'EN' } = useSelector(
     (state: RootState) => state.AuthReducer,
   );
   const [cartDetails, setcartDetails] = useState(null);
@@ -99,12 +99,11 @@ const useGetCart = () => {
           },
         });
 
-        const {data} = response;
-            
+        const { data } = response;
+
         // Check if data is valid before updating the state
-          
+
         if (data?.cart?.lines?.edges?.length) {
-          
           setcartDetails(data);
         } else {
           setcartDetails(null);
@@ -124,7 +123,7 @@ const useGetCart = () => {
     }
   };
 
-  return {cartDetails, getCartData, loading, error};
+  return { cartDetails, getCartData, loading, error };
 };
 
 export default useGetCart;

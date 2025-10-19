@@ -9,6 +9,7 @@ import {
   FlatList,
   ActivityIndicator,
   TouchableWithoutFeedback,
+  Modal,
 } from 'react-native';
 import React, {
   useCallback,
@@ -71,6 +72,9 @@ import { useStallionUpdate, restart } from 'react-native-stallion';
 import AnimatedModal from '../../../components/animatedModal/AnimatedModal';
 import RestartModal from './RestartModal';
 import { triggerHaptic } from '../../../Utils';
+import { useUpdatedCartId } from '../../../Api/hooks/useUpdatedCartId';
+import { callFunctionEveryTwoDays } from '../../../helpers/twoDays';
+import OfferModal from './OfferModal';
 
 // Memoized constants to prevent recreation
 const MOUNTING_CATEGORY = [
@@ -80,6 +84,12 @@ const MOUNTING_CATEGORY = [
     item: [],
     id: 1,
   },
+  // {
+  //   category: 'buy-1-get-1-free',
+  //   title: strings.Buy1Get1Free,
+  //   item: [],
+  //   id: 16,
+  // },
   {
     category: 'new-arrivals',
     title: strings.newArrivals,
@@ -160,24 +170,27 @@ const MOUNTING_CATEGORY = [
 
 const COLLECTION_HANDLE_1 = [
   'new-arrivals',
-  'last-chance-deals',
-  'qsales-choice',
-  'qr-1-qr-29-deals',
-  'add-more-save-more',
+  'travel-bags-organization',
+  'bathroom-laundry-supplies',
+  'outdoor-lighting',
+  'home-decor',
   'travel-bags-organization',
   'camping-outdoor',
+  'kitchen-organization',
   'wardrobe-organization',
+  'car-accessories',
 ];
 
 const COLLECTION_HANDLE_2 = [
-  'kitchen-organization',
-  'bathroom-laundry-supplies',
   'home-care',
-  'home-decor',
+  'bedsheet-mattress',
   'racks-storage',
+  'home-organization',
   'baby-care',
-  'car-accessories',
+  'cosmetics-makeup',
+  'mobile-computer-accessories',
   'tech-gadgets',
+  'fitness-personal-care',
 ];
 
 // Types
@@ -185,6 +198,7 @@ interface BannerItemProps {
   item: BannerImage;
   index: number;
   navigation: NativeStackNavigationProp<any>;
+  offerList: any;
 }
 
 interface BannerImage {
@@ -208,7 +222,7 @@ interface HomeProps {
 
 // Memoized banner item component
 const BannerItem: FC<BannerItemProps> = React.memo(
-  ({ item, index, navigation }) => {
+  ({ item, index, navigation, offerList }) => {
     const handlePress = useCallback(() => {
       if (item.type === 'collection') {
         if (item.target_handle === 'all') {
@@ -217,6 +231,7 @@ const BannerItem: FC<BannerItemProps> = React.memo(
           navigation.navigate(screens.productList, {
             title: item?.target_handle.replace('-', ' '),
             category: item?.target_handle,
+            offerList: offerList || {},
           });
         }
       }
@@ -225,7 +240,7 @@ const BannerItem: FC<BannerItemProps> = React.memo(
           handle: item?.target_handle,
         });
       }
-    }, [item, navigation]);
+    }, [item, navigation, offerList]);
 
     return (
       <TouchableWithoutFeedback onPress={handlePress}>
@@ -256,6 +271,8 @@ const Home: FC<HomeProps> = ({ navigation }) => {
   const [categoryList, setCategoryList] = useState<any[]>([]);
   const [categoryList1, setCategoryList1] = useState<any[]>([]);
   const [modalVisible, setModalVisible] = useState(true);
+  const [offerModal, setOfferModal] = useState<boolean>(false);
+  const { updatedCartId }: any = useUpdatedCartId();
   const [loading, setLoading] = useState<boolean>(true);
   const [categoriesLoading, setCategoriesLoading] = useState<boolean>(true);
   const [isRestartModalVisible, setIsRestartModalVisible] =
@@ -475,118 +492,6 @@ const Home: FC<HomeProps> = ({ navigation }) => {
     }
   }, [getProducts, getSectionData, isParallelLoading, parallelLoadingComplete]);
 
-  // Optimized function to handle initial categories
-
-  // const updateInitialCategories = useCallback(() => {
-  //   console.log('Updating initial categories:', {
-  //     specialOffers: {
-  //       products: specialOffers?.products?.length || 0,
-  //       loading: specialOffers?.loading,
-  //       error: specialOffers?.error,
-  //     },
-  //     newArrivals: {
-  //       products: newArrivals?.products?.length || 0,
-  //       loading: newArrivals?.loading,
-  //       error: newArrivals?.error,
-  //     },
-  //     offerVisible: offerList?.hasVisible,
-  //   });
-
-  //   setCategories(prev => {
-  //     const updatedCategories = [...prev];
-  //     let hasUpdates = false;
-
-  //     // Update special-offer
-  //     if (
-  //       !initialCategoriesLoaded.specialOffer &&
-  //       offerList?.hasVisible !== undefined
-  //     ) {
-  //       const specialOfferIndex = updatedCategories.findIndex(
-  //         cat => cat.category === 'special-offer',
-  //       );
-  //       if (specialOfferIndex !== -1) {
-  //         if (offerList?.hasVisible === false) {
-  //           updatedCategories[specialOfferIndex] = {
-  //             ...updatedCategories[specialOfferIndex],
-  //             item: [],
-  //           };
-  //           console.log(
-  //             'Special-offer disabled (hasVisible=false), set empty array',
-  //           );
-  //           setInitialCategoriesLoaded(prev => ({
-  //             ...prev,
-  //             specialOffer: true,
-  //           }));
-  //           hasUpdates = true;
-  //         } else {
-  //           // Set products immediately, even if still loading
-  //           const products = Array.isArray(specialOffers?.products)
-  //             ? specialOffers?.products
-  //             : [];
-  //           updatedCategories[specialOfferIndex] = {
-  //             ...updatedCategories[specialOfferIndex],
-  //             item: products,
-  //           };
-  //           console.log(
-  //             'Special-offer enabled, set products:',
-  //             products.length,
-  //           );
-  //           setInitialCategoriesLoaded(prev => ({
-  //             ...prev,
-  //             specialOffer: true,
-  //           }));
-  //           hasUpdates = true;
-  //         }
-  //       }
-  //     }
-
-  //     // Update new-arrivals
-  //     if (!initialCategoriesLoaded.newArrivals && !newArrivals?.loading) {
-  //       const newArrivalsIndex = updatedCategories.findIndex(
-  //         cat => cat.category === 'new-arrivals',
-  //       );
-  //       if (newArrivalsIndex !== -1) {
-  //         const products = Array.isArray(newArrivals?.products)
-  //           ? newArrivals?.products
-  //           : [];
-  //         updatedCategories[newArrivalsIndex] = {
-  //           ...updatedCategories[newArrivalsIndex],
-  //           item: products,
-  //         };
-  //         console.log('Updated new-arrivals with', products.length, 'products');
-  //         setInitialCategoriesLoaded(prev => ({ ...prev, newArrivals: true }));
-  //         hasUpdates = true;
-  //       }
-  //     }
-
-  //     // Start parallel loading as soon as offer status is known and new-arrivals is done
-  //     if (
-  //       offerList?.hasVisible !== undefined &&
-  //       !newArrivals?.loading &&
-  //       !parallelLoadingComplete &&
-  //       !isParallelLoading
-  //     ) {
-  //       console.log(
-  //         'Starting parallel loading - offer status known:',
-  //         offerList?.hasVisible,
-  //       );
-  //       fetchAllCategoriesInParallel();
-  //     }
-
-  //     return hasUpdates ? updatedCategories : prev;
-  //   });
-  // }, [
-  //   newArrivals?.products,
-  //   newArrivals?.loading,
-  //   specialOffers?.products,
-  //   specialOffers?.loading,
-  //   offerList?.hasVisible,
-  //   initialCategoriesLoaded,
-  //   parallelLoadingComplete,
-  //   isParallelLoading,
-  //   fetchAllCategoriesInParallel,
-  // ]);
-
   const updateInitialCategories = useCallback(() => {
     console.log('Updating initial categories:', {
       specialOffers: {
@@ -747,6 +652,37 @@ const Home: FC<HomeProps> = ({ navigation }) => {
     parallelLoadingComplete,
     isParallelLoading,
   ]);
+  const updateUserFCMToken = useCallback(async () => {
+    try {
+      const cartId = await AsyncStorage.getItem('cartId');
+      const checkoutId = await AsyncStorage.getItem('checkoutId');
+      // Get current FCM token or fetch new one
+      let fcmToken = await AsyncStorage.getItem('fcmToken');
+      console.log('Current FCM Token:', cartId, checkoutId, fcmToken);
+
+      if (!fcmToken) {
+        fcmToken = await messaging().getToken();
+        if (fcmToken) {
+          await AsyncStorage.setItem('fcmToken', fcmToken);
+        }
+      }
+      // If cartId is new/different, update backend
+      if (cartId !== checkoutId && checkoutId && fcmToken) {
+        await updatedCartId(checkoutId, fcmToken);
+        await AsyncStorage.setItem('cartId', checkoutId);
+      }
+    } catch (error) {
+      console.error('Failed to update FCM token:', error);
+    }
+  }, [updatedCartId]);
+
+  useEffect(() => {
+    if (isFocused) {
+      Promise.all([updateUserFCMToken(), callFunctionEveryTwoDays()]).catch(
+        err => console.error(err),
+      );
+    }
+  }, [isFocused, updateUserFCMToken]);
 
   // Async storage operations
   const storeCheckoutId = useCallback(async (value: string) => {
@@ -756,12 +692,33 @@ const Home: FC<HomeProps> = ({ navigation }) => {
       console.error('Store checkout ID error:', error);
     }
   }, []);
+
+  useEffect(() => {
+    try {
+      const unsubscribe = messaging().onTokenRefresh(async newToken => {
+        await AsyncStorage.setItem('fcmToken', newToken);
+
+        const cartId = await AsyncStorage.getItem('cartId');
+
+        if (cartId) {
+          await updatedCartId(cartId, newToken);
+        }
+      });
+
+      return () => unsubscribe();
+    } catch (error) {}
+  }, []);
+
   const getCheckoutId = useCallback(async () => {
     try {
       const value = await AsyncStorage.getItem('checkoutId');
+      console.log(value, 'this is the value');
+
       if (value) {
         getCartData();
       } else {
+        console.log('No checkoutId found, creating new cart');
+
         createCart();
       }
     } catch (error) {
@@ -809,10 +766,13 @@ const Home: FC<HomeProps> = ({ navigation }) => {
         navigation.navigate(screens.productList, {
           title: data.action_handle.toString().replace('-', ' '),
           category: data.action_handle,
+          offerList: offerList || {},
         });
+      } else if (data?.action_to === 'CART') {
+        navigation.navigate(screens.cart);
       }
     },
-    [navigation],
+    [navigation, offerList],
   );
 
   const subscribeToMyTopic = useCallback(async () => {
@@ -971,6 +931,7 @@ const Home: FC<HomeProps> = ({ navigation }) => {
                 item={item}
                 index={index}
                 navigation={navigation}
+                offerList={offerList}
               />
             ))}
           </Swiper>

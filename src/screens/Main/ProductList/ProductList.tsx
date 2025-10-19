@@ -6,23 +6,34 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import React, {useEffect, useRef, useState, useCallback, useMemo} from 'react';
-import {BannerStrip, Header, SectionItem, ProductListSkeleton} from '../../../components';
-import {useGetProducts} from '../../../Api/hooks';
-import {getHeight, getWidth} from '../../../Theme/Constants';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
+} from 'react';
+import {
+  BannerStrip,
+  Header,
+  SectionItem,
+  ProductListSkeleton,
+} from '../../../components';
+import { useGetProducts } from '../../../Api/hooks';
+import { getHeight, getWidth } from '../../../Theme/Constants';
 import Colors from '../../../Theme/Colors';
 import CommonStyles from '../../../Theme/CommonStyles';
 import SvgIcon from '../../../assets/SvgIcon';
 import Translation from '../../../assets/i18n/Translation';
 import strings from '../../../assets/i18n/strings';
 import screens from '../../../Navigation/screens';
-import {useSelector} from 'react-redux';
-import {RootState} from '../../../redux/store';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../redux/store';
 import BottomSheetFilter from '../../../components/BottomSheet/BottomSheetFilter';
 import BottomSheetSort, {
   sortType,
 } from '../../../components/BottomSheet/BottomSheetSort';
-import {AppEventsLogger} from 'react-native-fbsdk-next';
+import { AppEventsLogger } from 'react-native-fbsdk-next';
 import { sortKeyType } from '../../../Api/hooks/useGetProducts';
 import { logger } from '../../../Utils';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -59,22 +70,23 @@ interface ProductEdge {
   node: ProductNode;
 }
 
-const ProductList = ({route, navigation}: any) => {
-  const {title = '', category = '', offerList = {}} = route?.params || {};
+const ProductList = ({ route, navigation }: any) => {
+  const { title = '', category = '', offerList = {} } = route?.params || {};
   const [search, setSearch] = useState<string>('');
-  const [selectedSort, setSelectedSort] = useState<sortKeyType>("MANUAL"); 
+  const [selectedSort, setSelectedSort] = useState<sortKeyType>('MANUAL');
   const { products, error } = useGetProducts(
     category, // example collection handle
     200,
     null,
-    selectedSort
+    selectedSort,
   );
+  console.log(offerList, category, 'offerList in product list');
 
   // const {products} = useGetProducts(category, 200, '');
 
   const [showFilterSheet, setshowFilterSheet] = useState<boolean>(false);
   const [showSortSheet, setshowSortSheet] = useState<boolean>(false);
-  const {count} = useSelector((state: RootState) => state.CartReducer);
+  const { count } = useSelector((state: RootState) => state.CartReducer);
   const [minAmount, setMinAmount] = useState(0);
   const [maxAmount, setMaxAmount] = useState(10000);
   const [inStock, setInStock] = useState(true);
@@ -116,38 +128,43 @@ const ProductList = ({route, navigation}: any) => {
       setProducts(products);
       setFilteredProducts(products);
       setLoading(false);
-    } 
+    }
   }, [products]);
 
   // Optimized filter function with memoization
-  const applyFilters = useCallback((
-    productsList: ProductEdge[],
-    searchTerm: string,
-    min: number,
-    max: number,
-    stockIn: boolean,
-    stockOut: boolean
-  ) => {
-    if (!productsList.length) return [];
+  const applyFilters = useCallback(
+    (
+      productsList: ProductEdge[],
+      searchTerm: string,
+      min: number,
+      max: number,
+      stockIn: boolean,
+      stockOut: boolean,
+    ) => {
+      if (!productsList.length) return [];
 
-    return productsList.filter((edge: ProductEdge) => {
-      const product = edge.node;
-      const price = product?.priceRange?.minVariantPrice?.amount || 0;
-      const isAvailable = product?.availableForSale;
-      
-      // Search filter
-      const matchesSearch = !searchTerm || 
-        product.title.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      // Stock filter
-      const matchesStock = (isAvailable && stockIn) || (!isAvailable && stockOut);
-      
-      // Price filter
-      const matchesPrice = price >= min && price <= max;
-      
-      return matchesSearch && matchesStock && matchesPrice;
-    });
-  }, []);
+      return productsList.filter((edge: ProductEdge) => {
+        const product = edge.node;
+        const price = product?.priceRange?.minVariantPrice?.amount || 0;
+        const isAvailable = product?.availableForSale;
+
+        // Search filter
+        const matchesSearch =
+          !searchTerm ||
+          product.title.toLowerCase().includes(searchTerm.toLowerCase());
+
+        // Stock filter
+        const matchesStock =
+          (isAvailable && stockIn) || (!isAvailable && stockOut);
+
+        // Price filter
+        const matchesPrice = price >= min && price <= max;
+
+        return matchesSearch && matchesStock && matchesPrice;
+      });
+    },
+    [],
+  );
 
   // Apply filters when dependencies change
   useEffect(() => {
@@ -157,53 +174,57 @@ const ProductList = ({route, navigation}: any) => {
       minAmount,
       maxAmount,
       inStock,
-      outOfStock
+      outOfStock,
     );
-    
- 
-    
-    setFilteredProducts(filtered);
-  }, [productsData, searchDebounced, minAmount, maxAmount, inStock, outOfStock, applyFilters]);
 
-  const filter = useCallback((
-    min: number,
-    max: number,
-    stockIn: boolean,
-    stockOut: boolean,
-  ) => {
-    setMinAmount(min);
-    setMaxAmount(max);
-    setInStock(stockIn);
-    setOutOfStock(stockOut);
-    setshowFilterSheet(false);
-    
-    // Reset rendering state for new filter
-    setHasRenderedInitial(false);
-    setIsInitialRendering(true);
-    
-    // Clear existing timeout
-    if (renderTimeoutRef.current) {
-      clearTimeout(renderTimeoutRef.current);
-    }
-    
-    // Set new timeout
-    renderTimeoutRef.current = setTimeout(() => {
-      setIsInitialRendering(false);
-      setHasRenderedInitial(true);
-    }, 800);
-    // Scroll to top after a short delay to ensure state is updated
-    setTimeout(() => {
-      flatListRef.current?.scrollToOffset({offset: 0, animated: true});
-    }, 100);
-  }, []);
+    setFilteredProducts(filtered);
+  }, [
+    productsData,
+    searchDebounced,
+    minAmount,
+    maxAmount,
+    inStock,
+    outOfStock,
+    applyFilters,
+  ]);
+
+  const filter = useCallback(
+    (min: number, max: number, stockIn: boolean, stockOut: boolean) => {
+      setMinAmount(min);
+      setMaxAmount(max);
+      setInStock(stockIn);
+      setOutOfStock(stockOut);
+      setshowFilterSheet(false);
+
+      // Reset rendering state for new filter
+      setHasRenderedInitial(false);
+      setIsInitialRendering(true);
+
+      // Clear existing timeout
+      if (renderTimeoutRef.current) {
+        clearTimeout(renderTimeoutRef.current);
+      }
+
+      // Set new timeout
+      renderTimeoutRef.current = setTimeout(() => {
+        setIsInitialRendering(false);
+        setHasRenderedInitial(true);
+      }, 800);
+      // Scroll to top after a short delay to ensure state is updated
+      setTimeout(() => {
+        flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
+      }, 100);
+    },
+    [],
+  );
 
   const sort = useCallback((sortValue: any) => {
-    logger.log("sortValue",sortValue)
+    logger.log('sortValue', sortValue);
     setshowSortSheet(false);
     // Reset rendering state for new sort
     setHasRenderedInitial(false);
     setIsInitialRendering(true);
-    
+
     // Clear existing timeout
     if (renderTimeoutRef.current) {
       clearTimeout(renderTimeoutRef.current);
@@ -213,10 +234,10 @@ const ProductList = ({route, navigation}: any) => {
       setIsInitialRendering(false);
       setHasRenderedInitial(true);
     }, 800);
-    
+
     // setFilteredProducts(sortedProducts);
     setTimeout(() => {
-      flatListRef.current?.scrollToOffset({offset: 0, animated: true});
+      flatListRef.current?.scrollToOffset({ offset: 0, animated: true });
     }, 100);
   }, []);
 
@@ -225,12 +246,12 @@ const ProductList = ({route, navigation}: any) => {
     setIsRefreshing(true);
     // Reset rendering state
     setHasRenderedInitial(false);
-    
+
     // Simulate refresh delay
     setTimeout(() => {
       setIsRefreshing(false);
       setIsInitialRendering(true);
-      
+
       // Set timeout for rendering completion
       renderTimeoutRef.current = setTimeout(() => {
         setIsInitialRendering(false);
@@ -246,7 +267,7 @@ const ProductList = ({route, navigation}: any) => {
       if (renderTimeoutRef.current) {
         clearTimeout(renderTimeoutRef.current);
       }
-      
+
       // Small delay to ensure smooth transition
       setTimeout(() => {
         setIsInitialRendering(false);
@@ -258,7 +279,7 @@ const ProductList = ({route, navigation}: any) => {
   // Simplified loading overlay - just indicator, no text or decoration
   const renderInitialLoadingOverlay = useCallback(() => {
     if (!isInitialRendering || filteredProducts.length === 0) return null;
-    
+
     return (
       <View style={styles.initialLoadingOverlay}>
         <ActivityIndicator size="large" color={Colors.primary} />
@@ -267,41 +288,54 @@ const ProductList = ({route, navigation}: any) => {
   }, [isInitialRendering, filteredProducts.length]);
 
   // Memoized navigation handler
-  const handleProductPress = useCallback((item: ProductEdge) => {
-    navigation.navigate(screens.productDetails, {
-      id: item?.node?.id,
-      handle: item?.node?.handle,
-      pageNavigation: 'product_List',
-    });
-  }, [navigation]);
+  const handleProductPress = useCallback(
+    (item: ProductEdge) => {
+      navigation.navigate(screens.productDetails, {
+        id: item?.node?.id,
+        handle: item?.node?.handle,
+        pageNavigation: 'product_List',
+      });
+    },
+    [navigation],
+  );
 
   // Memoized render item function
-  const renderItem = useCallback(({item}: {item: ProductEdge}) => (
-    <SectionItem
-      onPress={() => handleProductPress(item)}
-      marginLeft={25}
-      price={item?.node?.priceRange?.minVariantPrice?.amount}
-      image={{uri: item?.node?.images?.edges[0]?.node?.url}}
-      name={item?.node?.title}
-      offerPrice={item?.node?.variants?.edges[0]?.node?.compareAtPrice?.amount}
-      offerList={offerList}
-      category={category}
-    />
-  ), [handleProductPress, offerList, category]);
+  const renderItem = useCallback(
+    ({ item }: { item: ProductEdge }) => (
+      <SectionItem
+        onPress={() => handleProductPress(item)}
+        marginLeft={25}
+        price={item?.node?.priceRange?.minVariantPrice?.amount}
+        image={{ uri: item?.node?.images?.edges[0]?.node?.url }}
+        name={item?.node?.title}
+        offerPrice={
+          item?.node?.variants?.edges[0]?.node?.compareAtPrice?.amount
+        }
+        offerList={offerList}
+        category={category}
+      />
+    ),
+    [handleProductPress, offerList, category],
+  );
 
   // Memoized key extractor
-  const keyExtractor = useCallback((item: ProductEdge, index: number) => 
-    item?.node?.id || index.toString(), []);
+  const keyExtractor = useCallback(
+    (item: ProductEdge, index: number) => item?.node?.id || index.toString(),
+    [],
+  );
 
   // Memoized empty component
-  const ListEmptyComponent = useCallback(() => (
-    <View style={styles.emptyContainer}>
-      <View style={styles.emptyIconContainer}>
-        <SvgIcon.SearchEmptyIcon />
+  const ListEmptyComponent = useCallback(
+    () => (
+      <View style={styles.emptyContainer}>
+        <View style={styles.emptyIconContainer}>
+          <SvgIcon.SearchEmptyIcon />
+        </View>
+        <Text style={styles.emptyTitle}>No Products Found</Text>
       </View>
-      <Text style={styles.emptyTitle}>No Products Found</Text>
-    </View>
-  ), []);
+    ),
+    [],
+  );
 
   const handleSearch = useCallback((text: string) => {
     setSearch(text);
@@ -388,42 +422,46 @@ const ProductList = ({route, navigation}: any) => {
             progressViewOffset={50}
             onLayout={onLayoutChange}
           />
-          
+
           {/* Simplified Loading Overlay - just spinner */}
           {renderInitialLoadingOverlay()}
         </View>
       )}
-      
-     { !loading && <View style={[styles.sortFilterContainer, {width: containerWidth}]}>
-        <TouchableOpacity
-          style={[
-            CommonStyles.containerFlex1,
-            CommonStyles.contentCenter,
-            CommonStyles.flexRowContainer,
-            styles.borderLine,
-          ]}
-          onPress={handleFilterPress}
-          activeOpacity={0.7}>
-          <SvgIcon.FilterIcon />
-          <Text style={[styles.textFilter, {fontSize: textSize}]}>
-            <Translation textKey={strings.filter} />
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            CommonStyles.containerFlex1,
-            CommonStyles.contentCenter,
-            CommonStyles.flexRowContainer,
-          ]}
-          onPress={handleSortPress}
-          activeOpacity={0.7}>
-          <SvgIcon.SortIcon width={iconSize} height={iconSize} />
-          <Text style={[styles.textFilter, {fontSize: textSize}]}>
-            <Translation textKey={strings.sort} />
-          </Text>
-        </TouchableOpacity>
-      </View>}
-      
+
+      {!loading && (
+        <View style={[styles.sortFilterContainer, { width: containerWidth }]}>
+          <TouchableOpacity
+            style={[
+              CommonStyles.containerFlex1,
+              CommonStyles.contentCenter,
+              CommonStyles.flexRowContainer,
+              styles.borderLine,
+            ]}
+            onPress={handleFilterPress}
+            activeOpacity={0.7}
+          >
+            <SvgIcon.FilterIcon />
+            <Text style={[styles.textFilter, { fontSize: textSize }]}>
+              <Translation textKey={strings.filter} />
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              CommonStyles.containerFlex1,
+              CommonStyles.contentCenter,
+              CommonStyles.flexRowContainer,
+            ]}
+            onPress={handleSortPress}
+            activeOpacity={0.7}
+          >
+            <SvgIcon.SortIcon width={iconSize} height={iconSize} />
+            <Text style={[styles.textFilter, { fontSize: textSize }]}>
+              <Translation textKey={strings.sort} />
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
       <BottomSheetFilter
         isVisible={showFilterSheet}
         onClose={handleFilterClose}

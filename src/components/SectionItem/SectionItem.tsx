@@ -1,11 +1,10 @@
-
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {FC, memo, useCallback, useMemo} from 'react';
-import {getHeight, getWidth} from '../../Theme/Constants';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { FC, memo, useCallback, useMemo } from 'react';
+import { getHeight, getWidth } from '../../Theme/Constants';
 import Colors from '../../Theme/Colors';
-import {formatPrice} from '../../Utils';
+import { formatPrice } from '../../Utils';
 import FastImage from 'react-native-fast-image';
-import {AppEventsLogger} from 'react-native-fbsdk-next';
+import { AppEventsLogger } from 'react-native-fbsdk-next';
 import PromoBanner from '../../test';
 import WaveBanner from '../../test';
 import MemoizedWaveBanner from '../../test';
@@ -153,7 +152,8 @@ const SectionItem: FC<ItemInterface> = memo(
       <TouchableOpacity
         onPress={handlePress}
         style={[styles.container, dynamicStyles.container]}
-        activeOpacity={0.8}>
+        activeOpacity={0.8}
+      >
         <View style={[styles.contentContainer, dynamicStyles.contentContainer]}>
           <View style={styles.imageContainer}>
             {/* Discount Badge */}
@@ -161,13 +161,15 @@ const SectionItem: FC<ItemInterface> = memo(
               <View
                 style={[
                   styles.discountBadge,
-                  {backgroundColor: offerDisplay.offerColor},
-                ]}>
+                  { backgroundColor: offerDisplay.offerColor },
+                ]}
+              >
                 <Text
                   style={[
                     styles.discountText,
-                    {color: offerDisplay.textColor},
-                  ]}>
+                    { color: offerDisplay.textColor },
+                  ]}
+                >
                   {discountContent}
                 </Text>
               </View>
@@ -189,7 +191,9 @@ const SectionItem: FC<ItemInterface> = memo(
           {/* Price Container */}
           <View style={styles.priceContainer}>
             <Text style={styles.priceTextQar}>QAR</Text>
-            <Text style={styles.priceText}>{calculations.formattedPrice}</Text>
+            <Text style={styles.priceText}>
+              {Math.round(Number(calculations.formattedPrice))}
+            </Text>
             {offerDisplay.hasOffer && (
               <Text style={styles.offerPrice}>
                 QAR {calculations.formattedOfferPrice}
@@ -204,7 +208,7 @@ const SectionItem: FC<ItemInterface> = memo(
                 source={require('../../assets/Images/van.png')}
                 style={[
                   styles.deliveryIcon,
-                  {width: dynamicStyles.deliveryIconWidth},
+                  { width: dynamicStyles.deliveryIconWidth },
                 ]}
               />
               <Text style={styles.deliveryText}>FREE DELIVERY</Text>

@@ -7,6 +7,8 @@ import FBSDKCoreKit
 import FirebaseCore
 import AppTrackingTransparency
 import AdSupport
+import react_native_stallion
+
 
 
 @main
@@ -133,10 +135,15 @@ class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
   }
 
   override func bundleURL() -> URL! {
-    #if DEBUG
-    return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+    // #if DEBUG
+    // return RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+    // #else
+    // return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+    // #endif
+     #if DEBUG
+        RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
     #else
-    return Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+        StallionModule.getBundleURL()
     #endif
   }
 }
