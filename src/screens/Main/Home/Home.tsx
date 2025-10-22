@@ -610,7 +610,6 @@ const Home: FC<HomeProps> = ({ navigation }) => {
       setLoading(false);
     }
   }, [initialCategoriesLoaded, loading]);
-
   // Timeout to prevent infinite loading
   useEffect(() => {
     const timeout = setTimeout(() => {
