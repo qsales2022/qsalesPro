@@ -93,6 +93,7 @@ const HomeTabs = () => {
         {/* Gradient background for the top */}
 
         {/* Your Tab Navigator */}
+        
         <Tab.Navigator
           screenOptions={{
             header: () => null,

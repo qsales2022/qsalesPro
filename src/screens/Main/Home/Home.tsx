@@ -73,7 +73,6 @@ import AnimatedModal from '../../../components/animatedModal/AnimatedModal';
 import RestartModal from './RestartModal';
 import { triggerHaptic } from '../../../Utils';
 import { useUpdatedCartId } from '../../../Api/hooks/useUpdatedCartId';
-import { callFunctionEveryTwoDays } from '../../../helpers/twoDays';
 import OfferModal from './OfferModal';
 
 // Memoized constants to prevent recreation
@@ -472,8 +471,7 @@ const Home: FC<HomeProps> = ({ navigation }) => {
               metaView: result.metaView || [],
             };
             console.log(
-              `Updated ${result.category} with ${
-                result.item.length
+              `Updated ${result.category} with ${result.item.length
               } products and ${result.metaView?.length || 0} meta items`,
             );
           }
@@ -657,8 +655,6 @@ const Home: FC<HomeProps> = ({ navigation }) => {
       const checkoutId = await AsyncStorage.getItem('checkoutId');
       // Get current FCM token or fetch new one
       let fcmToken = await AsyncStorage.getItem('fcmToken');
-      console.log('Current FCM Token:', cartId, checkoutId, fcmToken);
-
       if (!fcmToken) {
         fcmToken = await messaging().getToken();
         if (fcmToken) {
@@ -677,7 +673,7 @@ const Home: FC<HomeProps> = ({ navigation }) => {
 
   useEffect(() => {
     if (isFocused) {
-      Promise.all([updateUserFCMToken(), callFunctionEveryTwoDays()]).catch(
+      Promise.all([updateUserFCMToken()]).catch(
         err => console.error(err),
       );
     }
@@ -705,8 +701,11 @@ const Home: FC<HomeProps> = ({ navigation }) => {
       });
 
       return () => unsubscribe();
-    } catch (error) {}
+    } catch (error) { }
   }, []);
+
+
+
 
   const getCheckoutId = useCallback(async () => {
     try {
@@ -823,9 +822,21 @@ const Home: FC<HomeProps> = ({ navigation }) => {
         const updateOptions =
           Platform.OS === 'android'
             ? { updateType: IAUUpdateKind.FLEXIBLE }
-            : {};
+            : {
+              title: 'Update Available',
+              message: 'A new version of the app is available on the App Store. Do you want to update?',
+              buttonUpgradeText: 'Update',
+              buttonCancelText: 'Cancel',
+            };
+
 
         await inAppUpdates.startUpdate(updateOptions);
+        if (Platform.OS === 'android') {
+          const listener = (status: any) => {
+            if (status.status === 11) inAppUpdates.installUpdate();
+          };
+          inAppUpdates.addStatusUpdateListener(listener);
+        }
       }
     } catch (error: any) {
       const errorMessage = error?.message || '';

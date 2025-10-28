@@ -82,6 +82,7 @@ import filterUniqueItem from '../../../helpers/filterUniqueItem';
 import UltraOptimizedBanner from '../../../test';
 import LinearGradient from 'react-native-linear-gradient';
 import { trigger } from 'react-native-haptic-feedback';
+import { useUpdatedCartId } from '../../../Api/hooks/useUpdatedCartId';
 
 const ProductDetails = ({ route, navigation }: any) => {
   const tabRef = useRef<any>('');
@@ -97,6 +98,7 @@ const ProductDetails = ({ route, navigation }: any) => {
   const { frequentlyBroughtItem, getFrequentlyBroughtItem }: any =
     useFetchFrequenltyBroughtItem();
   const { response, notify }: any = useNotifiyMe();
+  const { updatedCartId } = useUpdatedCartId()
   const { dealLoading, deals, getDeals, setDeals }: any = useDealBlock();
   const { addCartData, addToCart, addToCartFrequentlyBought }: any =
     useAddToCart();
@@ -295,6 +297,7 @@ const ProductDetails = ({ route, navigation }: any) => {
   useEffect(() => {
     if (productDetails) {
       if (productDetails.id) {
+
         if (productDetails?.metafields) {
           setAddOnList(productDetails?.metafields);
         }
@@ -376,7 +379,7 @@ const ProductDetails = ({ route, navigation }: any) => {
       getCartData();
     }
   }, [addCartData]);
-  useEffect(() => {}, [productImages]);
+  useEffect(() => { }, [productImages]);
   const getNoFromId = (inputString: string) => {
     const numericPart = inputString?.match(/\d+/);
     const result = numericPart ? numericPart[0] : '';
@@ -447,6 +450,8 @@ const ProductDetails = ({ route, navigation }: any) => {
 
   const handleAddOnClick = (index: number) => {
     let list = [...addOnList];
+    console.log(list[index], 'list[index]');
+
 
     list[index].selected == undefined
       ? (list[index].selected = true)
@@ -621,7 +626,7 @@ const ProductDetails = ({ route, navigation }: any) => {
         (variantItem: any) =>
           variantItem?.node?.selectedOptions &&
           JSON.stringify(variantItem.node.selectedOptions) ===
-            JSON.stringify(options),
+          JSON.stringify(options),
       );
       setSelectedVariant(variantIndex);
     },
@@ -634,10 +639,22 @@ const ProductDetails = ({ route, navigation }: any) => {
   const snapPoints = useMemo(() => ['25%', '30%'], []);
 
   // callbacks
-  const handlePresentModalPress = useCallback((productTittile: any) => {
-    Vibration.vibrate();
-    bottomSheetModalRef.current?.present();
+  const handlePresentModalPress = useCallback(async (productTitle: any) => {
+    try {
+      const checkoutId = await AsyncStorage.getItem('checkoutId');
+      const fcmToken = await AsyncStorage.getItem('fcmToken');
+
+      if (fcmToken && checkoutId) {
+        await updatedCartId(checkoutId, fcmToken);
+      }
+
+      Vibration.vibrate();
+      bottomSheetModalRef.current?.present();
+    } catch (error) {
+      console.error('Error in handlePresentModalPress:', error);
+    }
   }, []);
+
   const handleSheetChanges = useCallback((index: number) => {
     setIsPlaying(true);
   }, []);
@@ -702,7 +719,7 @@ const ProductDetails = ({ route, navigation }: any) => {
         <StatusBar
           backgroundColor={'transparent'}
           barStyle="dark-content"
-          // translucent={false}
+        // translucent={false}
         />
         <LinearGradient
           colors={[
@@ -929,10 +946,10 @@ const ProductDetails = ({ route, navigation }: any) => {
                             onPress={() =>
                               productHasVariantSize(variantList, 'Color')
                                 ? selectVariantItem({
-                                    name: 'Color',
-                                    value: color,
-                                    selected: variant,
-                                  })
+                                  name: 'Color',
+                                  value: color,
+                                  selected: variant,
+                                })
                                 : setSelectedVariant(index)
                             }
                           >
@@ -944,8 +961,8 @@ const ProductDetails = ({ route, navigation }: any) => {
                                     'Size',
                                   ) &&
                                     item?.node?.title ==
-                                      variant?.node?.title) ||
-                                  color == selectedColor
+                                    variant?.node?.title) ||
+                                    color == selectedColor
                                     ? 2
                                     : 0,
                                 borderColor: Colors.primary,
@@ -1760,9 +1777,9 @@ const ProductDetails = ({ route, navigation }: any) => {
                                     {JSON.parse(item?.value)?.data?.ymq1
                                       ?.options?.['1_1']?.variant_id == 0
                                       ? JSON.parse(item?.value)?.data?.ymq1
-                                          ?.options?.['1_1']?.price
+                                        ?.options?.['1_1']?.price
                                       : JSON.parse(item?.value)?.data?.ymq1
-                                          ?.options?.['1_1']?.variant_price}
+                                        ?.options?.['1_1']?.variant_price}
                                   </Text>
                                 </View>
                                 {JSON.parse(item?.value)?.data?.ymq1?.options?.[
@@ -1846,10 +1863,10 @@ const ProductDetails = ({ route, navigation }: any) => {
                             variant?.node?.quantityAvailable > quantity
                               ? setQuantity(quantity + 1)
                               : Toast.show({
-                                  type: 'warning',
-                                  text1: `Not enough stock to add this item to your cart`,
-                                  position: 'bottom',
-                                });
+                                type: 'warning',
+                                text1: `Not enough stock to add this item to your cart`,
+                                position: 'bottom',
+                              });
                           }}
                           style={{
                             width: getHeight(28),
@@ -2014,11 +2031,11 @@ const ProductDetails = ({ route, navigation }: any) => {
                                       {item?.dealBarType !== 'bxgy'
                                         ? `${item?.label}`
                                         : `SAVE ${Math.round(
-                                            (item.getQuantity /
-                                              (item.buyQuantity +
-                                                item.getQuantity)) *
-                                              100,
-                                          )}%`}
+                                          (item.getQuantity /
+                                            (item.buyQuantity +
+                                              item.getQuantity)) *
+                                          100,
+                                        )}%`}
                                     </Text>
                                   </View>
                                 </View>
@@ -2033,16 +2050,16 @@ const ProductDetails = ({ route, navigation }: any) => {
                                   {index === 0
                                     ? `${item?.subtitle}`
                                     : item?.dealBarType !== 'bxgy'
-                                    ? `You save QAR ${formatPrice(
+                                      ? `You save QAR ${formatPrice(
                                         Math.abs(
                                           Number(item.discountValue) -
-                                            Number(
-                                              variant?.node?.price?.amount || 0,
-                                            ) *
-                                              (item?.quantity || 1),
+                                          Number(
+                                            variant?.node?.price?.amount || 0,
+                                          ) *
+                                          (item?.quantity || 1),
                                         ),
                                       )}`
-                                    : null}
+                                      : null}
                                 </Text>
                                 {index == 1 && index === selectedDealIndex && (
                                   <Text
@@ -2053,7 +2070,7 @@ const ProductDetails = ({ route, navigation }: any) => {
                                     }}
                                   >
                                     {variant?.node?.selectedOptions[0]?.name !==
-                                    'Title'
+                                      'Title'
                                       ? variant?.node?.selectedOptions[0]?.name
                                       : ''}
                                   </Text>
@@ -2061,7 +2078,7 @@ const ProductDetails = ({ route, navigation }: any) => {
 
                                 {/* cheking === */}
                                 {variant?.node?.title ===
-                                'Default Title' ? null : (
+                                  'Default Title' ? null : (
                                   <>
                                     {index === selectedDealIndex &&
                                       Array.from(
@@ -2069,13 +2086,13 @@ const ProductDetails = ({ route, navigation }: any) => {
                                           length:
                                             item?.dealBarType !== 'bxgy'
                                               ? Number(
-                                                  deals?.dealBars[index]
-                                                    ?.quantity ?? 0,
-                                                )
+                                                deals?.dealBars[index]
+                                                  ?.quantity ?? 0,
+                                              )
                                               : Number(
-                                                  deals?.dealBars[index]
-                                                    ?.getQuantity * 2,
-                                                ),
+                                                deals?.dealBars[index]
+                                                  ?.getQuantity * 2,
+                                              ),
                                         },
 
                                         (_, quantityIndex) => (
@@ -2133,11 +2150,11 @@ const ProductDetails = ({ route, navigation }: any) => {
                                                   {bundleDeals?.[quantityIndex]
                                                     ?.variants?.name !== ''
                                                     ? bundleDeals?.[
-                                                        quantityIndex
-                                                      ]?.variants?.name
+                                                      quantityIndex
+                                                    ]?.variants?.name
                                                     : variant?.node
-                                                        ?.selectedOptions[0]
-                                                        ?.value}
+                                                      ?.selectedOptions[0]
+                                                      ?.value}
                                                 </Text>
                                               </View>
 
@@ -2196,22 +2213,22 @@ const ProductDetails = ({ route, navigation }: any) => {
                                   {variant?.node?.price?.currencyCode}{' '}
                                   {item?.dealBarType !== 'bxgy'
                                     ? formatPrice(
-                                        Number(
-                                          item?.discountValue
-                                            ? item?.discountValue
-                                            : variant?.node?.price?.amount,
-                                        ),
-                                      )
+                                      Number(
+                                        item?.discountValue
+                                          ? item?.discountValue
+                                          : variant?.node?.price?.amount,
+                                      ),
+                                    )
                                     : formatPrice(
-                                        Number(variant?.node?.price?.amount) *
-                                          item?.buyQuantity,
-                                      )}{' '}
+                                      Number(variant?.node?.price?.amount) *
+                                      item?.buyQuantity,
+                                    )}{' '}
                                 </Text>
                                 {item?.dealBarType !== 'bxgy' ? (
                                   item.discountValue &&
                                   variant?.node?.price?.amount *
-                                    item?.quantity !=
-                                    item.discountValue && (
+                                  item?.quantity !=
+                                  item.discountValue && (
                                     <Text
                                       style={{
                                         fontWeight: '400',
@@ -2225,7 +2242,7 @@ const ProductDetails = ({ route, navigation }: any) => {
                                       {formatPrice(
                                         Number(
                                           variant?.node?.price?.amount *
-                                            item?.quantity,
+                                          item?.quantity,
                                         ),
                                       )}
                                     </Text>
@@ -2245,8 +2262,8 @@ const ProductDetails = ({ route, navigation }: any) => {
                                     {formatPrice(
                                       Number(
                                         variant?.node?.price?.amount *
-                                          item?.getQuantity *
-                                          2,
+                                        item?.getQuantity *
+                                        2,
                                       ),
                                     )}
                                   </Text>
@@ -2326,7 +2343,7 @@ const ProductDetails = ({ route, navigation }: any) => {
                       // play={playing}
 
                       videoId={getYouTubeVideoId(productVideo?.value)}
-                      // onChangeState={onStateChange}
+                    // onChangeState={onStateChange}
                     />
                   ) : null}
                   {/* <Text>Hello {JSON.stringify(productVideo?.value)}</Text> */}
@@ -2475,7 +2492,7 @@ const ProductDetails = ({ route, navigation }: any) => {
                                         <>
                                           {variant?.node?.selectedOptions[0]
                                             ?.value ===
-                                          'Default Title' ? null : (
+                                            'Default Title' ? null : (
                                             <TouchableOpacity
                                               onPress={() =>
                                                 item?.variants.length > 1 &&
@@ -2619,13 +2636,13 @@ const ProductDetails = ({ route, navigation }: any) => {
                                     <Text style={styles.priceText}>
                                       {index == 0
                                         ? `QAR ${formatPrice(
-                                            Number(
-                                              variant?.node?.price?.amount,
-                                            ),
-                                          )}`
+                                          Number(
+                                            variant?.node?.price?.amount,
+                                          ),
+                                        )}`
                                         : `QAR ${formatPrice(
-                                            Number(item?.price),
-                                          )}`}
+                                          Number(item?.price),
+                                        )}`}
                                     </Text>
                                   </View>
                                 </View>
@@ -2697,7 +2714,7 @@ const ProductDetails = ({ route, navigation }: any) => {
                         </View>
                         <View>
                           <SectionView
-                            viewAllPress={() => {}}
+                            viewAllPress={() => { }}
                             items={relatedProducts}
                             title={t('youMayAlosLike')}
                             page={''}
@@ -2880,106 +2897,106 @@ const ProductDetails = ({ route, navigation }: any) => {
               </TouchableOpacity>
               {freqIndex == 0
                 ? freqItem?.variants &&
-                  freqItem?.variants.length >= 1 && (
-                    <FlatList
-                      ref={flatListRef0}
-                      style={{ marginTop: 6 }}
-                      data={freqItem?.variants}
-                      renderItem={({ item }) => (
-                        <>
-                          {item && (
-                            <TouchableOpacity
-                              onPress={() => {
-                                handleVariantCliclFreqItemThisItem(
-                                  item,
-                                  freqIndex,
-                                );
-                              }}
-                              style={{
-                                borderColor: Colors.primary,
-                                backgroundColor:
-                                  freqItems[freqIndex].id ==
+                freqItem?.variants.length >= 1 && (
+                  <FlatList
+                    ref={flatListRef0}
+                    style={{ marginTop: 6 }}
+                    data={freqItem?.variants}
+                    renderItem={({ item }) => (
+                      <>
+                        {item && (
+                          <TouchableOpacity
+                            onPress={() => {
+                              handleVariantCliclFreqItemThisItem(
+                                item,
+                                freqIndex,
+                              );
+                            }}
+                            style={{
+                              borderColor: Colors.primary,
+                              backgroundColor:
+                                freqItems[freqIndex].id ==
                                   getNoFromId(item?.node?.id)
-                                    ? Colors.accent
-                                    : Colors.white,
-                                paddingLeft: 16,
-                                paddingRight: 16,
-                                paddingTop: 6,
-                                paddingBottom: 6,
-                                borderWidth: 0.5,
-                                width: getWidth(1.5),
-                                alignSelf: 'center',
-                              }}
-                            >
-                              {item?.node?.selectedOptions.map((item: any) => (
-                                <Text
-                                  numberOfLines={1}
-                                  style={{
-                                    color: Colors.black,
-                                    fontWeight: '500',
-                                  }}
-                                >
-                                  {item?.value}
-                                </Text>
-                              ))}
-                            </TouchableOpacity>
-                          )}
-                        </>
-                      )}
-                      keyExtractor={item => item.toString()}
-                    />
-                  )
-                : freqItem?.variants &&
-                  freqItem?.variants.length >= 1 && (
-                    <FlatList
-                      ref={flatListRef}
-                      style={{ marginTop: 6 }}
-                      data={freqItem?.variants}
-                      renderItem={({ item }) => (
-                        <>
-                          {item && (
-                            <TouchableOpacity
-                              onPress={async () => {
-                                await handleVariantCliclFreqItem(
-                                  item,
-                                  freqIndex,
-                                );
-                              }}
-                              style={{
-                                borderColor: Colors.primary,
-                                backgroundColor:
-                                  freqItems[freqIndex].id == item.id
-                                    ? Colors.accent
-                                    : Colors.white,
-                                paddingLeft: 16,
-                                paddingRight: 16,
-                                paddingTop: 6,
-                                paddingBottom: 6,
-                                borderWidth: 0.5,
-                                justifyContent: 'center',
-                                width: getWidth(1.5),
-                                alignSelf: 'center',
-
-                                //width: getItemWidth(item.label.length),
-                              }}
-                            >
+                                  ? Colors.accent
+                                  : Colors.white,
+                              paddingLeft: 16,
+                              paddingRight: 16,
+                              paddingTop: 6,
+                              paddingBottom: 6,
+                              borderWidth: 0.5,
+                              width: getWidth(1.5),
+                              alignSelf: 'center',
+                            }}
+                          >
+                            {item?.node?.selectedOptions.map((item: any) => (
                               <Text
+                                numberOfLines={1}
                                 style={{
                                   color: Colors.black,
                                   fontWeight: '500',
-                                  alignSelf: 'center',
-                                  textAlign: 'left',
                                 }}
                               >
-                                {item?.label}
+                                {item?.value}
                               </Text>
-                            </TouchableOpacity>
-                          )}
-                        </>
-                      )}
-                      keyExtractor={item => item.toString()}
-                    />
-                  )}
+                            ))}
+                          </TouchableOpacity>
+                        )}
+                      </>
+                    )}
+                    keyExtractor={item => item.toString()}
+                  />
+                )
+                : freqItem?.variants &&
+                freqItem?.variants.length >= 1 && (
+                  <FlatList
+                    ref={flatListRef}
+                    style={{ marginTop: 6 }}
+                    data={freqItem?.variants}
+                    renderItem={({ item }) => (
+                      <>
+                        {item && (
+                          <TouchableOpacity
+                            onPress={async () => {
+                              await handleVariantCliclFreqItem(
+                                item,
+                                freqIndex,
+                              );
+                            }}
+                            style={{
+                              borderColor: Colors.primary,
+                              backgroundColor:
+                                freqItems[freqIndex].id == item.id
+                                  ? Colors.accent
+                                  : Colors.white,
+                              paddingLeft: 16,
+                              paddingRight: 16,
+                              paddingTop: 6,
+                              paddingBottom: 6,
+                              borderWidth: 0.5,
+                              justifyContent: 'center',
+                              width: getWidth(1.5),
+                              alignSelf: 'center',
+
+                              //width: getItemWidth(item.label.length),
+                            }}
+                          >
+                            <Text
+                              style={{
+                                color: Colors.black,
+                                fontWeight: '500',
+                                alignSelf: 'center',
+                                textAlign: 'left',
+                              }}
+                            >
+                              {item?.label}
+                            </Text>
+                          </TouchableOpacity>
+                        )}
+                      </>
+                    )}
+                    keyExtractor={item => item.toString()}
+                  />
+                )}
             </View>
           </View>
         </Modal>
@@ -3041,7 +3058,7 @@ const ProductDetails = ({ route, navigation }: any) => {
                           borderColor: Colors.primary,
                           backgroundColor:
                             bundleDeals[dealIndex]?.id ==
-                            getNoFromId(item?.node?.id)
+                              getNoFromId(item?.node?.id)
                               ? Colors.accent
                               : Colors.white,
                           paddingLeft: 16,

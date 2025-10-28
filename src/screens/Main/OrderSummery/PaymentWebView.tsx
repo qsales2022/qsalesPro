@@ -44,11 +44,8 @@ const PaymentWebView = ({ route, navigation }: any) => {
 
   useEffect(() => {
     if (url == undefined) {
-      console.log(url, 'this is url');
       createCart();
     }
-
-    console.log(url, 'this not is url');
   }, [url]);
 
   useEffect(() => {
@@ -59,8 +56,6 @@ const PaymentWebView = ({ route, navigation }: any) => {
 
   const storeCheckoutId = async (value: any) => {
     try {
-      console.log(value, 'this is value');
-
       await AsyncStorage.setItem('checkoutId', value);
       if (checkoutCompleted) {
         navigation.replace(screens.successScreen);
