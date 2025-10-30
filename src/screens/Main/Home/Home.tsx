@@ -947,11 +947,11 @@ const Home: FC<HomeProps> = ({ navigation }) => {
         style={styles.deliveryGif}
         resizeMode={FastImage.resizeMode.cover}
       />
-      <FastImage
+      {/* <FastImage
         source={require('../../../assets/Images/bannerTenPerc.gif')}
         style={styles.bannerGif}
         resizeMode={FastImage.resizeMode.cover}
-      />
+      /> */}
 
       {/* Categories Section */}
       <View style={styles.container}>
