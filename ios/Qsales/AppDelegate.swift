@@ -7,7 +7,7 @@ import FBSDKCoreKit
 import FirebaseCore
 import AppTrackingTransparency
 import AdSupport
-import react_native_stallion
+import HotUpdater
 
 
 
@@ -143,7 +143,8 @@ class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
      #if DEBUG
         RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
     #else
-        StallionModule.getBundleURL()
+            HotUpdater.bundleURL()
+
     #endif
   }
 }

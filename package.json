@@ -1,13 +1,17 @@
 {
   "name": "Qsales",
-  "version": "5.1.5",
+  "version": "6.1.2",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "hot-updater:build": "hot-updater deploy -i",
+    "console": "hot-updater console",
+    "hot-compression-android": "npx hot-updater deploy -p android -t 6.1.2",
+    "hot-compression-ios": "npx hot-updater deploy -p ios -t 6.1.2"
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^5.1.6",
@@ -99,7 +103,7 @@
     "babel-plugin-transform-remove-console": "^6.9.4",
     "dotenv": "^17.2.3",
     "eslint": "^8.19.0",
-    "hot-updater": "^0.21.3",
+    "hot-updater": "^0.21.4",
     "jest": "^29.6.3",
     "prettier": "2.8.8",
     "react-native-dotenv": "^3.4.11",
