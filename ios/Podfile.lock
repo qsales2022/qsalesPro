@@ -1,4 +1,5 @@
 PODS:
+  - BitByteData (2.0.4)
   - boost (1.84.0)
   - BVLinearGradient (2.8.3):
     - React-Core
@@ -156,6 +157,36 @@ PODS:
   - hermes-engine (0.80.2):
     - hermes-engine/Pre-built (= 0.80.2)
   - hermes-engine/Pre-built (0.80.2)
+  - HotUpdater (0.21.0):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - SWCompression (~> 4.8.0)
+    - Yoga
   - libwebp (1.5.0):
     - libwebp/demux (= 1.5.0)
     - libwebp/mux (= 1.5.0)
@@ -2945,6 +2976,47 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.7.1)
+  - SWCompression (4.8.6):
+    - BitByteData (~> 2.0)
+    - SWCompression/BZip2 (= 4.8.6)
+    - SWCompression/Deflate (= 4.8.6)
+    - SWCompression/GZip (= 4.8.6)
+    - SWCompression/LZ4 (= 4.8.6)
+    - SWCompression/LZMA (= 4.8.6)
+    - SWCompression/LZMA2 (= 4.8.6)
+    - SWCompression/SevenZip (= 4.8.6)
+    - SWCompression/TAR (= 4.8.6)
+    - SWCompression/XZ (= 4.8.6)
+    - SWCompression/ZIP (= 4.8.6)
+    - SWCompression/Zlib (= 4.8.6)
+  - SWCompression/BZip2 (4.8.6):
+    - BitByteData (~> 2.0)
+  - SWCompression/Deflate (4.8.6):
+    - BitByteData (~> 2.0)
+  - SWCompression/GZip (4.8.6):
+    - BitByteData (~> 2.0)
+    - SWCompression/Deflate
+  - SWCompression/LZ4 (4.8.6):
+    - BitByteData (~> 2.0)
+  - SWCompression/LZMA (4.8.6):
+    - BitByteData (~> 2.0)
+  - SWCompression/LZMA2 (4.8.6):
+    - BitByteData (~> 2.0)
+    - SWCompression/LZMA
+  - SWCompression/SevenZip (4.8.6):
+    - BitByteData (~> 2.0)
+    - SWCompression/LZMA2
+  - SWCompression/TAR (4.8.6):
+    - BitByteData (~> 2.0)
+  - SWCompression/XZ (4.8.6):
+    - BitByteData (~> 2.0)
+    - SWCompression/LZMA2
+  - SWCompression/ZIP (4.8.6):
+    - BitByteData (~> 2.0)
+    - SWCompression/Deflate
+  - SWCompression/Zlib (4.8.6):
+    - BitByteData (~> 2.0)
+    - SWCompression/Deflate
   - Yoga (0.0.0)
   - ZIPFoundation (0.9.19)
 
@@ -2965,6 +3037,7 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - GoogleUtilities
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
+  - "HotUpdater (from `../node_modules/@hot-updater/react-native`)"
   - lottie-react-native (from `../node_modules/lottie-react-native`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
@@ -3060,6 +3133,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - BitByteData
     - FBAEMKit
     - FBSDKCoreKit
     - FBSDKCoreKit_Basics
@@ -3088,6 +3162,7 @@ SPEC REPOS:
     - SDWebImage
     - SDWebImageWebPCoder
     - SocketRocket
+    - SWCompression
     - ZIPFoundation
 
 EXTERNAL SOURCES:
@@ -3108,6 +3183,8 @@ EXTERNAL SOURCES:
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-2025-07-24-RNv0.80.2-5c7dbc0a78cb2d2a8bc81c41c617c3abecf209ff
+  HotUpdater:
+    :path: "../node_modules/@hot-updater/react-native"
   lottie-react-native:
     :path: "../node_modules/lottie-react-native"
   RCT-Folly:
@@ -3290,6 +3367,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  BitByteData: 2422ed269fcddc44976d97f171a183d25ef535ce
   boost: 7e761d76ca2ce687f7cc98e698152abd03a18f90
   BVLinearGradient: cb006ba232a1f3e4f341bb62c42d1098c284da70
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
@@ -3317,6 +3395,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   hermes-engine: bbc1152da7d2d40f9e59c28acc6576fcf5d28e2a
+  HotUpdater: cf3ae7fe6ee1d4e07700c54e8fcb17cc47d5b5ce
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   lottie-ios: 8f97d3271e155c2d688875c29cd3c74908aef5f8
   lottie-react-native: 5d89c05930d4180a1e39b1757d46e6c0eec90255
@@ -3415,6 +3494,7 @@ SPEC CHECKSUMS:
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
+  SWCompression: 9379873ad5e9f25b31db88c441649b59a4c2bab7
   Yoga: a742cc68e8366fcfc681808162492bc0aa7a9498
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 

@@ -74,6 +74,7 @@ import RestartModal from './RestartModal';
 import { triggerHaptic } from '../../../Utils';
 import { useUpdatedCartId } from '../../../Api/hooks/useUpdatedCartId';
 import OfferModal from './OfferModal';
+import { isCartExpired } from '../../../helpers/expireCart';
 
 // Memoized constants to prevent recreation
 const MOUNTING_CATEGORY = [
@@ -311,6 +312,7 @@ const Home: FC<HomeProps> = ({ navigation }) => {
     if (isRestartRequired) {
       setIsRestartModalVisible(true);
     }
+
   }, [isRestartRequired]);
 
   // Memoized banner images based on language
@@ -360,7 +362,6 @@ const Home: FC<HomeProps> = ({ navigation }) => {
       Promise.all([
         requestNotificationPermission(),
         subscribeToMyTopic(),
-        getCheckoutId(),
       ]).catch(console.error);
 
       dispatch(updateSelectedTab(0));
@@ -395,6 +396,23 @@ const Home: FC<HomeProps> = ({ navigation }) => {
       clearTimeout(timer);
     };
   }, []);
+
+  useEffect(() => {
+    (async function () {
+      const checkoutId = await AsyncStorage.getItem('checkoutId');
+      if (checkoutId) {
+        const expired = await isCartExpired(checkoutId);
+        if (expired) {
+          await AsyncStorage.removeItem('checkoutId');
+          createCart();
+        } else {
+          getCartData();
+        }
+      } else {
+        createCart();
+      }
+    })()
+  }, [])
 
   // Parallel category fetching function
   const fetchAllCategoriesInParallel = useCallback(async (): Promise<void> => {
@@ -706,24 +724,6 @@ const Home: FC<HomeProps> = ({ navigation }) => {
 
 
 
-
-  const getCheckoutId = useCallback(async () => {
-    try {
-      const value = await AsyncStorage.getItem('checkoutId');
-      console.log(value, 'this is the value');
-
-      if (value) {
-        getCartData();
-      } else {
-        console.log('No checkoutId found, creating new cart');
-
-        createCart();
-      }
-    } catch (error) {
-      console.error('Get checkout ID error:', error);
-    }
-  }, [getCartData, createCart]);
-
   useEffect(() => {
     if ((cart as any)?.cartCreate?.cart?.id) {
       storeCheckoutId((cart as any).cartCreate.cart.id);
@@ -853,6 +853,8 @@ const Home: FC<HomeProps> = ({ navigation }) => {
       }
     }
   }, []);
+
+
 
   const checkAndRequestReview = useCallback(async () => {
     try {

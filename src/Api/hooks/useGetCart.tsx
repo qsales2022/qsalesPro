@@ -100,7 +100,7 @@ const useGetCart = () => {
         });
 
         const { data } = response;
-
+      
         // Check if data is valid before updating the state
 
         if (data?.cart?.lines?.edges?.length) {

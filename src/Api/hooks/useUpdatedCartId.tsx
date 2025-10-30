@@ -6,14 +6,12 @@ export const useUpdatedCartId = () => {
 
   const updatedCartId = async (cartid: any, fcmtoken: string) => {
     let response: any;
-    console.log('ge>>><<>>');
-
     try {
       setLoading(true);
       response = await axios
         .create({
-            // baseURL: 'https://qdelivery.online/user/',
-          baseURL: 'http://192.168.10.68:4001/user',
+            baseURL: 'https://qdelivery.online/user/',
+          // baseURL: 'http://192.168.10.68:4001/user',
           headers: {
             'Content-Type': 'application/json',
             // Origin: 'http://localhost:8081',

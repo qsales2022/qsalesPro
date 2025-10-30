@@ -9,7 +9,8 @@ import com.facebook.react.ReactNativeHost
 import com.facebook.react.ReactPackage
 import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
-import com.stallion.Stallion
+import com.hotupdater.HotUpdater 
+
 
 
 class MainApplication : Application(), ReactApplication {
@@ -29,9 +30,9 @@ class MainApplication : Application(), ReactApplication {
         override val isNewArchEnabled: Boolean = BuildConfig.IS_NEW_ARCHITECTURE_ENABLED
         override val isHermesEnabled: Boolean = BuildConfig.IS_HERMES_ENABLED
 
-          override fun getJSBundleFile(): String? {
-          return Stallion.getJSBundleFile(applicationContext)
-      }
+         override fun getJSBundleFile(): String? {  
+          return HotUpdater.getJSBundleFile(applicationContext)  
+        } 
       
       }
 

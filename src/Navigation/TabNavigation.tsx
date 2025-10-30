@@ -64,7 +64,6 @@ const HomeTabs = () => {
       } else {
         //create cart if no checkoutId present
         await AsyncStorage.removeItem('checkoutId');
-
         createCart();
       }
     } catch (e) {
