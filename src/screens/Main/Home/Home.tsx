@@ -952,7 +952,6 @@ const Home: FC<HomeProps> = ({ navigation }) => {
         style={styles.bannerGif}
         resizeMode={FastImage.resizeMode.cover}
       /> */}
-
       {/* Categories Section */}
       <View style={styles.container}>
         <View style={styles.categoryHeader}>
