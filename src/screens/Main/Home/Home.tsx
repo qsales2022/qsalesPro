@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   TouchableWithoutFeedback,
   Modal,
+  Button,
 } from 'react-native';
 import React, {
   useCallback,
@@ -68,13 +69,14 @@ import { getReview, setReview } from '../../../AsyncStorage/StorageUtil';
 import useGetOffer from '../../../Api/hooks/useGetOffer';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
-import { useStallionUpdate, restart } from 'react-native-stallion';
+// import { useStallionUpdate, restart } from 'react-native-stallion';
 import AnimatedModal from '../../../components/animatedModal/AnimatedModal';
 import RestartModal from './RestartModal';
 import { triggerHaptic } from '../../../Utils';
 import { useUpdatedCartId } from '../../../Api/hooks/useUpdatedCartId';
 import OfferModal from './OfferModal';
 import { isCartExpired } from '../../../helpers/expireCart';
+import { HotUpdater } from '@hot-updater/react-native';
 
 // Memoized constants to prevent recreation
 const MOUNTING_CATEGORY = [
@@ -306,14 +308,14 @@ const Home: FC<HomeProps> = ({ navigation }) => {
   const newArrivals = useGetProducts('new-arrivals', 12, '', 'CREATED_AT_DESC');
   const specialOffers: any = useGetProducts('special-offer', 12, '');
 
-  const { isRestartRequired } = useStallionUpdate();
+  // const { isRestartRequired } = useStallionUpdate();
 
-  useEffect(() => {
-    if (isRestartRequired) {
-      setIsRestartModalVisible(true);
-    }
+  // useEffect(() => {
+  //   if (isRestartRequired) {
+  //     setIsRestartModalVisible(true);
+  //   }
 
-  }, [isRestartRequired]);
+  // }, [isRestartRequired]);
 
   // Memoized banner images based on language
   const bannerImages = useMemo<BannerImage[]>(() => {
@@ -927,7 +929,7 @@ const Home: FC<HomeProps> = ({ navigation }) => {
       contentContainerStyle={styles.scrollContainer}
     >
       {/* Banner Swiper */}
-      {bannerImages?.length > 0 && (
+      {/* {bannerImages?.length > 0 && (
         <View>
           <Swiper
             key={bannerImages.length}
@@ -948,8 +950,13 @@ const Home: FC<HomeProps> = ({ navigation }) => {
             ))}
           </Swiper>
         </View>
-      )}
+      )} */}
+      <Text>{__DEV__ ? "developemnet mode" : "Release mode"}</Text>
+      <Text>{HotUpdater.getAppVersion()}</Text>
+      <Text>{HotUpdater.getBundleId()}</Text>
+      <Text>{HotUpdater.getChannel()}</Text>
 
+      {/* <Button title='reload' onPress={()=>HotUpdater.reload()} /> */}
       {/* Delivery GIFs */}
       <FastImage
         source={
@@ -997,7 +1004,7 @@ const Home: FC<HomeProps> = ({ navigation }) => {
         </ScrollView>
 
         <BannerStrip />
-        <RestartModal
+        {/* <RestartModal
           isVisible={isRestartModalVisible}
           onClose={() => {
             setIsRestartModalVisible(false);
@@ -1005,7 +1012,7 @@ const Home: FC<HomeProps> = ({ navigation }) => {
           onRestart={() => {
             restart();
           }}
-        />
+        /> */}
       </View>
 
       {/* Product Categories */}
