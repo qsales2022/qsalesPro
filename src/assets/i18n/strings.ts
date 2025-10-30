@@ -32,7 +32,7 @@ export default {
   CarAccessories:"CarAccessories",
   CONTINUESHOPPING:"CONTINUESHOPPING",
   ViewCart:"View Cart",
-  SpecialOffer:"BIG SAVING OFFER",
+  SpecialOffer:"Offer",
   Buy1Get1Free:"Buy 1 Get 1 Free"
 
 
