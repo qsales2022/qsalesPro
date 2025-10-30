@@ -101,7 +101,6 @@ export default HotUpdater.wrap({
   requestHeaders: {},
   reloadOnForceUpdate: true,
   
-  
   fallbackComponent: ({ progress, status, error }: any) => (
     <View style={{ flex: 1, padding: 20, borderRadius: 10, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' }}>
       <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}>
