@@ -914,7 +914,7 @@ const Home: FC<HomeProps> = ({ navigation }) => {
       contentContainerStyle={styles.scrollContainer}
     >
       {/* Banner Swiper */}
-      {/* {bannerImages?.length > 0 && (
+      {bannerImages?.length > 0 && (
         <View>
           <Swiper
             key={bannerImages.length}
@@ -935,7 +935,7 @@ const Home: FC<HomeProps> = ({ navigation }) => {
             ))}
           </Swiper>
         </View>
-      )} */}
+      )}
 
       {/* Delivery GIFs */}
       <FastImage
