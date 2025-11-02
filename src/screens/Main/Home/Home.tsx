@@ -75,6 +75,7 @@ import { triggerHaptic } from '../../../Utils';
 import { useUpdatedCartId } from '../../../Api/hooks/useUpdatedCartId';
 import { callFunctionEveryTwoDays } from '../../../helpers/twoDays';
 import OfferModal from './OfferModal';
+import { isCartExpired } from '../../../helpers/cartCheck';
 
 // Memoized constants to prevent recreation
 const MOUNTING_CATEGORY = [
@@ -730,6 +731,23 @@ const Home: FC<HomeProps> = ({ navigation }) => {
       storeCheckoutId((cart as any).cartCreate.cart.id);
     }
   }, [cart, storeCheckoutId]);
+
+  useEffect(() => {
+    (async function () {
+      const checkoutId = await AsyncStorage.getItem('checkoutId');
+      if (checkoutId) {
+        const expired = await isCartExpired(checkoutId);
+        if (expired) {
+          await AsyncStorage.removeItem('checkoutId');
+          createCart();
+        } else {
+          getCartData();
+        }
+      } else {
+        createCart();
+      }
+    })()
+  }, [])
 
   // Notification setup
   const setupNotificationHandlers = useCallback(() => {
