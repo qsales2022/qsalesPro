@@ -342,18 +342,21 @@ import { useNavigation } from '@react-navigation/native';
 import screens from '../../Navigation/screens';
 import { useTranslation } from 'react-i18next';
 import { formatPrice, triggerHaptic } from '../../Utils';
+import { getMulti, STORAGE_KEYS } from '../../AsyncStorage/StorageUtil';
 
 interface CartItemInterFace {
   product: any;
   checkoutId: any;
   removedCallBack(): any;
   updateCallBack(): any;
+  totalAmount: Number | any
 }
 const CartItem: FC<CartItemInterFace> = ({
   product = {},
   checkoutId,
   removedCallBack,
   updateCallBack,
+  totalAmount
 }) => {
   const { id: selectedVariantId, product: productDetails } =
     product?.merchandise;
@@ -364,6 +367,7 @@ const CartItem: FC<CartItemInterFace> = ({
   const [quantity, setQuantity] = useState(product?.quantity);
   const [checked, setChecked] = useState(product?.isChecked);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [giftDetails, setGiftDetails] = useState<{}>({});
 
   const { removeCartData, removeFromCart }: any = useRemoveFromCart();
   const { updateQuantityData, updateQuantity }: any = useUpdateQuantity();
@@ -398,7 +402,7 @@ const CartItem: FC<CartItemInterFace> = ({
       const newQuantity = quantity + 1;
       setQuantity(newQuantity); // Optimistic update
       setIsUpdating(true);
-      updateQuantity(product?.id, newQuantity);
+      updateQuantity(product?.id, newQuantity, giftDetails);
     }
   };
 
@@ -408,9 +412,23 @@ const CartItem: FC<CartItemInterFace> = ({
       const newQuantity = quantity - 1;
       setQuantity(newQuantity);
       setIsUpdating(true);
-      updateQuantity(product?.id, newQuantity);
+      updateQuantity(product?.id, newQuantity, giftDetails);
     }
   };
+  useEffect(() => {
+    (async () => {
+      const data = await getMulti(Object.values(STORAGE_KEYS));
+      if (data) {
+        setGiftDetails({
+          discountCode: data.get(STORAGE_KEYS.DISCOUNT_CODE),
+          gift: data.get(STORAGE_KEYS.GIFT),
+          giftThreshold: data.get(STORAGE_KEYS.GIFT_THRESHOLD),
+          productId: data.get(STORAGE_KEYS.PRODUCT_ID),
+        });
+      }
+    })()
+  }, [])
+
 
   return (
     <View style={styles.mainContainer}>
@@ -524,7 +542,7 @@ const CartItem: FC<CartItemInterFace> = ({
               style={[
                 styles.quantityButtonText,
                 (quantity <= 1 || isUpdating) &&
-                  styles.quantityButtonTextDisabled,
+                styles.quantityButtonTextDisabled,
               ]}
             >
               −
@@ -549,7 +567,7 @@ const CartItem: FC<CartItemInterFace> = ({
               styles.quantityButton,
               (quantity >= selectedVariant?.node?.quantityAvailable ||
                 isUpdating) &&
-                styles.quantityButtonDisabled,
+              styles.quantityButtonDisabled,
             ]}
             disabled={
               quantity >= selectedVariant?.node?.quantityAvailable || isUpdating
@@ -560,7 +578,7 @@ const CartItem: FC<CartItemInterFace> = ({
                 styles.quantityButtonText,
                 (quantity >= selectedVariant?.node?.quantityAvailable ||
                   isUpdating) &&
-                  styles.quantityButtonTextDisabled,
+                styles.quantityButtonTextDisabled,
               ]}
             >
               +
@@ -569,7 +587,7 @@ const CartItem: FC<CartItemInterFace> = ({
         </View>
 
         <TouchableOpacity
-          onPress={() => removeFromCart(checkoutId, product?.id)}
+          onPress={() => removeFromCart(checkoutId, product?.id, giftDetails)}
           style={{
             flexDirection: 'row',
             flex: 1,
@@ -616,7 +634,7 @@ const CartItem: FC<CartItemInterFace> = ({
                 }}
               >
                 {formatPrice(
-                  Number(product?.merchandise?.price?.amount * quantity),
+                  Math.floor(Number(product?.merchandise?.price?.amount * quantity),)
                 )}{' '}
                 {product?.discountAllocations[0].discountedAmount?.currencyCode}
               </Text>
@@ -625,17 +643,17 @@ const CartItem: FC<CartItemInterFace> = ({
           {product?.discountAllocations?.length > 0 ? (
             <Text style={{ color: Colors.black, fontWeight: '600' }}>
               {formatPrice(
-                Number(
+                Math.floor(Number(
                   product?.merchandise?.price?.amount * quantity -
-                    product?.discountAllocations[0]?.discountedAmount?.amount,
-                ),
+                  product?.discountAllocations[0]?.discountedAmount?.amount,
+                ),)
               )}{' '}
               {product?.merchandise?.price?.currencyCode}
             </Text>
           ) : (
             <Text style={{ color: Colors.black, fontWeight: '600' }}>
               {formatPrice(
-                Number(product?.merchandise?.price?.amount * quantity),
+                Math.floor(Number(product?.merchandise?.price?.amount * quantity))
               )}{' '}
               {product?.merchandise?.price?.currencyCode}
             </Text>
