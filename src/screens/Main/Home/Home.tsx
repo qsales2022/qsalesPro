@@ -44,6 +44,7 @@ import SpInAppUpdates, {
   StartUpdateOptions,
 } from 'sp-react-native-in-app-updates';
 import {
+  giftDetails,
   toggleLoader,
   updateSelectedTab,
 } from '../../../redux/reducers/GlobalReducer';
@@ -64,7 +65,7 @@ import Translation from '../../../assets/i18n/Translation';
 import { RootState } from '../../../redux/store';
 import axios from 'axios';
 import { AppEventsLogger } from 'react-native-fbsdk-next';
-import { getReview, setReview } from '../../../AsyncStorage/StorageUtil';
+import { getReview, setMulti, setReview, STORAGE_KEYS } from '../../../AsyncStorage/StorageUtil';
 import useGetOffer from '../../../Api/hooks/useGetOffer';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
@@ -76,6 +77,7 @@ import { useUpdatedCartId } from '../../../Api/hooks/useUpdatedCartId';
 import { callFunctionEveryTwoDays } from '../../../helpers/twoDays';
 import OfferModal from './OfferModal';
 import { isCartExpired } from '../../../helpers/cartCheck';
+import useGetGift from '../../../Api/hooks/useGetGift';
 
 // Memoized constants to prevent recreation
 const MOUNTING_CATEGORY = [
@@ -259,6 +261,8 @@ const Home: FC<HomeProps> = ({ navigation }) => {
   // Hooks
   const { collections } = useGetCollections(100);
   const { offerList } = useGetOffer();
+  const { giftList } = useGetGift();
+
   const { bannerImagesEN, bannerImagesAR } = useGetHomeBannerList();
   const { getProducts } = useGetCategoryProducts();
   const { cartDetails, getCartData } = useGetCart();
@@ -266,7 +270,6 @@ const Home: FC<HomeProps> = ({ navigation }) => {
   const { cart, createCart } = useCreateCart();
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
-
   // State
   const [categories, setCategories] = useState<Category[]>(MOUNTING_CATEGORY);
   const [categoryList, setCategoryList] = useState<any[]>([]);
@@ -301,7 +304,6 @@ const Home: FC<HomeProps> = ({ navigation }) => {
 
   // Selectors
   const language = useSelector((state: any) => state.AuthReducer.language);
-  const launch = useSelector((state: any) => state.globalReducer.launch);
 
   // Product hooks for initial categories
   const newArrivals = useGetProducts('new-arrivals', 12, '', 'CREATED_AT_DESC');
@@ -473,8 +475,7 @@ const Home: FC<HomeProps> = ({ navigation }) => {
               metaView: result.metaView || [],
             };
             console.log(
-              `Updated ${result.category} with ${
-                result.item.length
+              `Updated ${result.category} with ${result.item.length
               } products and ${result.metaView?.length || 0} meta items`,
             );
           }
@@ -706,7 +707,7 @@ const Home: FC<HomeProps> = ({ navigation }) => {
       });
 
       return () => unsubscribe();
-    } catch (error) {}
+    } catch (error) { }
   }, []);
 
   const getCheckoutId = useCallback(async () => {
@@ -924,6 +925,31 @@ const Home: FC<HomeProps> = ({ navigation }) => {
     });
   }, [navigation]);
 
+  useEffect(() => {
+    if (!giftList) return;
+
+    (async () => {
+      try {
+        // 1. Save to AsyncStorage
+        await setMulti([
+          [STORAGE_KEYS.DISCOUNT_CODE, giftList.discountCode],
+          [STORAGE_KEYS.GIFT, giftList.gift],
+          [STORAGE_KEYS.GIFT_THRESHOLD, giftList.giftThreshold],
+          [STORAGE_KEYS.PRODUCT_ID, `gid://shopify/ProductVariant/${giftList.productId}`],
+          [STORAGE_KEYS.ORIGINAL_PRICE, giftList.originalPrice.toString()],
+        ]);
+        dispatch(giftDetails({
+          discountCode: giftList.discountCode,
+          gift: giftList.gift,
+          giftThreshold: giftList.giftThreshold,
+          productId: `gid://shopify/ProductVariant/${giftList.productId}`,
+          originalPrice: giftList.originalPrice,
+        }));
+      } catch (error) {
+        console.error('Failed to save gift data:', error);
+      }
+    })();
+  }, [giftList, dispatch]);
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -970,7 +996,6 @@ const Home: FC<HomeProps> = ({ navigation }) => {
         style={styles.bannerGif}
         resizeMode={FastImage.resizeMode.cover}
       /> */}
-
       {/* Categories Section */}
       <View style={styles.container}>
         <View style={styles.categoryHeader}>

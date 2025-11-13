@@ -12,6 +12,14 @@ export interface GlobalSliceInterface {
   selectedEquipment: any;
   selectedTab: any;
   launch: boolean;
+  details:{
+    discountCode: string;
+    gift: boolean;
+    giftThreshold: number;
+    productId: string;
+    originalPrice?: number;
+  }
+
 }
 const initialState: GlobalSliceInterface = {
   isLoading: false,
@@ -26,6 +34,13 @@ const initialState: GlobalSliceInterface = {
   selectedEquipment: null,
   selectedTab: 0,
   launch: false,
+  details:{
+    discountCode: '',
+    gift: false,
+    giftThreshold: 0,
+    productId: '',
+    originalPrice: 0,
+  }
 };
 export const globalSlice = createSlice({
   name: 'globalReducer',
@@ -56,6 +71,9 @@ export const globalSlice = createSlice({
     updateLaunch: (state, action) => {      
       state.launch = action.payload;
     },
+    giftDetails: (state, action) => {
+      state.details = action.payload;
+    }
   },
 });
 export const {
@@ -65,5 +83,6 @@ export const {
   updateAccessToken,
   updateSelectedTab,
   updateLaunch,
+  giftDetails
 } = globalSlice.actions;
 export default globalSlice.reducer;

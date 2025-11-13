@@ -72,9 +72,7 @@ const Navigation = () => {
         }}
       >
         <Stack.Screen name="SPLASH" component={LogoSplash} />
-
         <Stack.Screen name="MAIN" component={MainNavigation} />
-
         <Stack.Screen name="ON_BOARDING" component={OnBoardingNavigation} />
         <Stack.Screen name="Cheking" component={Test} />
         <Stack.Screen name="CART" component={Cart} />

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 export interface GlobalSliceInterface {
-  token: string;
+  token: string | null;
 }
 const initialState: GlobalSliceInterface = {
   token: null,
