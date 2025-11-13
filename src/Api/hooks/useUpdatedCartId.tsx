@@ -12,13 +12,8 @@ export const useUpdatedCartId = () => {
       setLoading(true);
       response = await axios
         .create({
-<<<<<<< HEAD
           //   baseURL: 'https://qdelivery.online/user/',
           baseURL: 'https://qdelivery.online/user/',
-=======
-            baseURL: 'https://qdelivery.online/user/',
-          // baseURL: 'http://192.168.10.37:4001/user/',
->>>>>>> updation
           headers: {
             'Content-Type': 'application/json',
             // Origin: 'http://localhost:8081',

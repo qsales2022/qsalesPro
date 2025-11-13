@@ -3500,6 +3500,7 @@ import UltraOptimizedBanner from '../../../test';
 import LinearGradient from 'react-native-linear-gradient';
 import { trigger } from 'react-native-haptic-feedback';
 import { useUpdatedCartId } from '../../../Api/hooks/useUpdatedCartId';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ProductDetails = ({ route, navigation }: any) => {
   const tabRef = useRef<any>('');
@@ -4131,7 +4132,7 @@ const ProductDetails = ({ route, navigation }: any) => {
   }, [deals]);
   return (
     <BottomSheetModalProvider>
-      <View
+      <SafeAreaView
         style={[CommonStyles.containerFlex1, { backgroundColor: Colors.white }]}
       >
         <StatusBar
@@ -6608,7 +6609,7 @@ const ProductDetails = ({ route, navigation }: any) => {
             </View>
           </BottomSheetView>
         </BottomSheetModal>
-      </View>
+      </SafeAreaView>
     </BottomSheetModalProvider>
   );
 };
