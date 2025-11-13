@@ -150,4 +150,5 @@ export const STORAGE_KEYS = {
   GIFT: 'gift_item',
   GIFT_THRESHOLD: 'gift_threshold',
   PRODUCT_ID: 'gift_product_id',
+  ORIGINAL_PRICE: 'gift_original_price',
 } as const;

@@ -450,11 +450,11 @@ const useAddToCart = () => {
     const { productId: GIFT_ID, giftThreshold: THRESHOLD, discountCode } = details;
 
     const lines = cart.lines.edges.map(e => e.node);
-   
+
     // Split gift lines into tagged vs untagged (paid)
     const taggedGiftLines = lines.filter(l => l.merchandise.id === GIFT_ID && isFreeGift(l));
     const untaggedGiftLines = lines.filter(l => l.merchandise.id === GIFT_ID && !isFreeGift(l));
-    
+
     let tagged = taggedGiftLines[0] ?? null;
     const qualifies = subtotalExcludingTaggedGift(cart) >= THRESHOLD;
 
@@ -540,7 +540,7 @@ const useAddToCart = () => {
     if (!giftDetails?.productId) {
       console.warn('Gift details not ready; skipping gift logic');
     }
-          console.log(giftDetails,'giftDetails');
+    console.log(giftDetails, 'giftDetails');
 
 
     dispatch(toggleLoader(true));
@@ -599,8 +599,8 @@ const useAddToCart = () => {
     if (!giftDetails?.productId) {
       console.warn('Gift details not ready; skipping gift logic');
     }
-      console.log(giftDetails,'giftDetails');
-      
+    console.log(giftDetails, 'giftDetails');
+
     dispatch(toggleLoader(true));
     setLoading(true);
     setError(null);

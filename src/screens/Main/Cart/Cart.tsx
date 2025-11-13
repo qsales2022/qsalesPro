@@ -10,8 +10,15 @@ import {
   SafeAreaView,
   Platform,
   ActivityIndicator,
-  Animated,
 } from 'react-native';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+  withSequence,
+  runOnJS,
+} from 'react-native-reanimated';
 import Colors from '../../../Theme/Colors';
 import { getHeight, getWidth, lightenColor } from '../../../Theme/Constants';
 import CommonStyles from '../../../Theme/CommonStyles';
@@ -20,7 +27,7 @@ import screens from '../../../Navigation/screens';
 import { useCheckout, useGetCart } from '../../../Api/hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateSelectedTab } from '../../../redux/reducers/GlobalReducer';
 import { Toast } from 'react-native-toast-message/lib/src/Toast';
 import { useTranslation } from 'react-i18next';
@@ -33,11 +40,17 @@ import LinearGradient from 'react-native-linear-gradient';
 import ProgressBar from '../../../components/progressBar/ProgressBar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { getMulti, STORAGE_KEYS } from '../../../AsyncStorage/StorageUtil';
+import images from '../../../assets/Images';
+import useGetProductByVariant from '../../../Api/hooks/useGetProductByVariant';
 
 
 // Define thresholds
 const FREE_DELIVERY_THRESHOLD = 35;
-const FREE_GIFT_THRESHOLD = 49;
+const FREE_GIFT_THRESHOLD = 70;
+const GIFT_CONFIG = {
+  imageUrl: images.Cleaning,
+  name: 'Luxury Sample Set',
+};
 
 const Cart = ({ navigation }: any) => {
   const { cartDetails, getCartData, loading }: any = useGetCart();
@@ -51,16 +64,19 @@ const Cart = ({ navigation }: any) => {
   const [eventPrice, setEventPrice] = useState(0);
   const [currentAmount, setCurrentAmount] = useState(0);
   const [showGiftAnimation, setShowGiftAnimation] = useState(false);
+  const { productDetails, getProductByVariant, error } = useGetProductByVariant()
+  const gift = useSelector((state: any) => state.globalReducer.details);
+
 
   // Use ref to track previous amount and avoid re-showing animation
   const previousAmountRef = useRef(0);
-  const animationOpacity = useRef(new Animated.Value(0)).current;
-  const animationScale = useRef(new Animated.Value(0.5)).current;
+
+  // Reanimated shared values
+  const animationOpacity = useSharedValue(0);
+  const animationScale = useSharedValue(0.5);
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
-
-  // Check if gift threshold is met
 
   const getCheckoutId = async () => {
     try {
@@ -72,7 +88,7 @@ const Cart = ({ navigation }: any) => {
       // error reading value
     }
   };
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
       getCartData();
@@ -101,11 +117,22 @@ const Cart = ({ navigation }: any) => {
   }, [cartDetails]);
 
   useEffect(() => {
-    if (isFocused) {
-      dispatch(updateSelectedTab(2));
-      getCartData();
-    }
+    if (!isFocused) return;
+    dispatch(updateSelectedTab(2));
+    const fetchData = async () => {
+      try {
+        await Promise.allSettled([
+          getCartData(),
+          getProductByVariant(gift?.productId ?? ''),
+        ]);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    };
+
+    fetchData();
   }, [isFocused]);
+
 
   const next = () => {
     setCheckLoading(true);
@@ -127,7 +154,6 @@ const Cart = ({ navigation }: any) => {
   }, [checkout]);
 
   useEffect(() => {
-
     const screenName =
       navigation.getState().routes[navigation.getState().index]?.name;
     AppEventsLogger.logEvent('fb_mobile_content_view', {
@@ -141,39 +167,21 @@ const Cart = ({ navigation }: any) => {
     setShowGiftAnimation(true);
 
     // Reset animation values
-    animationOpacity.setValue(0);
-    animationScale.setValue(0.5);
+    animationOpacity.value = 0;
+    animationScale.value = 0.5;
 
-    // Animate in
-    Animated.parallel([
-      Animated.timing(animationOpacity, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-      Animated.spring(animationScale, {
-        toValue: 1,
-        tension: 50,
-        friction: 7,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    // Animate in with Reanimated
+    animationOpacity.value = withTiming(1, { duration: 300 });
+    animationScale.value = withSpring(1, {
+      damping: 7,
+      stiffness: 50,
+    });
 
     // Auto-hide after animation completes (3 seconds total)
     setTimeout(() => {
-      Animated.parallel([
-        Animated.timing(animationOpacity, {
-          toValue: 0,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-        Animated.timing(animationScale, {
-          toValue: 0.5,
-          duration: 300,
-          useNativeDriver: true,
-        }),
-      ]).start(() => {
-        setShowGiftAnimation(false);
+      animationOpacity.value = withTiming(0, { duration: 300 });
+      animationScale.value = withTiming(0.5, { duration: 300 }, () => {
+        runOnJS(setShowGiftAnimation)(false);
       });
     }, 2700);
   };
@@ -189,8 +197,6 @@ const Cart = ({ navigation }: any) => {
 
     setCurrentAmount(amount);
     setEventPrice(amount);
-
-    // Show gift animation only when crossing threshold from below
     if (
       previousAmount < FREE_GIFT_THRESHOLD &&
       amount >= FREE_GIFT_THRESHOLD &&
@@ -202,6 +208,14 @@ const Cart = ({ navigation }: any) => {
     // Update previous amount
     previousAmountRef.current = amount;
   }, [cartDetails]);
+
+  // Animated style for gift animation
+  const animatedGiftStyle = useAnimatedStyle(() => {
+    return {
+      opacity: animationOpacity.value,
+      transform: [{ scale: animationScale.value }],
+    };
+  });
 
   return (
     <SafeAreaProvider style={styles.container}>
@@ -256,9 +270,12 @@ const Cart = ({ navigation }: any) => {
       {cartDetails?.cart?.lines?.edges?.length > 0 && (
         <ProgressBar
           currentAmount={currentAmount}
-          freeDeliveryThreshold={FREE_DELIVERY_THRESHOLD}
-          freeGiftThreshold={FREE_GIFT_THRESHOLD}
-          currency={cartDetails?.cart?.cost?.totalAmount?.currencyCode || 'USD'}
+          freeDeliveryThreshold={FREE_DELIVERY_THRESHOLD ?? 0}
+          freeGiftThreshold={gift?.giftThreshold ?? 0}
+          currency={cartDetails?.cart?.cost?.totalAmount?.currencyCode || 'QAR'}
+          giftImageUrl={productDetails?.image.url || GIFT_CONFIG.imageUrl}
+          giftName={productDetails?.product.title || GIFT_CONFIG.name}
+          giftAmount={gift?.originalPrice || 0}
         />
       )}
 
@@ -302,7 +319,6 @@ const Cart = ({ navigation }: any) => {
                   loop
                   style={{ width: getWidth(4), height: getHeight(4) }}
                   colorFilters={[{ keypath: 'LayerName', color: '#FF0000' }]}
-
                 />
 
                 <Text
@@ -453,10 +469,7 @@ const Cart = ({ navigation }: any) => {
         <Animated.View
           style={[
             styles.giftAnimationContainer,
-            {
-              opacity: animationOpacity,
-              transform: [{ scale: animationScale }],
-            }
+            animatedGiftStyle,
           ]}
         >
           <LottieView

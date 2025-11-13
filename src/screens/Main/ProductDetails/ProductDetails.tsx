@@ -4075,6 +4075,7 @@ const ProductDetails = ({ route, navigation }: any) => {
   const handleSheetChanges = useCallback((index: number) => {
     setIsPlaying(true);
   }, []);
+  
   const handleContinueShopping = () => {
     bottomSheetModalRef.current?.dismiss();
   };

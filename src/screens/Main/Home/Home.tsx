@@ -918,6 +918,7 @@ const Home: FC<HomeProps> = ({ navigation }) => {
           [STORAGE_KEYS.GIFT, giftList.gift],
           [STORAGE_KEYS.GIFT_THRESHOLD, giftList.giftThreshold],
           [STORAGE_KEYS.PRODUCT_ID, `gid://shopify/ProductVariant/${giftList.productId}`],
+          [STORAGE_KEYS.ORIGINAL_PRICE, giftList.originalPrice.toString()],
         ]);
         dispatch(giftDetails({
           discountCode: giftList.discountCode,
