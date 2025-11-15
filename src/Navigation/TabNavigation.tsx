@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   Platform,
-  SafeAreaView,
   StatusBar,
   StyleSheet,
   ToastAndroid,
@@ -22,6 +21,7 @@ import { updateLaunch } from '../redux/reducers/GlobalReducer';
 import LinearGradient from 'react-native-linear-gradient';
 import { View } from 'react-native-animatable';
 import { getHeight, lightenColor } from '../Theme/Constants';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const HomeTabs = () => {
   const isFocused = useIsFocused();
@@ -82,7 +82,10 @@ const HomeTabs = () => {
 
   return (
     <>
-      <View style={styles.container}>
+      <SafeAreaView
+       style={styles.container}
+       edges={['left','right','bottom']}
+       >
         {/* Transparent StatusBar */}
         <StatusBar
           barStyle="dark-content"
@@ -109,7 +112,7 @@ const HomeTabs = () => {
           <Tab.Screen name="CART" component={Cart} />
           <Tab.Screen name="ACCOUNT" component={Account} />
         </Tab.Navigator>
-      </View>
+      </SafeAreaView>
     </>
   );
 };

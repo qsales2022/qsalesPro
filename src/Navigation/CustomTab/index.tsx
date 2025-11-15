@@ -480,6 +480,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { updateSelectedTab } from "../../redux/reducers/GlobalReducer";
 import { triggerHaptic } from "../../Utils";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 interface CartIconWithBadgeProps {
   cartCount: number;

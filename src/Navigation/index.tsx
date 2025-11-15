@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getFirstUserLaunch } from '../AsyncStorage/StorageUtil';
 import { updateLaunch } from '../redux/reducers/GlobalReducer';
 import Loading from './loading/Loading';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const Navigation = () => {
   const { launch } = useSelector((state: RootState) => state.globalReducer);
@@ -63,21 +64,24 @@ const Navigation = () => {
     return <Loading />;
   }
   return (
-    <NavigationContainer linking={linking}>
-      <Stack.Navigator
-        initialRouteName={launch ? 'MAIN' : 'SPLASH'}
-        screenOptions={{
-          animation: 'flip',
-          headerShown: false,
-        }}
-      >
-        <Stack.Screen name="SPLASH" component={LogoSplash} />
-        <Stack.Screen name="MAIN" component={MainNavigation} />
-        <Stack.Screen name="ON_BOARDING" component={OnBoardingNavigation} />
-        <Stack.Screen name="Cheking" component={Test} />
-        <Stack.Screen name="CART" component={Cart} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer linking={linking}>
+        <Stack.Navigator
+          initialRouteName={launch ? 'MAIN' : 'SPLASH'}
+          screenOptions={{
+            animation: 'flip',
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="SPLASH" component={LogoSplash} />
+          <Stack.Screen name="MAIN" component={MainNavigation} />
+          <Stack.Screen name="ON_BOARDING" component={OnBoardingNavigation} />
+          <Stack.Screen name="Cheking" component={Test} />
+          <Stack.Screen name="CART" component={Cart} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
+
   );
 };
 export default Navigation;

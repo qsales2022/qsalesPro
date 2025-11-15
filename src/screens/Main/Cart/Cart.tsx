@@ -7,7 +7,6 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
-  SafeAreaView,
   Platform,
   ActivityIndicator,
 } from 'react-native';
@@ -38,7 +37,7 @@ import { AppEventsLogger } from 'react-native-fbsdk-next';
 import LottieView from 'lottie-react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import ProgressBar from '../../../components/progressBar/ProgressBar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { getMulti, STORAGE_KEYS } from '../../../AsyncStorage/StorageUtil';
 import images from '../../../assets/Images';
 import useGetProductByVariant from '../../../Api/hooks/useGetProductByVariant';
@@ -218,7 +217,7 @@ const Cart = ({ navigation }: any) => {
   });
 
   return (
-    <SafeAreaProvider style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['bottom', 'left', 'right']} >
       <LinearGradient
         colors={[
           lightenColor(Colors.primary, 50),
@@ -480,7 +479,7 @@ const Cart = ({ navigation }: any) => {
           />
         </Animated.View>
       )}
-    </SafeAreaProvider>
+    </SafeAreaView>
   );
 };
 

@@ -4076,7 +4076,7 @@ const ProductDetails = ({ route, navigation }: any) => {
   const handleSheetChanges = useCallback((index: number) => {
     setIsPlaying(true);
   }, []);
-  
+
   const handleContinueShopping = () => {
     bottomSheetModalRef.current?.dismiss();
   };
@@ -4133,6 +4133,7 @@ const ProductDetails = ({ route, navigation }: any) => {
   return (
     <BottomSheetModalProvider>
       <SafeAreaView
+        edges={['bottom', 'left', 'right']}
         style={[CommonStyles.containerFlex1, { backgroundColor: Colors.white }]}
       >
         <StatusBar
