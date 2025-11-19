@@ -4130,72 +4130,73 @@ const ProductDetails = ({ route, navigation }: any) => {
       setSelectedDealIndex(0);
     }
   }, [deals]);
+  
   return (
-    <BottomSheetModalProvider>
-      <SafeAreaView
-        edges={['bottom', 'left', 'right']}
-        style={[CommonStyles.containerFlex1, { backgroundColor: Colors.white }]}
-      >
-        <StatusBar
-          backgroundColor={'transparent'}
-          barStyle="dark-content"
-        // translucent={false}
-        />
-        <LinearGradient
-          colors={[
-            lightenColor(Colors.skyBlue, 50),
-            lightenColor(Colors.skyBlue, 90),
-          ]}
-          style={{
-            minHeight: getHeight(8),
-            // paddingTop: getWidth(13),
-          }}
+      <BottomSheetModalProvider>
+        <SafeAreaView  edges={ Platform.OS === 'android' ? ['left','right','bottom'] : []}
+      
+          style={[CommonStyles.containerFlex1, { backgroundColor: Colors.white }]}
         >
-          <View style={{ marginTop: getHeight(13) }}>
-            <Header
-              title={productDetails?.title}
-              cartCount={count}
-              hideSearch={true}
-              page="details"
-              pageNavigation={pageNavigation}
-            />
-          </View>
-        </LinearGradient>
-        <View style={styles.container}>
-          {(variant != undefined || variant != null) && (
-            <>
-              {!loading ? (
-                <ScrollView
-                  showsHorizontalScrollIndicator={false}
-                  showsVerticalScrollIndicator={false}
-                  nestedScrollEnabled
-                  contentContainerStyle={{ paddingBottom: getHeight(7) }}
-                >
-                  <PagerView
-                    style={styles.imageContainer}
-                    onPageSelected={e => {
-                      setSelectedIndex(e.nativeEvent.position);
-                    }}
-                    ref={tabRef}
+          <StatusBar
+            backgroundColor={'transparent'}
+            barStyle="dark-content"
+          // translucent={false}
+          />
+          <LinearGradient
+            colors={[
+              lightenColor(Colors.skyBlue, 50),
+              lightenColor(Colors.skyBlue, 90),
+            ]}
+            style={{
+              minHeight: getHeight(8),
+              // paddingTop: getWidth(13),
+            }}
+          >
+            <View style={{ marginTop: getHeight(13) }}>
+              <Header
+                title={productDetails?.title}
+                cartCount={count}
+                hideSearch={true}
+                page="details"
+                pageNavigation={pageNavigation}
+              />
+            </View>
+          </LinearGradient>
+          <View style={styles.container}>
+            {(variant != undefined || variant != null) && (
+              <>
+                {!loading ? (
+                  <ScrollView
+                    showsHorizontalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
+                    nestedScrollEnabled
+                    contentContainerStyle={{ paddingBottom: getHeight(7) }}
                   >
-                    {productImages &&
-                      productImages.map((item: any, index: number) => {
-                        if (item?.node?.mediaContentType === 'IMAGE') {
-                          return (
-                            <View
-                              style={{
-                                position: 'relative',
-                                height: '100%',
-                              }}
-                            >
-                              <ImageZoom
-                                uri={item?.node?.image?.url}
-                                key={index}
-                                resizeMode="stretch"
-                                style={CommonStyles.containerFlex1}
-                                isDoubleTapEnabled
-                              />
-                              {/* 
+                    <PagerView
+                      style={styles.imageContainer}
+                      onPageSelected={e => {
+                        setSelectedIndex(e.nativeEvent.position);
+                      }}
+                      ref={tabRef}
+                    >
+                      {productImages &&
+                        productImages.map((item: any, index: number) => {
+                          if (item?.node?.mediaContentType === 'IMAGE') {
+                            return (
+                              <View
+                                style={{
+                                  position: 'relative',
+                                  height: '100%',
+                                }}
+                              >
+                                <ImageZoom
+                                  uri={item?.node?.image?.url}
+                                  key={index}
+                                  resizeMode="stretch"
+                                  style={CommonStyles.containerFlex1}
+                                  isDoubleTapEnabled
+                                />
+                                {/* 
                               <Image
                                 key={index}
                                 resizeMode="stretch"
@@ -4204,216 +4205,117 @@ const ProductDetails = ({ route, navigation }: any) => {
                                   uri: item?.node?.image?.url,
                                 }}
                               /> */}
-                              <View
-                                style={{
-                                  // backgroundColor: "green",
-                                  width: getWidth(2),
-                                  height: getHeight(6),
-                                  position: 'absolute',
-                                  right: 0,
-                                  display: 'flex',
-                                  alignItems: 'flex-end',
-                                }}
-                              >
-                                <TouchableOpacity
-                                  style={{
-                                    marginTop: getWidth(35),
-                                    marginRight: getWidth(35),
-                                    padding: getWidth(90),
-                                    borderRadius: 8,
-                                    backgroundColor: '#FCFBFA',
-                                  }}
-                                  onPress={() => onShare()}
-                                >
-                                  <Image
-                                    source={images?.share3}
-                                    style={{ width: 25, height: 25 }}
-                                  />
-                                </TouchableOpacity>
-                              </View>
-                              {deals?.dealBars[0]?.dealBarType === 'bxgy' && (
                                 <View
                                   style={{
+                                    // backgroundColor: "green",
+                                    width: getWidth(2),
+                                    height: getHeight(6),
                                     position: 'absolute',
-                                    top: 0,
-                                    left: 0,
                                     right: 0,
-                                    bottom: 0,
+                                    display: 'flex',
+                                    alignItems: 'flex-end',
                                   }}
                                 >
-                                  <UltraOptimizedBanner
-                                    paddingHorizontal={5.5}
-                                    paddingVertical={2.5}
-                                    top={1}
-                                    right={getWidth(1.35)}
-                                    fontSize={12}
-                                    borderBottomLeftRadius={4}
-                                    borderBottomRightRadius={4}
-                                  />
+                                  <TouchableOpacity
+                                    style={{
+                                      marginTop: getWidth(35),
+                                      marginRight: getWidth(35),
+                                      padding: getWidth(90),
+                                      borderRadius: 8,
+                                      backgroundColor: '#FCFBFA',
+                                    }}
+                                    onPress={() => onShare()}
+                                  >
+                                    <Image
+                                      source={images?.share3}
+                                      style={{ width: 25, height: 25 }}
+                                    />
+                                  </TouchableOpacity>
                                 </View>
-                              )}
-                            </View>
-                          );
-                        }
-                      })}
-                  </PagerView>
-                  <View style={styles.dotContainer}>
-                    {productImages &&
-                      productImages.map((item: any, index: number) => {
-                        return (
-                          <View
-                            key={index}
-                            style={[
-                              styles.dotStyle,
-                              {
-                                backgroundColor:
-                                  index !== selectedIndex
-                                    ? Colors.placeholderColor
-                                    : Colors.black,
-                              },
-                            ]}
-                          />
-                        );
-                      })}
-                  </View>
-                  <Text style={styles.titleTxt}>{productDetails?.title}</Text>
-                  <View style={[{ marginTop: 16 }]}>
-                    {variantToShow?.node?.selectedOptions?.map(
-                      (item: any, idx: number) =>
-                        item?.name !== 'Size' ? (
-                          <View
-                            key={idx}
-                            style={{ flexDirection: 'row', marginRight: 6 }}
-                          >
-                            <Text
-                              style={[
-                                styles.variantTitle,
-                                { fontWeight: '500' },
-                              ]}
-                            >
-                              {item?.name != 'Title' ? item?.name : ''}{' '}
-                            </Text>
-                            <Text
-                              style={[
-                                styles.variantValue,
-                                { fontWeight: '500' },
-                              ]}
-                            >
-                              {item?.value != 'Default Title'
-                                ? item?.value
-                                : ''}
-                            </Text>
-                          </View>
-                        ) : null,
-                    )}
-                  </View>
-                  {variantList &&
-                    variantList.length > 1 &&
-                    variantToShow?.length >= 0 &&
-                    productHasVariantSize(variantList, 'Color') && (
-                      <View style={[{ marginTop: 16 }]}>
-                        {variant?.node?.selectedOptions.map((item: any) => (
-                          <>
-                            {item?.name === 'Color' ? (
-                              <View
-                                style={{
-                                  flexDirection: 'row',
-                                  marginRight: 6,
-                                }}
-                              >
-                                <Text
-                                  style={[
-                                    styles.variantTitle,
-                                    { fontWeight: '500' },
-                                  ]}
-                                >
-                                  {item?.name != 'Title' ? item?.name : ''}
-                                  {''}:
-                                </Text>
-                                <Text
-                                  style={[
-                                    styles.variantValue,
-                                    { fontWeight: '500' },
-                                  ]}
-                                >
-                                  {item?.value != 'Default Title'
-                                    ? item?.value
-                                    : ''}
-                                </Text>
+                                {deals?.dealBars[0]?.dealBarType === 'bxgy' && (
+                                  <View
+                                    style={{
+                                      position: 'absolute',
+                                      top: 0,
+                                      left: 0,
+                                      right: 0,
+                                      bottom: 0,
+                                    }}
+                                  >
+                                    <UltraOptimizedBanner
+                                      paddingHorizontal={5.5}
+                                      paddingVertical={2.5}
+                                      top={1}
+                                      right={getWidth(1.35)}
+                                      fontSize={12}
+                                      borderBottomLeftRadius={4}
+                                      borderBottomRightRadius={4}
+                                    />
+                                  </View>
+                                )}
                               </View>
-                            ) : null}
-                          </>
-                        ))}
-                      </View>
-                    )}
-                  {variantToShow && variantToShow.length > 1 && (
-                    <FlatList
-                      horizontal
-                      data={variantToShow}
-                      renderItem={({ item, index }) => {
-                        let color = item?.node?.selectedOptions.find(
-                          (variantOptions: any) =>
-                            variantOptions.name == 'Color',
-                        )?.value;
-
-                        let selectedColor = variant?.node?.selectedOptions.find(
-                          (variantOptions: any) =>
-                            variantOptions.name === 'Color',
-                        )?.value;
-                        return (
-                          <TouchableOpacity
-                            key={index}
-                            onPress={() =>
-                              productHasVariantSize(variantList, 'Color')
-                                ? selectVariantItem({
-                                  name: 'Color',
-                                  value: color,
-                                  selected: variant,
-                                })
-                                : setSelectedVariant(index)
-                            }
-                          >
+                            );
+                          }
+                        })}
+                    </PagerView>
+                    <View style={styles.dotContainer}>
+                      {productImages &&
+                        productImages.map((item: any, index: number) => {
+                          return (
                             <View
-                              style={{
-                                borderWidth:
-                                  (!productHasVariantSize(
-                                    variantList,
-                                    'Size',
-                                  ) &&
-                                    item?.node?.title ==
-                                    variant?.node?.title) ||
-                                    color == selectedColor
-                                    ? 2
-                                    : 0,
-                                borderColor: Colors.primary,
-                                margin: getWidth(50),
-                                opacity:
-                                  item?.node?.quantityAvailable > 0 ? 1 : 0.5,
-                              }}
+                              key={index}
+                              style={[
+                                styles.dotStyle,
+                                {
+                                  backgroundColor:
+                                    index !== selectedIndex
+                                      ? Colors.placeholderColor
+                                      : Colors.black,
+                                },
+                              ]}
+                            />
+                          );
+                        })}
+                    </View>
+                    <Text style={styles.titleTxt}>{productDetails?.title}</Text>
+                    <View style={[{ marginTop: 16 }]}>
+                      {variantToShow?.node?.selectedOptions?.map(
+                        (item: any, idx: number) =>
+                          item?.name !== 'Size' ? (
+                            <View
+                              key={idx}
+                              style={{ flexDirection: 'row', marginRight: 6 }}
                             >
-                              <Image
-                                resizeMode="stretch"
-                                style={styles.varientImage}
-                                source={{
-                                  uri: item?.node?.image?.url,
-                                }}
-                              />
+                              <Text
+                                style={[
+                                  styles.variantTitle,
+                                  { fontWeight: '500' },
+                                ]}
+                              >
+                                {item?.name != 'Title' ? item?.name : ''}{' '}
+                              </Text>
+                              <Text
+                                style={[
+                                  styles.variantValue,
+                                  { fontWeight: '500' },
+                                ]}
+                              >
+                                {item?.value != 'Default Title'
+                                  ? item?.value
+                                  : ''}
+                              </Text>
                             </View>
-                          </TouchableOpacity>
-                        );
-                      }}
-                    />
-                  )}
-
-                  {variantList &&
-                    variantList.length > 1 &&
-                    pcsToShow.length >= 0 &&
-                    productHasVariantSize(variantList, 'PCS') && (
-                      <>
+                          ) : null,
+                      )}
+                    </View>
+                    {variantList &&
+                      variantList.length > 1 &&
+                      variantToShow?.length >= 0 &&
+                      productHasVariantSize(variantList, 'Color') && (
                         <View style={[{ marginTop: 16 }]}>
                           {variant?.node?.selectedOptions.map((item: any) => (
                             <>
-                              {item?.name === 'PCS' ? (
+                              {item?.name === 'Color' ? (
                                 <View
                                   style={{
                                     flexDirection: 'row',
@@ -4427,7 +4329,7 @@ const ProductDetails = ({ route, navigation }: any) => {
                                     ]}
                                   >
                                     {item?.name != 'Title' ? item?.name : ''}
-                                    {''}
+                                    {''}:
                                   </Text>
                                   <Text
                                     style={[
@@ -4444,1154 +4346,1253 @@ const ProductDetails = ({ route, navigation }: any) => {
                             </>
                           ))}
                         </View>
+                      )}
+                    {variantToShow && variantToShow.length > 1 && (
+                      <FlatList
+                        horizontal
+                        data={variantToShow}
+                        renderItem={({ item, index }) => {
+                          let color = item?.node?.selectedOptions.find(
+                            (variantOptions: any) =>
+                              variantOptions.name == 'Color',
+                          )?.value;
 
-                        <FlatList
-                          horizontal
-                          showsHorizontalScrollIndicator={false}
-                          data={pcsToShow}
-                          renderItem={({ item, index }) => {
-                            let PCS = item?.node?.selectedOptions.find(
-                              (variantOptions: any) =>
-                                variantOptions.name === 'PCS',
-                            )?.value;
-                            let selectedSize =
-                              variant?.node?.selectedOptions.find(
+                          let selectedColor = variant?.node?.selectedOptions.find(
+                            (variantOptions: any) =>
+                              variantOptions.name === 'Color',
+                          )?.value;
+                          return (
+                            <TouchableOpacity
+                              key={index}
+                              onPress={() =>
+                                productHasVariantSize(variantList, 'Color')
+                                  ? selectVariantItem({
+                                    name: 'Color',
+                                    value: color,
+                                    selected: variant,
+                                  })
+                                  : setSelectedVariant(index)
+                              }
+                            >
+                              <View
+                                style={{
+                                  borderWidth:
+                                    (!productHasVariantSize(
+                                      variantList,
+                                      'Size',
+                                    ) &&
+                                      item?.node?.title ==
+                                      variant?.node?.title) ||
+                                      color == selectedColor
+                                      ? 2
+                                      : 0,
+                                  borderColor: Colors.primary,
+                                  margin: getWidth(50),
+                                  opacity:
+                                    item?.node?.quantityAvailable > 0 ? 1 : 0.5,
+                                }}
+                              >
+                                <Image
+                                  resizeMode="stretch"
+                                  style={styles.varientImage}
+                                  source={{
+                                    uri: item?.node?.image?.url,
+                                  }}
+                                />
+                              </View>
+                            </TouchableOpacity>
+                          );
+                        }}
+                      />
+                    )}
+
+                    {variantList &&
+                      variantList.length > 1 &&
+                      pcsToShow.length >= 0 &&
+                      productHasVariantSize(variantList, 'PCS') && (
+                        <>
+                          <View style={[{ marginTop: 16 }]}>
+                            {variant?.node?.selectedOptions.map((item: any) => (
+                              <>
+                                {item?.name === 'PCS' ? (
+                                  <View
+                                    style={{
+                                      flexDirection: 'row',
+                                      marginRight: 6,
+                                    }}
+                                  >
+                                    <Text
+                                      style={[
+                                        styles.variantTitle,
+                                        { fontWeight: '500' },
+                                      ]}
+                                    >
+                                      {item?.name != 'Title' ? item?.name : ''}
+                                      {''}
+                                    </Text>
+                                    <Text
+                                      style={[
+                                        styles.variantValue,
+                                        { fontWeight: '500' },
+                                      ]}
+                                    >
+                                      {item?.value != 'Default Title'
+                                        ? item?.value
+                                        : ''}
+                                    </Text>
+                                  </View>
+                                ) : null}
+                              </>
+                            ))}
+                          </View>
+
+                          <FlatList
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            data={pcsToShow}
+                            renderItem={({ item, index }) => {
+                              let PCS = item?.node?.selectedOptions.find(
                                 (variantOptions: any) =>
                                   variantOptions.name === 'PCS',
                               )?.value;
-                            return (
-                              <TouchableOpacity
-                                key={index}
-                                onPress={() => {
-                                  selectVariantItem({
-                                    value: PCS,
-                                    name: 'PCS',
-                                    selected: variant,
-                                  });
-                                }}
-                              >
-                                <View
-                                  style={{
-                                    borderWidth: 2,
-                                    borderColor:
-                                      selectedSize === PCS
-                                        ? Colors.primary
-                                        : Colors.lightPink,
-                                    margin: getWidth(50),
-                                    minWidth: 65,
-                                    paddingLeft: 10,
-                                    paddingRight: 10,
-                                    height: 30,
-                                    borderRadius: 3,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    opacity:
-                                      item?.node?.quantityAvailable > 0
-                                        ? 1
-                                        : 0.5,
+                              let selectedSize =
+                                variant?.node?.selectedOptions.find(
+                                  (variantOptions: any) =>
+                                    variantOptions.name === 'PCS',
+                                )?.value;
+                              return (
+                                <TouchableOpacity
+                                  key={index}
+                                  onPress={() => {
+                                    selectVariantItem({
+                                      value: PCS,
+                                      name: 'PCS',
+                                      selected: variant,
+                                    });
                                   }}
-                                >
-                                  <Text style={{ color: Colors.black }}>
-                                    {PCS}
-                                  </Text>
-                                </View>
-                              </TouchableOpacity>
-                            );
-                          }}
-                        />
-                      </>
-                    )}
-                  {variantList &&
-                    variantList.length > 1 &&
-                    sizeToShow.length >= 0 &&
-                    productHasVariantSize(variantList, 'Size') && (
-                      <>
-                        <View style={[{ marginTop: 16 }]}>
-                          {variant?.node?.selectedOptions.map((item: any) => (
-                            <>
-                              {item?.name === 'Size' ? (
-                                <View
-                                  style={{
-                                    flexDirection: 'row',
-                                    marginRight: 6,
-                                  }}
-                                >
-                                  <Text
-                                    style={[
-                                      styles.variantTitle,
-                                      { fontWeight: '500' },
-                                    ]}
-                                  >
-                                    {item?.name != 'Title' ? item?.name : ''}
-                                    {''}
-                                  </Text>
-                                  <Text
-                                    style={[
-                                      styles.variantValue,
-                                      { fontWeight: '500' },
-                                    ]}
-                                  >
-                                    {item?.value != 'Default Title'
-                                      ? item?.value
-                                      : ''}
-                                  </Text>
-                                </View>
-                              ) : null}
-                            </>
-                          ))}
-                        </View>
-
-                        <FlatList
-                          horizontal
-                          showsHorizontalScrollIndicator={false}
-                          data={sizeToShow}
-                          renderItem={({ item, index }) => {
-                            let size = item?.node?.selectedOptions.find(
-                              (variantOptions: any) =>
-                                variantOptions.name === 'Size',
-                            )?.value;
-                            let selectedSize =
-                              variant?.node?.selectedOptions.find(
-                                (variantOptions: any) =>
-                                  variantOptions.name === 'Size',
-                              )?.value;
-                            return (
-                              <TouchableOpacity
-                                key={index}
-                                onPress={() => {
-                                  selectVariantItem({
-                                    value: size,
-                                    name: 'Size',
-                                    selected: variant,
-                                  });
-                                }}
-                              >
-                                <View
-                                  style={{
-                                    borderWidth: 2,
-                                    borderColor:
-                                      selectedSize === size
-                                        ? Colors.primary
-                                        : Colors.lightPink,
-                                    margin: getWidth(50),
-                                    minWidth: 65,
-                                    paddingLeft: 10,
-                                    paddingRight: 10,
-                                    height: 30,
-                                    borderRadius: 3,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    opacity:
-                                      item?.node?.quantityAvailable > 0
-                                        ? 1
-                                        : 0.5,
-                                  }}
-                                >
-                                  <Text style={{ color: Colors.black }}>
-                                    {size}
-                                  </Text>
-                                </View>
-                              </TouchableOpacity>
-                            );
-                          }}
-                        />
-                      </>
-                    )}
-                  {variantList &&
-                    variantList?.length > 1 &&
-                    layerToShow?.length >= 0 &&
-                    productHasVariantSize(variantList, 'Layer') && (
-                      <>
-                        <View style={[{ marginTop: 16 }]}>
-                          {variant?.node?.selectedOptions.map((item: any) => (
-                            <>
-                              {item?.name === 'Layer' ? (
-                                <View
-                                  style={{
-                                    flexDirection: 'row',
-                                    marginRight: 6,
-                                  }}
-                                >
-                                  <Text
-                                    style={[
-                                      styles.variantTitle,
-                                      { fontWeight: '500' },
-                                    ]}
-                                  >
-                                    {item?.name != 'Title' ? item?.name : 'nsb'}
-                                    {''}
-                                  </Text>
-                                  <Text
-                                    style={[
-                                      styles.variantValue,
-                                      { fontWeight: '500' },
-                                    ]}
-                                  >
-                                    {item?.value != 'Default Title'
-                                      ? item?.value
-                                      : ''}
-                                  </Text>
-                                </View>
-                              ) : null}
-                            </>
-                          ))}
-                        </View>
-
-                        <FlatList
-                          horizontal
-                          showsHorizontalScrollIndicator={false}
-                          data={layerToShow}
-                          renderItem={({ item, index }) => {
-                            let Layer = item?.node?.selectedOptions.find(
-                              (variantOptions: any) =>
-                                variantOptions.name === 'Layer',
-                            )?.value;
-                            let selectedSize =
-                              variant?.node?.selectedOptions.find(
-                                (variantOptions: any) =>
-                                  variantOptions.name === 'Layer',
-                              )?.value;
-                            return (
-                              <TouchableOpacity
-                                key={index}
-                                onPress={() => {
-                                  selectVariantItem({
-                                    value: Layer,
-                                    name: 'Layer',
-                                    selected: variant,
-                                  });
-                                }}
-                              >
-                                <View
-                                  style={{
-                                    borderWidth: 2,
-                                    borderColor:
-                                      selectedSize === Layer
-                                        ? Colors.primary
-                                        : Colors.lightPink,
-                                    margin: getWidth(50),
-                                    minWidth: 65,
-                                    paddingLeft: 10,
-                                    paddingRight: 10,
-                                    height: 30,
-                                    borderRadius: 3,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    opacity:
-                                      item?.node?.quantityAvailable > 0
-                                        ? 1
-                                        : 0.5,
-                                  }}
-                                >
-                                  <Text style={{ color: Colors.black }}>
-                                    {Layer}
-                                  </Text>
-                                </View>
-                              </TouchableOpacity>
-                            );
-                          }}
-                        />
-                      </>
-                    )}
-                  {/* //test  */}
-                  {variantList &&
-                    variantList?.length > 1 &&
-                    modelToShow?.length >= 0 &&
-                    productHasVariantSize(variantList, 'Model') && (
-                      <>
-                        <View style={[{ marginTop: 16 }]}>
-                          {variant?.node?.selectedOptions.map((item: any) => (
-                            <>
-                              {item?.name === 'Model' ? (
-                                <View
-                                  style={{
-                                    flexDirection: 'row',
-                                    marginRight: 6,
-                                  }}
-                                >
-                                  <Text
-                                    style={[
-                                      styles.variantTitle,
-                                      { fontWeight: '500' },
-                                    ]}
-                                  >
-                                    {item?.name != 'Title' ? item?.name : 'nsb'}
-                                    {''}
-                                  </Text>
-                                  <Text
-                                    style={[
-                                      styles.variantValue,
-                                      { fontWeight: '500' },
-                                    ]}
-                                  >
-                                    {item?.value != 'Default Title'
-                                      ? item?.value
-                                      : ''}
-                                  </Text>
-                                </View>
-                              ) : null}
-                            </>
-                          ))}
-                        </View>
-
-                        <FlatList
-                          horizontal
-                          showsHorizontalScrollIndicator={false}
-                          data={modelToShow}
-                          renderItem={({ item, index }) => {
-                            let Model = item?.node?.selectedOptions.find(
-                              (variantOptions: any) =>
-                                variantOptions.name === 'Model',
-                            )?.value;
-                            let selectedSize =
-                              variant?.node?.selectedOptions.find(
-                                (variantOptions: any) =>
-                                  variantOptions.name === 'Model',
-                              )?.value;
-                            return (
-                              <TouchableOpacity
-                                key={index}
-                                onPress={() => {
-                                  selectVariantItem({
-                                    value: Model,
-                                    name: 'Model',
-                                    selected: variant,
-                                  });
-                                }}
-                              >
-                                <View
-                                  style={{
-                                    borderWidth: 2,
-                                    borderColor:
-                                      selectedSize === Model
-                                        ? Colors.primary
-                                        : Colors.lightPink,
-                                    margin: getWidth(50),
-                                    minWidth: 65,
-                                    paddingLeft: 10,
-                                    paddingRight: 10,
-                                    height: 30,
-                                    borderRadius: 3,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    opacity:
-                                      item?.node?.quantityAvailable > 0
-                                        ? 1
-                                        : 0.5,
-                                  }}
-                                >
-                                  <Text style={{ color: Colors.black }}>
-                                    {Model}
-                                  </Text>
-                                </View>
-                              </TouchableOpacity>
-                            );
-                          }}
-                        />
-                      </>
-                    )}
-                  {variantList &&
-                    variantList?.length > 1 &&
-                    designToShow?.length >= 0 &&
-                    productHasVariantSize(variantList, 'Design') && (
-                      <>
-                        <View style={[{ marginTop: 16 }]}>
-                          {variant?.node?.selectedOptions.map((item: any) => (
-                            <>
-                              {item?.name === 'Design' ? (
-                                <View
-                                  style={{
-                                    flexDirection: 'row',
-                                    marginRight: 6,
-                                  }}
-                                >
-                                  <Text
-                                    style={[
-                                      styles.variantTitle,
-                                      { fontWeight: '500' },
-                                    ]}
-                                  >
-                                    {item?.name != 'Title' ? item?.name : 'nsb'}
-                                    {''}
-                                  </Text>
-                                  <Text
-                                    style={[
-                                      styles.variantValue,
-                                      { fontWeight: '500' },
-                                    ]}
-                                  >
-                                    {item?.value != 'Default Title'
-                                      ? item?.value
-                                      : ''}
-                                  </Text>
-                                </View>
-                              ) : null}
-                            </>
-                          ))}
-                        </View>
-
-                        <FlatList
-                          horizontal
-                          showsHorizontalScrollIndicator={false}
-                          data={designToShow}
-                          renderItem={({ item, index }) => {
-                            let Design = item?.node?.selectedOptions.find(
-                              (variantOptions: any) =>
-                                variantOptions.name === 'Design',
-                            )?.value;
-                            let selectedSize =
-                              variant?.node?.selectedOptions.find(
-                                (variantOptions: any) =>
-                                  variantOptions.name === 'Design',
-                              )?.value;
-                            return (
-                              <TouchableOpacity
-                                key={index}
-                                onPress={() => {
-                                  selectVariantItem({
-                                    value: Design,
-                                    name: 'Design',
-                                    selected: variant,
-                                  });
-                                }}
-                              >
-                                <View
-                                  style={{
-                                    borderWidth: 2,
-                                    borderColor:
-                                      selectedSize === Design
-                                        ? Colors.primary
-                                        : Colors.lightPink,
-                                    margin: getWidth(50),
-                                    minWidth: 65,
-                                    paddingLeft: 10,
-                                    paddingRight: 10,
-                                    height: 30,
-                                    borderRadius: 3,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    opacity:
-                                      item?.node?.quantityAvailable > 0
-                                        ? 1
-                                        : 0.5,
-                                  }}
-                                >
-                                  <Text style={{ color: Colors.black }}>
-                                    {Design}
-                                  </Text>
-                                </View>
-                              </TouchableOpacity>
-                            );
-                          }}
-                        />
-                      </>
-                    )}
-                  {variantList &&
-                    variantList?.length > 1 &&
-                    capacityToShow?.length >= 0 &&
-                    productHasVariantSize(variantList, 'Capacity') && (
-                      <>
-                        <View style={[{ marginTop: 16 }]}>
-                          {variant?.node?.selectedOptions.map((item: any) => (
-                            <>
-                              {item?.name === 'Capacity' ? (
-                                <View
-                                  style={{
-                                    flexDirection: 'row',
-                                    marginRight: 6,
-                                  }}
-                                >
-                                  <Text
-                                    style={[
-                                      styles.variantTitle,
-                                      { fontWeight: '500' },
-                                    ]}
-                                  >
-                                    {item?.name != 'Title' ? item?.name : 'nsb'}
-                                    {''}
-                                  </Text>
-                                  <Text
-                                    style={[
-                                      styles.variantValue,
-                                      { fontWeight: '500' },
-                                    ]}
-                                  >
-                                    {item?.value != 'Default Title'
-                                      ? item?.value
-                                      : ''}
-                                  </Text>
-                                </View>
-                              ) : null}
-                            </>
-                          ))}
-                        </View>
-
-                        <FlatList
-                          horizontal
-                          showsHorizontalScrollIndicator={false}
-                          data={capacityToShow}
-                          renderItem={({ item, index }) => {
-                            let Capacity = item?.node?.selectedOptions.find(
-                              (variantOptions: any) =>
-                                variantOptions.name === 'Capacity',
-                            )?.value;
-                            let selectedSize =
-                              variant?.node?.selectedOptions.find(
-                                (variantOptions: any) =>
-                                  variantOptions.name === 'Capacity',
-                              )?.value;
-                            return (
-                              <TouchableOpacity
-                                key={index}
-                                onPress={() => {
-                                  selectVariantItem({
-                                    value: Capacity,
-                                    name: 'Capacity',
-                                    selected: variant,
-                                  });
-                                }}
-                              >
-                                <View
-                                  style={{
-                                    borderWidth: 2,
-                                    borderColor:
-                                      selectedSize === Capacity
-                                        ? Colors.primary
-                                        : Colors.lightPink,
-                                    margin: getWidth(50),
-                                    minWidth: 65,
-                                    paddingLeft: 10,
-                                    paddingRight: 10,
-                                    height: 30,
-                                    borderRadius: 3,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    opacity:
-                                      item?.node?.quantityAvailable > 0
-                                        ? 1
-                                        : 0.5,
-                                  }}
-                                >
-                                  <Text style={{ color: Colors.black }}>
-                                    {Capacity}
-                                  </Text>
-                                </View>
-                              </TouchableOpacity>
-                            );
-                          }}
-                        />
-                      </>
-                    )}
-                  {variantList &&
-                    variantList?.length > 1 &&
-                    styleToShow?.length >= 0 &&
-                    productHasVariantSize(variantList, 'Style') && (
-                      <>
-                        <View style={[{ marginTop: 16 }]}>
-                          {variant?.node?.selectedOptions.map((item: any) => (
-                            <>
-                              {item?.name === 'Style' ? (
-                                <View
-                                  style={{
-                                    flexDirection: 'row',
-                                    marginRight: 6,
-                                  }}
-                                >
-                                  <Text
-                                    style={[
-                                      styles.variantTitle,
-                                      { fontWeight: '500' },
-                                    ]}
-                                  >
-                                    {item?.name != 'Title' ? item?.name : 'nsb'}
-                                    {''}
-                                  </Text>
-                                  <Text
-                                    style={[
-                                      styles.variantValue,
-                                      { fontWeight: '500' },
-                                    ]}
-                                  >
-                                    {item?.value != 'Default Title'
-                                      ? item?.value
-                                      : ''}
-                                  </Text>
-                                </View>
-                              ) : null}
-                            </>
-                          ))}
-                        </View>
-
-                        <FlatList
-                          horizontal
-                          showsHorizontalScrollIndicator={false}
-                          data={styleToShow}
-                          renderItem={({ item, index }) => {
-                            let Style = item?.node?.selectedOptions.find(
-                              (variantOptions: any) =>
-                                variantOptions.name === 'Style',
-                            )?.value;
-                            let selectedSize =
-                              variant?.node?.selectedOptions.find(
-                                (variantOptions: any) =>
-                                  variantOptions.name === 'Style',
-                              )?.value;
-                            return (
-                              <TouchableOpacity
-                                key={index}
-                                onPress={() => {
-                                  selectVariantItem({
-                                    value: Style,
-                                    name: 'Style',
-                                    selected: variant,
-                                  });
-                                }}
-                              >
-                                <View
-                                  style={{
-                                    borderWidth: 2,
-                                    borderColor:
-                                      selectedSize === Style
-                                        ? Colors.primary
-                                        : Colors.lightPink,
-                                    margin: getWidth(50),
-                                    minWidth: 65,
-                                    paddingLeft: 10,
-                                    paddingRight: 10,
-                                    height: 30,
-                                    borderRadius: 3,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    opacity:
-                                      item?.node?.quantityAvailable > 0
-                                        ? 1
-                                        : 0.5,
-                                  }}
-                                >
-                                  <Text style={{ color: Colors.black }}>
-                                    {Style}
-                                  </Text>
-                                </View>
-                              </TouchableOpacity>
-                            );
-                          }}
-                        />
-                      </>
-                    )}
-                  <Text style={styles.priceTxt}>
-                    {variant?.node?.price?.currencyCode}{' '}
-                    <Text
-                      style={{
-                        fontWeight: '600',
-                        paddingLeft: 5,
-                        fontSize: 18,
-                      }}
-                    >
-                      {formatPrice(Number(variant?.node?.price?.amount))}{' '}
-                    </Text>
-                    {!Number.isNaN(
-                      Number(variant?.node?.compareAtPrice?.amount),
-                    ) &&
-                      Number(variant?.node?.compareAtPrice?.amount) !== 0 && (
-                        <Text
-                          style={{
-                            fontWeight: '600',
-                            paddingLeft: 99,
-                            fontSize: 14,
-                            color: 'black',
-                            textDecorationLine: 'line-through',
-                          }}
-                        >
-                          QAR{' '}
-                          {formatPrice(
-                            Number(variant?.node?.compareAtPrice?.amount),
-                          )}{' '}
-                        </Text>
-                      )}
-                  </Text>
-
-                  <View style={styles.rowContainer}>
-                    <View
-                      style={
-                        variant?.node?.quantityAvailable > 0
-                          ? styles.inStock
-                          : styles.outOfStock
-                      }
-                    />
-                    <Text style={styles.variantValue}>
-                      {variant?.node?.quantityAvailable > 0
-                        ? ` ${t('inSTock')} `
-                        : ` ${t('outOfStock')} `}
-                    </Text>
-                  </View>
-
-                  {addOnList && addOnList.length > 0 && (
-                    <FlatList
-                      data={addOnList}
-                      style={{ padding: 6 }}
-                      renderItem={({ item, index }) => {
-                        return (
-                          <>
-                            {item && (
-                              <TouchableOpacity
-                                onPress={() => {
-                                  console.log(
-                                    JSON.parse(item?.value)?.data?.ymq1,
-                                    '==YMQ-ITEM==',
-                                  );
-                                  // JSON.parse(item?.value)?.data?.ymq1
-                                  //       ?.options?.["1_1"]?.variant_id == 0 ?
-                                  //       handleInstallationClick()
-                                  //       :
-                                  handleAddOnClick(index);
-                                }}
-                                style={{
-                                  borderWidth: 0.5,
-                                  padding: 6,
-                                  marginTop: index == 0 ? 16 : 0,
-                                  marginBottom:
-                                    index == addOnList.length - 1 ? 16 : 0,
-                                }}
-                              >
-                                <Text
-                                  style={{
-                                    fontWeight: '500',
-                                    color: Colors.black,
-                                  }}
-                                >
-                                  {JSON.parse(item?.value)?.data?.ymq1?.label}
-                                </Text>
-                                <View
-                                  style={{ flexDirection: 'row', marginTop: 6 }}
                                 >
                                   <View
                                     style={{
-                                      borderWidth: 0.5,
-                                      width: 20,
-                                      height: 20,
+                                      borderWidth: 2,
+                                      borderColor:
+                                        selectedSize === PCS
+                                          ? Colors.primary
+                                          : Colors.lightPink,
+                                      margin: getWidth(50),
+                                      minWidth: 65,
+                                      paddingLeft: 10,
+                                      paddingRight: 10,
+                                      height: 30,
+                                      borderRadius: 3,
                                       justifyContent: 'center',
+                                      alignItems: 'center',
+                                      opacity:
+                                        item?.node?.quantityAvailable > 0
+                                          ? 1
+                                          : 0.5,
                                     }}
                                   >
-                                    {item.selected && (
-                                      <Image
-                                        style={{
-                                          alignSelf: 'center',
-                                          justifyContent: 'center',
-                                          width: 20,
-                                          height: 20,
-                                        }}
-                                        source={icons.check_box}
-                                      />
-                                    )}
+                                    <Text style={{ color: Colors.black }}>
+                                      {PCS}
+                                    </Text>
                                   </View>
-                                  <Text
+                                </TouchableOpacity>
+                              );
+                            }}
+                          />
+                        </>
+                      )}
+                    {variantList &&
+                      variantList.length > 1 &&
+                      sizeToShow.length >= 0 &&
+                      productHasVariantSize(variantList, 'Size') && (
+                        <>
+                          <View style={[{ marginTop: 16 }]}>
+                            {variant?.node?.selectedOptions.map((item: any) => (
+                              <>
+                                {item?.name === 'Size' ? (
+                                  <View
                                     style={{
-                                      fontWeight: '400',
-                                      color: Colors.black,
-                                      fontSize: 12,
-                                      marginLeft: 6,
-                                      flex: 1,
+                                      flexDirection: 'row',
+                                      marginRight: 6,
                                     }}
                                   >
-                                    Yes + QAR{' '}
-                                    {JSON.parse(item?.value)?.data?.ymq1
-                                      ?.options?.['1_1']?.variant_id == 0
-                                      ? JSON.parse(item?.value)?.data?.ymq1
-                                        ?.options?.['1_1']?.price
-                                      : JSON.parse(item?.value)?.data?.ymq1
-                                        ?.options?.['1_1']?.variant_price}
-                                  </Text>
-                                </View>
-                                {JSON.parse(item?.value)?.data?.ymq1?.options?.[
-                                  '1_1'
-                                ]?.variant_id != 0 &&
-                                  item.selected && (
-                                    <TouchableOpacity
-                                      onPress={() => setAddOnModalOpen(true)}
-                                      style={styles.quantitySelectorAddOn}
+                                    <Text
+                                      style={[
+                                        styles.variantTitle,
+                                        { fontWeight: '500' },
+                                      ]}
                                     >
-                                      <Text
-                                        style={{
-                                          fontSize: getHeight(55),
-                                          flex: 2,
-                                          color: Colors.black,
-                                        }}
-                                      >
-                                        {' '}
-                                        {quantityAddOn}
-                                      </Text>
-                                      <Image
-                                        style={{ height: '50%', width: '50%' }}
-                                        source={images.arrowDown}
-                                      />
-                                    </TouchableOpacity>
-                                  )}
-                              </TouchableOpacity>
-                            )}
-                          </>
-                        );
-                      }}
-                      keyExtractor={item => item?.id}
-                    />
-                  )}
+                                      {item?.name != 'Title' ? item?.name : ''}
+                                      {''}
+                                    </Text>
+                                    <Text
+                                      style={[
+                                        styles.variantValue,
+                                        { fontWeight: '500' },
+                                      ]}
+                                    >
+                                      {item?.value != 'Default Title'
+                                        ? item?.value
+                                        : ''}
+                                    </Text>
+                                  </View>
+                                ) : null}
+                              </>
+                            ))}
+                          </View>
 
-                  {variant?.node?.quantityAvailable > 0 && (
-                    <View style={styles.quantityContainer}>
-                      <Text style={styles.quantityTxt}>{t('quantity')}</Text>
-                      <View style={styles.quantitySelector}>
-                        <TouchableOpacity
-                          onPress={() => {
-                            trigger('impactMedium');
-                            quantity > 1
-                              ? setQuantity(quantity - 1)
-                              : setQuantity(1);
-                          }}
-                          style={{
-                            width: getHeight(28),
-                            height: getHeight(28),
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderRadius: 4,
-                            backgroundColor: Colors.white,
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: getHeight(45),
-                              color: Colors.primary,
-                              fontWeight: '600',
-                            }}
-                          >
-                            -
-                          </Text>
-                        </TouchableOpacity>
-
-                        <Text
-                          style={{
-                            fontSize: getHeight(45),
-                            color: Colors.black,
-                            paddingHorizontal: 12,
-                            fontWeight: '500',
-                          }}
-                        >
-                          {quantity}
-                        </Text>
-
-                        <TouchableOpacity
-                          onPress={() => {
-                            trigger('notificationWarning');
-                            variant?.node?.quantityAvailable > quantity
-                              ? setQuantity(quantity + 1)
-                              : Toast.show({
-                                type: 'warning',
-                                text1: `Not enough stock to add this item to your cart`,
-                                position: 'bottom',
-                              });
-                          }}
-                          style={{
-                            width: getHeight(28),
-                            height: getHeight(28),
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            borderRadius: 4,
-                            backgroundColor: Colors.white,
-                          }}
-                        >
-                          <Text
-                            style={{
-                              fontSize: getHeight(45),
-                              color: Colors.primary,
-                              fontWeight: '600',
-                            }}
-                          >
-                            +
-                          </Text>
-                        </TouchableOpacity>
-                      </View>
-                    </View>
-                  )}
-
-                  {deals && variant?.node?.quantityAvailable > 0 && (
-                    <View
-                      style={{
-                        flexDirection: 'column',
-                        borderTopWidth: 0.5,
-                        marginTop: 24,
-                        borderColor: 'grey',
-                      }}
-                    >
-                      <Text style={[styles.subTitle]}>{deals?.blockTitle}</Text>
-                      <View
-                        style={{
-                          borderWidth: 1,
-                          borderColor:
-                            deals?.dealBars[0]?.dealBarType !== 'bxgy'
-                              ? Colors.primary
-                              : '#6d71f9',
-                          padding: 6,
-                          marginTop: 24,
-                        }}
-                      >
-                        <FlatList
-                          data={deals?.dealBars}
-                          renderItem={({ item, index }) => (
-                            <TouchableOpacity
-                              onPress={() => {
-                                setArryIndex(index);
-                                setSelectedDealIndex(index);
-                                if (item?.dealBarType == 'bxgy') {
-                                  setQuantity(
-                                    item.getQuantity + item.buyQuantity,
-                                  );
-                                } else {
-                                  setQuantity(item?.quantity);
-                                }
-                              }}
-                              style={{
-                                flexDirection: 'row',
-                                borderTopWidth: index == 0 ? 0 : 0.5,
-                                paddingTop: 10,
-                                paddingBottom: 10,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                // backgroundColor:'red'
-                              }}
-                              key={index}
-                            >
-                              {index === selectedDealIndex ? (
-                                <View
-                                  style={{
-                                    alignSelf: 'center',
-                                    justifyContent: 'center',
-                                    height: 24,
-                                    width: 24,
-                                    borderWidth: 0.5,
-                                    borderColor:
-                                      item?.dealBarType !== 'bxgy'
-                                        ? Colors.primary
-                                        : '#6d71f9',
-                                    marginRight: 16,
-                                    borderRadius: 12,
+                          <FlatList
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            data={sizeToShow}
+                            renderItem={({ item, index }) => {
+                              let size = item?.node?.selectedOptions.find(
+                                (variantOptions: any) =>
+                                  variantOptions.name === 'Size',
+                              )?.value;
+                              let selectedSize =
+                                variant?.node?.selectedOptions.find(
+                                  (variantOptions: any) =>
+                                    variantOptions.name === 'Size',
+                                )?.value;
+                              return (
+                                <TouchableOpacity
+                                  key={index}
+                                  onPress={() => {
+                                    selectVariantItem({
+                                      value: size,
+                                      name: 'Size',
+                                      selected: variant,
+                                    });
                                   }}
                                 >
+                                  <View
+                                    style={{
+                                      borderWidth: 2,
+                                      borderColor:
+                                        selectedSize === size
+                                          ? Colors.primary
+                                          : Colors.lightPink,
+                                      margin: getWidth(50),
+                                      minWidth: 65,
+                                      paddingLeft: 10,
+                                      paddingRight: 10,
+                                      height: 30,
+                                      borderRadius: 3,
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      opacity:
+                                        item?.node?.quantityAvailable > 0
+                                          ? 1
+                                          : 0.5,
+                                    }}
+                                  >
+                                    <Text style={{ color: Colors.black }}>
+                                      {size}
+                                    </Text>
+                                  </View>
+                                </TouchableOpacity>
+                              );
+                            }}
+                          />
+                        </>
+                      )}
+                    {variantList &&
+                      variantList?.length > 1 &&
+                      layerToShow?.length >= 0 &&
+                      productHasVariantSize(variantList, 'Layer') && (
+                        <>
+                          <View style={[{ marginTop: 16 }]}>
+                            {variant?.node?.selectedOptions.map((item: any) => (
+                              <>
+                                {item?.name === 'Layer' ? (
+                                  <View
+                                    style={{
+                                      flexDirection: 'row',
+                                      marginRight: 6,
+                                    }}
+                                  >
+                                    <Text
+                                      style={[
+                                        styles.variantTitle,
+                                        { fontWeight: '500' },
+                                      ]}
+                                    >
+                                      {item?.name != 'Title' ? item?.name : 'nsb'}
+                                      {''}
+                                    </Text>
+                                    <Text
+                                      style={[
+                                        styles.variantValue,
+                                        { fontWeight: '500' },
+                                      ]}
+                                    >
+                                      {item?.value != 'Default Title'
+                                        ? item?.value
+                                        : ''}
+                                    </Text>
+                                  </View>
+                                ) : null}
+                              </>
+                            ))}
+                          </View>
+
+                          <FlatList
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            data={layerToShow}
+                            renderItem={({ item, index }) => {
+                              let Layer = item?.node?.selectedOptions.find(
+                                (variantOptions: any) =>
+                                  variantOptions.name === 'Layer',
+                              )?.value;
+                              let selectedSize =
+                                variant?.node?.selectedOptions.find(
+                                  (variantOptions: any) =>
+                                    variantOptions.name === 'Layer',
+                                )?.value;
+                              return (
+                                <TouchableOpacity
+                                  key={index}
+                                  onPress={() => {
+                                    selectVariantItem({
+                                      value: Layer,
+                                      name: 'Layer',
+                                      selected: variant,
+                                    });
+                                  }}
+                                >
+                                  <View
+                                    style={{
+                                      borderWidth: 2,
+                                      borderColor:
+                                        selectedSize === Layer
+                                          ? Colors.primary
+                                          : Colors.lightPink,
+                                      margin: getWidth(50),
+                                      minWidth: 65,
+                                      paddingLeft: 10,
+                                      paddingRight: 10,
+                                      height: 30,
+                                      borderRadius: 3,
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      opacity:
+                                        item?.node?.quantityAvailable > 0
+                                          ? 1
+                                          : 0.5,
+                                    }}
+                                  >
+                                    <Text style={{ color: Colors.black }}>
+                                      {Layer}
+                                    </Text>
+                                  </View>
+                                </TouchableOpacity>
+                              );
+                            }}
+                          />
+                        </>
+                      )}
+                    {/* //test  */}
+                    {variantList &&
+                      variantList?.length > 1 &&
+                      modelToShow?.length >= 0 &&
+                      productHasVariantSize(variantList, 'Model') && (
+                        <>
+                          <View style={[{ marginTop: 16 }]}>
+                            {variant?.node?.selectedOptions.map((item: any) => (
+                              <>
+                                {item?.name === 'Model' ? (
+                                  <View
+                                    style={{
+                                      flexDirection: 'row',
+                                      marginRight: 6,
+                                    }}
+                                  >
+                                    <Text
+                                      style={[
+                                        styles.variantTitle,
+                                        { fontWeight: '500' },
+                                      ]}
+                                    >
+                                      {item?.name != 'Title' ? item?.name : 'nsb'}
+                                      {''}
+                                    </Text>
+                                    <Text
+                                      style={[
+                                        styles.variantValue,
+                                        { fontWeight: '500' },
+                                      ]}
+                                    >
+                                      {item?.value != 'Default Title'
+                                        ? item?.value
+                                        : ''}
+                                    </Text>
+                                  </View>
+                                ) : null}
+                              </>
+                            ))}
+                          </View>
+
+                          <FlatList
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            data={modelToShow}
+                            renderItem={({ item, index }) => {
+                              let Model = item?.node?.selectedOptions.find(
+                                (variantOptions: any) =>
+                                  variantOptions.name === 'Model',
+                              )?.value;
+                              let selectedSize =
+                                variant?.node?.selectedOptions.find(
+                                  (variantOptions: any) =>
+                                    variantOptions.name === 'Model',
+                                )?.value;
+                              return (
+                                <TouchableOpacity
+                                  key={index}
+                                  onPress={() => {
+                                    selectVariantItem({
+                                      value: Model,
+                                      name: 'Model',
+                                      selected: variant,
+                                    });
+                                  }}
+                                >
+                                  <View
+                                    style={{
+                                      borderWidth: 2,
+                                      borderColor:
+                                        selectedSize === Model
+                                          ? Colors.primary
+                                          : Colors.lightPink,
+                                      margin: getWidth(50),
+                                      minWidth: 65,
+                                      paddingLeft: 10,
+                                      paddingRight: 10,
+                                      height: 30,
+                                      borderRadius: 3,
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      opacity:
+                                        item?.node?.quantityAvailable > 0
+                                          ? 1
+                                          : 0.5,
+                                    }}
+                                  >
+                                    <Text style={{ color: Colors.black }}>
+                                      {Model}
+                                    </Text>
+                                  </View>
+                                </TouchableOpacity>
+                              );
+                            }}
+                          />
+                        </>
+                      )}
+                    {variantList &&
+                      variantList?.length > 1 &&
+                      designToShow?.length >= 0 &&
+                      productHasVariantSize(variantList, 'Design') && (
+                        <>
+                          <View style={[{ marginTop: 16 }]}>
+                            {variant?.node?.selectedOptions.map((item: any) => (
+                              <>
+                                {item?.name === 'Design' ? (
+                                  <View
+                                    style={{
+                                      flexDirection: 'row',
+                                      marginRight: 6,
+                                    }}
+                                  >
+                                    <Text
+                                      style={[
+                                        styles.variantTitle,
+                                        { fontWeight: '500' },
+                                      ]}
+                                    >
+                                      {item?.name != 'Title' ? item?.name : 'nsb'}
+                                      {''}
+                                    </Text>
+                                    <Text
+                                      style={[
+                                        styles.variantValue,
+                                        { fontWeight: '500' },
+                                      ]}
+                                    >
+                                      {item?.value != 'Default Title'
+                                        ? item?.value
+                                        : ''}
+                                    </Text>
+                                  </View>
+                                ) : null}
+                              </>
+                            ))}
+                          </View>
+
+                          <FlatList
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            data={designToShow}
+                            renderItem={({ item, index }) => {
+                              let Design = item?.node?.selectedOptions.find(
+                                (variantOptions: any) =>
+                                  variantOptions.name === 'Design',
+                              )?.value;
+                              let selectedSize =
+                                variant?.node?.selectedOptions.find(
+                                  (variantOptions: any) =>
+                                    variantOptions.name === 'Design',
+                                )?.value;
+                              return (
+                                <TouchableOpacity
+                                  key={index}
+                                  onPress={() => {
+                                    selectVariantItem({
+                                      value: Design,
+                                      name: 'Design',
+                                      selected: variant,
+                                    });
+                                  }}
+                                >
+                                  <View
+                                    style={{
+                                      borderWidth: 2,
+                                      borderColor:
+                                        selectedSize === Design
+                                          ? Colors.primary
+                                          : Colors.lightPink,
+                                      margin: getWidth(50),
+                                      minWidth: 65,
+                                      paddingLeft: 10,
+                                      paddingRight: 10,
+                                      height: 30,
+                                      borderRadius: 3,
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      opacity:
+                                        item?.node?.quantityAvailable > 0
+                                          ? 1
+                                          : 0.5,
+                                    }}
+                                  >
+                                    <Text style={{ color: Colors.black }}>
+                                      {Design}
+                                    </Text>
+                                  </View>
+                                </TouchableOpacity>
+                              );
+                            }}
+                          />
+                        </>
+                      )}
+                    {variantList &&
+                      variantList?.length > 1 &&
+                      capacityToShow?.length >= 0 &&
+                      productHasVariantSize(variantList, 'Capacity') && (
+                        <>
+                          <View style={[{ marginTop: 16 }]}>
+                            {variant?.node?.selectedOptions.map((item: any) => (
+                              <>
+                                {item?.name === 'Capacity' ? (
+                                  <View
+                                    style={{
+                                      flexDirection: 'row',
+                                      marginRight: 6,
+                                    }}
+                                  >
+                                    <Text
+                                      style={[
+                                        styles.variantTitle,
+                                        { fontWeight: '500' },
+                                      ]}
+                                    >
+                                      {item?.name != 'Title' ? item?.name : 'nsb'}
+                                      {''}
+                                    </Text>
+                                    <Text
+                                      style={[
+                                        styles.variantValue,
+                                        { fontWeight: '500' },
+                                      ]}
+                                    >
+                                      {item?.value != 'Default Title'
+                                        ? item?.value
+                                        : ''}
+                                    </Text>
+                                  </View>
+                                ) : null}
+                              </>
+                            ))}
+                          </View>
+
+                          <FlatList
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            data={capacityToShow}
+                            renderItem={({ item, index }) => {
+                              let Capacity = item?.node?.selectedOptions.find(
+                                (variantOptions: any) =>
+                                  variantOptions.name === 'Capacity',
+                              )?.value;
+                              let selectedSize =
+                                variant?.node?.selectedOptions.find(
+                                  (variantOptions: any) =>
+                                    variantOptions.name === 'Capacity',
+                                )?.value;
+                              return (
+                                <TouchableOpacity
+                                  key={index}
+                                  onPress={() => {
+                                    selectVariantItem({
+                                      value: Capacity,
+                                      name: 'Capacity',
+                                      selected: variant,
+                                    });
+                                  }}
+                                >
+                                  <View
+                                    style={{
+                                      borderWidth: 2,
+                                      borderColor:
+                                        selectedSize === Capacity
+                                          ? Colors.primary
+                                          : Colors.lightPink,
+                                      margin: getWidth(50),
+                                      minWidth: 65,
+                                      paddingLeft: 10,
+                                      paddingRight: 10,
+                                      height: 30,
+                                      borderRadius: 3,
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      opacity:
+                                        item?.node?.quantityAvailable > 0
+                                          ? 1
+                                          : 0.5,
+                                    }}
+                                  >
+                                    <Text style={{ color: Colors.black }}>
+                                      {Capacity}
+                                    </Text>
+                                  </View>
+                                </TouchableOpacity>
+                              );
+                            }}
+                          />
+                        </>
+                      )}
+                    {variantList &&
+                      variantList?.length > 1 &&
+                      styleToShow?.length >= 0 &&
+                      productHasVariantSize(variantList, 'Style') && (
+                        <>
+                          <View style={[{ marginTop: 16 }]}>
+                            {variant?.node?.selectedOptions.map((item: any) => (
+                              <>
+                                {item?.name === 'Style' ? (
+                                  <View
+                                    style={{
+                                      flexDirection: 'row',
+                                      marginRight: 6,
+                                    }}
+                                  >
+                                    <Text
+                                      style={[
+                                        styles.variantTitle,
+                                        { fontWeight: '500' },
+                                      ]}
+                                    >
+                                      {item?.name != 'Title' ? item?.name : 'nsb'}
+                                      {''}
+                                    </Text>
+                                    <Text
+                                      style={[
+                                        styles.variantValue,
+                                        { fontWeight: '500' },
+                                      ]}
+                                    >
+                                      {item?.value != 'Default Title'
+                                        ? item?.value
+                                        : ''}
+                                    </Text>
+                                  </View>
+                                ) : null}
+                              </>
+                            ))}
+                          </View>
+
+                          <FlatList
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            data={styleToShow}
+                            renderItem={({ item, index }) => {
+                              let Style = item?.node?.selectedOptions.find(
+                                (variantOptions: any) =>
+                                  variantOptions.name === 'Style',
+                              )?.value;
+                              let selectedSize =
+                                variant?.node?.selectedOptions.find(
+                                  (variantOptions: any) =>
+                                    variantOptions.name === 'Style',
+                                )?.value;
+                              return (
+                                <TouchableOpacity
+                                  key={index}
+                                  onPress={() => {
+                                    selectVariantItem({
+                                      value: Style,
+                                      name: 'Style',
+                                      selected: variant,
+                                    });
+                                  }}
+                                >
+                                  <View
+                                    style={{
+                                      borderWidth: 2,
+                                      borderColor:
+                                        selectedSize === Style
+                                          ? Colors.primary
+                                          : Colors.lightPink,
+                                      margin: getWidth(50),
+                                      minWidth: 65,
+                                      paddingLeft: 10,
+                                      paddingRight: 10,
+                                      height: 30,
+                                      borderRadius: 3,
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      opacity:
+                                        item?.node?.quantityAvailable > 0
+                                          ? 1
+                                          : 0.5,
+                                    }}
+                                  >
+                                    <Text style={{ color: Colors.black }}>
+                                      {Style}
+                                    </Text>
+                                  </View>
+                                </TouchableOpacity>
+                              );
+                            }}
+                          />
+                        </>
+                      )}
+                    <Text style={styles.priceTxt}>
+                      {variant?.node?.price?.currencyCode}{' '}
+                      <Text
+                        style={{
+                          fontWeight: '600',
+                          paddingLeft: 5,
+                          fontSize: 18,
+                        }}
+                      >
+                        {formatPrice(Number(variant?.node?.price?.amount))}{' '}
+                      </Text>
+                      {!Number.isNaN(
+                        Number(variant?.node?.compareAtPrice?.amount),
+                      ) &&
+                        Number(variant?.node?.compareAtPrice?.amount) !== 0 && (
+                          <Text
+                            style={{
+                              fontWeight: '600',
+                              paddingLeft: 99,
+                              fontSize: 14,
+                              color: 'black',
+                              textDecorationLine: 'line-through',
+                            }}
+                          >
+                            QAR{' '}
+                            {formatPrice(
+                              Number(variant?.node?.compareAtPrice?.amount),
+                            )}{' '}
+                          </Text>
+                        )}
+                    </Text>
+
+                    <View style={styles.rowContainer}>
+                      <View
+                        style={
+                          variant?.node?.quantityAvailable > 0
+                            ? styles.inStock
+                            : styles.outOfStock
+                        }
+                      />
+                      <Text style={styles.variantValue}>
+                        {variant?.node?.quantityAvailable > 0
+                          ? ` ${t('inSTock')} `
+                          : ` ${t('outOfStock')} `}
+                      </Text>
+                    </View>
+
+                    {addOnList && addOnList.length > 0 && (
+                      <FlatList
+                        data={addOnList}
+                        style={{ padding: 6 }}
+                        renderItem={({ item, index }) => {
+                          return (
+                            <>
+                              {item && (
+                                <TouchableOpacity
+                                  onPress={() => {
+                                    console.log(
+                                      JSON.parse(item?.value)?.data?.ymq1,
+                                      '==YMQ-ITEM==',
+                                    );
+                                    // JSON.parse(item?.value)?.data?.ymq1
+                                    //       ?.options?.["1_1"]?.variant_id == 0 ?
+                                    //       handleInstallationClick()
+                                    //       :
+                                    handleAddOnClick(index);
+                                  }}
+                                  style={{
+                                    borderWidth: 0.5,
+                                    padding: 6,
+                                    marginTop: index == 0 ? 16 : 0,
+                                    marginBottom:
+                                      index == addOnList.length - 1 ? 16 : 0,
+                                  }}
+                                >
+                                  <Text
+                                    style={{
+                                      fontWeight: '500',
+                                      color: Colors.black,
+                                    }}
+                                  >
+                                    {JSON.parse(item?.value)?.data?.ymq1?.label}
+                                  </Text>
+                                  <View
+                                    style={{ flexDirection: 'row', marginTop: 6 }}
+                                  >
+                                    <View
+                                      style={{
+                                        borderWidth: 0.5,
+                                        width: 20,
+                                        height: 20,
+                                        justifyContent: 'center',
+                                      }}
+                                    >
+                                      {item.selected && (
+                                        <Image
+                                          style={{
+                                            alignSelf: 'center',
+                                            justifyContent: 'center',
+                                            width: 20,
+                                            height: 20,
+                                          }}
+                                          source={icons.check_box}
+                                        />
+                                      )}
+                                    </View>
+                                    <Text
+                                      style={{
+                                        fontWeight: '400',
+                                        color: Colors.black,
+                                        fontSize: 12,
+                                        marginLeft: 6,
+                                        flex: 1,
+                                      }}
+                                    >
+                                      Yes + QAR{' '}
+                                      {JSON.parse(item?.value)?.data?.ymq1
+                                        ?.options?.['1_1']?.variant_id == 0
+                                        ? JSON.parse(item?.value)?.data?.ymq1
+                                          ?.options?.['1_1']?.price
+                                        : JSON.parse(item?.value)?.data?.ymq1
+                                          ?.options?.['1_1']?.variant_price}
+                                    </Text>
+                                  </View>
+                                  {JSON.parse(item?.value)?.data?.ymq1?.options?.[
+                                    '1_1'
+                                  ]?.variant_id != 0 &&
+                                    item.selected && (
+                                      <TouchableOpacity
+                                        onPress={() => setAddOnModalOpen(true)}
+                                        style={styles.quantitySelectorAddOn}
+                                      >
+                                        <Text
+                                          style={{
+                                            fontSize: getHeight(55),
+                                            flex: 2,
+                                            color: Colors.black,
+                                          }}
+                                        >
+                                          {' '}
+                                          {quantityAddOn}
+                                        </Text>
+                                        <Image
+                                          style={{ height: '50%', width: '50%' }}
+                                          source={images.arrowDown}
+                                        />
+                                      </TouchableOpacity>
+                                    )}
+                                </TouchableOpacity>
+                              )}
+                            </>
+                          );
+                        }}
+                        keyExtractor={item => item?.id}
+                      />
+                    )}
+
+                    {variant?.node?.quantityAvailable > 0 && (
+                      <View style={styles.quantityContainer}>
+                        <Text style={styles.quantityTxt}>{t('quantity')}</Text>
+                        <View style={styles.quantitySelector}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              trigger('impactMedium');
+                              quantity > 1
+                                ? setQuantity(quantity - 1)
+                                : setQuantity(1);
+                            }}
+                            style={{
+                              width: getHeight(28),
+                              height: getHeight(28),
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              borderRadius: 4,
+                              backgroundColor: Colors.white,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontSize: getHeight(45),
+                                color: Colors.primary,
+                                fontWeight: '600',
+                              }}
+                            >
+                              -
+                            </Text>
+                          </TouchableOpacity>
+
+                          <Text
+                            style={{
+                              fontSize: getHeight(45),
+                              color: Colors.black,
+                              paddingHorizontal: 12,
+                              fontWeight: '500',
+                            }}
+                          >
+                            {quantity}
+                          </Text>
+
+                          <TouchableOpacity
+                            onPress={() => {
+                              trigger('notificationWarning');
+                              variant?.node?.quantityAvailable > quantity
+                                ? setQuantity(quantity + 1)
+                                : Toast.show({
+                                  type: 'warning',
+                                  text1: `Not enough stock to add this item to your cart`,
+                                  position: 'bottom',
+                                });
+                            }}
+                            style={{
+                              width: getHeight(28),
+                              height: getHeight(28),
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              borderRadius: 4,
+                              backgroundColor: Colors.white,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontSize: getHeight(45),
+                                color: Colors.primary,
+                                fontWeight: '600',
+                              }}
+                            >
+                              +
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    )}
+
+                    {deals && variant?.node?.quantityAvailable > 0 && (
+                      <View
+                        style={{
+                          flexDirection: 'column',
+                          borderTopWidth: 0.5,
+                          marginTop: 24,
+                          borderColor: 'grey',
+                        }}
+                      >
+                        <Text style={[styles.subTitle]}>{deals?.blockTitle}</Text>
+                        <View
+                          style={{
+                            borderWidth: 1,
+                            borderColor:
+                              deals?.dealBars[0]?.dealBarType !== 'bxgy'
+                                ? Colors.primary
+                                : '#6d71f9',
+                            padding: 6,
+                            marginTop: 24,
+                          }}
+                        >
+                          <FlatList
+                            data={deals?.dealBars}
+                            renderItem={({ item, index }) => (
+                              <TouchableOpacity
+                                onPress={() => {
+                                  setArryIndex(index);
+                                  setSelectedDealIndex(index);
+                                  if (item?.dealBarType == 'bxgy') {
+                                    setQuantity(
+                                      item.getQuantity + item.buyQuantity,
+                                    );
+                                  } else {
+                                    setQuantity(item?.quantity);
+                                  }
+                                }}
+                                style={{
+                                  flexDirection: 'row',
+                                  borderTopWidth: index == 0 ? 0 : 0.5,
+                                  paddingTop: 10,
+                                  paddingBottom: 10,
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                  // backgroundColor:'red'
+                                }}
+                                key={index}
+                              >
+                                {index === selectedDealIndex ? (
                                   <View
                                     style={{
                                       alignSelf: 'center',
                                       justifyContent: 'center',
-                                      height: 20,
-                                      width: 20,
-                                      // borderWidth: 0.5,
-                                      backgroundColor:
+                                      height: 24,
+                                      width: 24,
+                                      borderWidth: 0.5,
+                                      borderColor:
                                         item?.dealBarType !== 'bxgy'
                                           ? Colors.primary
                                           : '#6d71f9',
-
-                                      borderRadius: 10,
-                                    }}
-                                  ></View>
-                                </View>
-                              ) : (
-                                <View
-                                  style={{
-                                    alignSelf: 'center',
-                                    justifyContent: 'center',
-                                    height: 24,
-                                    width: 24,
-                                    borderWidth: 0.5,
-                                    borderColor:
-                                      item?.dealBarType !== 'bxgy'
-                                        ? Colors.primary
-                                        : '#6d71f9',
-                                    marginRight: 16,
-                                    borderRadius: 12,
-                                  }}
-                                ></View>
-                              )}
-
-                              <View style={{ flex: 1 }}>
-                                <View
-                                  style={{
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    alignContent: 'center',
-                                  }}
-                                >
-                                  <Text
-                                    style={{
-                                      fontWeight: '600',
-                                      color:
-                                        item?.dealBarType !== 'bxgy'
-                                          ? Colors.primary
-                                          : '#6d71f9',
+                                      marginRight: 16,
+                                      borderRadius: 12,
                                     }}
                                   >
-                                    {item?.title}
-                                  </Text>
+                                    <View
+                                      style={{
+                                        alignSelf: 'center',
+                                        justifyContent: 'center',
+                                        height: 20,
+                                        width: 20,
+                                        // borderWidth: 0.5,
+                                        backgroundColor:
+                                          item?.dealBarType !== 'bxgy'
+                                            ? Colors.primary
+                                            : '#6d71f9',
+
+                                        borderRadius: 10,
+                                      }}
+                                    ></View>
+                                  </View>
+                                ) : (
+                                  <View
+                                    style={{
+                                      alignSelf: 'center',
+                                      justifyContent: 'center',
+                                      height: 24,
+                                      width: 24,
+                                      borderWidth: 0.5,
+                                      borderColor:
+                                        item?.dealBarType !== 'bxgy'
+                                          ? Colors.primary
+                                          : '#6d71f9',
+                                      marginRight: 16,
+                                      borderRadius: 12,
+                                    }}
+                                  ></View>
+                                )}
+
+                                <View style={{ flex: 1 }}>
                                   <View
                                     style={{
                                       flexDirection: 'row',
                                       alignItems: 'center',
                                       alignContent: 'center',
-                                      backgroundColor: '#e5e5e5',
-                                      minWidth: getWidth(10),
-                                      height: getHeight(50),
-                                      borderRadius: 10,
-                                      marginLeft: getWidth(70),
                                     }}
                                   >
                                     <Text
                                       style={{
-                                        fontWeight: '400',
-                                        color: Colors.black,
-                                        marginLeft: 6,
-                                        fontSize: 9,
-                                        alignSelf: 'center',
+                                        fontWeight: '600',
+                                        color:
+                                          item?.dealBarType !== 'bxgy'
+                                            ? Colors.primary
+                                            : '#6d71f9',
                                       }}
                                     >
-                                      {item?.dealBarType !== 'bxgy'
-                                        ? `${item?.label}`
-                                        : `SAVE ${Math.round(
-                                          (item.getQuantity /
-                                            (item.buyQuantity +
-                                              item.getQuantity)) *
-                                          100,
-                                        )}%`}
+                                      {item?.title}
                                     </Text>
+                                    <View
+                                      style={{
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        alignContent: 'center',
+                                        backgroundColor: '#e5e5e5',
+                                        minWidth: getWidth(10),
+                                        height: getHeight(50),
+                                        borderRadius: 10,
+                                        marginLeft: getWidth(70),
+                                      }}
+                                    >
+                                      <Text
+                                        style={{
+                                          fontWeight: '400',
+                                          color: Colors.black,
+                                          marginLeft: 6,
+                                          fontSize: 9,
+                                          alignSelf: 'center',
+                                        }}
+                                      >
+                                        {item?.dealBarType !== 'bxgy'
+                                          ? `${item?.label}`
+                                          : `SAVE ${Math.round(
+                                            (item.getQuantity /
+                                              (item.buyQuantity +
+                                                item.getQuantity)) *
+                                            100,
+                                          )}%`}
+                                      </Text>
+                                    </View>
                                   </View>
-                                </View>
 
-                                <Text
-                                  style={{
-                                    fontWeight: '400',
-                                    color: Colors.black,
-                                  }}
-                                >
-                                  {/* {item?.subtitle} */}
-                                  {index === 0
-                                    ? `${item?.subtitle}`
-                                    : item?.dealBarType !== 'bxgy'
-                                      ? `You save QAR ${formatPrice(
-                                        Math.abs(
-                                          Number(item.discountValue) -
-                                          Number(
-                                            variant?.node?.price?.amount || 0,
-                                          ) *
-                                          (item?.quantity || 1),
-                                        ),
-                                      )}`
-                                      : null}
-                                </Text>
-                                {index == 1 && index === selectedDealIndex && (
                                   <Text
                                     style={{
-                                      fontSize: 12,
-                                      color: 'red',
-                                      marginTop: getHeight(70),
+                                      fontWeight: '400',
+                                      color: Colors.black,
                                     }}
                                   >
-                                    {variant?.node?.selectedOptions[0]?.name !==
-                                      'Title'
-                                      ? variant?.node?.selectedOptions[0]?.name
-                                      : ''}
+                                    {/* {item?.subtitle} */}
+                                    {index === 0
+                                      ? `${item?.subtitle}`
+                                      : item?.dealBarType !== 'bxgy'
+                                        ? `You save QAR ${formatPrice(
+                                          Math.abs(
+                                            Number(item.discountValue) -
+                                            Number(
+                                              variant?.node?.price?.amount || 0,
+                                            ) *
+                                            (item?.quantity || 1),
+                                          ),
+                                        )}`
+                                        : null}
                                   </Text>
-                                )}
+                                  {index == 1 && index === selectedDealIndex && (
+                                    <Text
+                                      style={{
+                                        fontSize: 12,
+                                        color: 'red',
+                                        marginTop: getHeight(70),
+                                      }}
+                                    >
+                                      {variant?.node?.selectedOptions[0]?.name !==
+                                        'Title'
+                                        ? variant?.node?.selectedOptions[0]?.name
+                                        : ''}
+                                    </Text>
+                                  )}
 
-                                {/* cheking === */}
-                                {variant?.node?.title ===
-                                  'Default Title' ? null : (
-                                  <>
-                                    {index === selectedDealIndex &&
-                                      Array.from(
-                                        {
-                                          length:
-                                            item?.dealBarType !== 'bxgy'
-                                              ? Number(
-                                                deals?.dealBars[index]
-                                                  ?.quantity ?? 0,
-                                              )
-                                              : Number(
-                                                deals?.dealBars[index]
-                                                  ?.getQuantity * 2,
-                                              ),
-                                        },
+                                  {/* cheking === */}
+                                  {variant?.node?.title ===
+                                    'Default Title' ? null : (
+                                    <>
+                                      {index === selectedDealIndex &&
+                                        Array.from(
+                                          {
+                                            length:
+                                              item?.dealBarType !== 'bxgy'
+                                                ? Number(
+                                                  deals?.dealBars[index]
+                                                    ?.quantity ?? 0,
+                                                )
+                                                : Number(
+                                                  deals?.dealBars[index]
+                                                    ?.getQuantity * 2,
+                                                ),
+                                          },
 
-                                        (_, quantityIndex) => (
-                                          <>
-                                            <TouchableOpacity
-                                              onPress={() => {
-                                                dealpicker(quantityIndex);
-                                              }}
-                                              key={quantityIndex}
-                                              style={{
-                                                flexDirection: 'row',
-                                                maxWidth: '30%',
-                                                height: 30,
-                                                borderWidth: 0.5,
-                                                marginTop: 3,
-                                                alignItems: 'center',
-                                                borderColor:
-                                                  item?.dealBarType !== 'bxgy'
-                                                    ? Colors.primary
-                                                    : '#6d71f9',
-                                                borderRadius: 4,
-                                                paddingHorizontal: 6,
-                                              }}
-                                            >
-                                              <Text
+                                          (_, quantityIndex) => (
+                                            <>
+                                              <TouchableOpacity
+                                                onPress={() => {
+                                                  dealpicker(quantityIndex);
+                                                }}
+                                                key={quantityIndex}
                                                 style={{
-                                                  fontSize: 12,
-                                                  fontWeight: '600',
-                                                  color:
+                                                  flexDirection: 'row',
+                                                  maxWidth: '30%',
+                                                  height: 30,
+                                                  borderWidth: 0.5,
+                                                  marginTop: 3,
+                                                  alignItems: 'center',
+                                                  borderColor:
                                                     item?.dealBarType !== 'bxgy'
                                                       ? Colors.primary
                                                       : '#6d71f9',
-                                                  marginRight: 6,
+                                                  borderRadius: 4,
+                                                  paddingHorizontal: 6,
                                                 }}
                                               >
-                                                {quantityIndex + 1}
-                                              </Text>
-
-                                              <View style={{ flex: 1 }}>
                                                 <Text
-                                                  // key={idx}
-                                                  numberOfLines={1}
-                                                  ellipsizeMode="tail"
                                                   style={{
-                                                    color: 'black',
                                                     fontSize: 12,
-                                                    fontWeight: '500',
+                                                    fontWeight: '600',
+                                                    color:
+                                                      item?.dealBarType !== 'bxgy'
+                                                        ? Colors.primary
+                                                        : '#6d71f9',
+                                                    marginRight: 6,
                                                   }}
                                                 >
-                                                  {/* {bundleDeals?.variants
+                                                  {quantityIndex + 1}
+                                                </Text>
+
+                                                <View style={{ flex: 1 }}>
+                                                  <Text
+                                                    // key={idx}
+                                                    numberOfLines={1}
+                                                    ellipsizeMode="tail"
+                                                    style={{
+                                                      color: 'black',
+                                                      fontSize: 12,
+                                                      fontWeight: '500',
+                                                    }}
+                                                  >
+                                                    {/* {bundleDeals?.variants
                                                   ?.length &&
                                                 bundleDeals?.selected
                                                   ? 'd'
                                                   : variant?.node?.title} */}
-                                                  {bundleDeals?.[quantityIndex]
-                                                    ?.variants?.name !== ''
-                                                    ? bundleDeals?.[
-                                                      quantityIndex
-                                                    ]?.variants?.name
-                                                    : variant?.node
-                                                      ?.selectedOptions[0]
-                                                      ?.value}
-                                                </Text>
-                                              </View>
+                                                    {bundleDeals?.[quantityIndex]
+                                                      ?.variants?.name !== ''
+                                                      ? bundleDeals?.[
+                                                        quantityIndex
+                                                      ]?.variants?.name
+                                                      : variant?.node
+                                                        ?.selectedOptions[0]
+                                                        ?.value}
+                                                  </Text>
+                                                </View>
 
-                                              <Text
-                                                style={{
-                                                  color: 'black',
-                                                  fontSize: 12,
-                                                  paddingLeft: 6,
-                                                }}
-                                              >
-                                                ▼
-                                              </Text>
-                                            </TouchableOpacity>
-                                          </>
-                                        ),
-                                      )}
-                                    {/* {item?.selected && index !== 0 && (
+                                                <Text
+                                                  style={{
+                                                    color: 'black',
+                                                    fontSize: 12,
+                                                    paddingLeft: 6,
+                                                  }}
+                                                >
+                                                  ▼
+                                                </Text>
+                                              </TouchableOpacity>
+                                            </>
+                                          ),
+                                        )}
+                                      {/* {item?.selected && index !== 0 && (
                                       <View>
                                         <Text
                                           style={{color: 'red', fontSize: 12}}>
@@ -5600,55 +5601,74 @@ const ProductDetails = ({ route, navigation }: any) => {
                                         </Text>
                                       </View>
                                     )} */}
-                                  </>
-                                )}
-                              </View>
-                              <View style={{ justifyContent: 'center' }}>
-                                {deals?.mostPopularDealBarId &&
-                                  deals?.mostPopularDealBarId == item?.id && (
-                                    <Text
-                                      style={{
-                                        color: 'white',
-                                        backgroundColor: 'red',
-                                        paddingLeft: 6,
-                                        paddingRight: 6,
-                                        fontSize: 10,
-                                        paddingTop: 3,
-                                        paddingBottom: 3,
-                                        borderRadius: 6,
-                                        fontWeight: '500',
-                                      }}
-                                    >
-                                      {t('most_Popular')}
-                                    </Text>
+                                    </>
                                   )}
-                                <Text
-                                  style={{
-                                    fontWeight: '600',
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    alignSelf: 'center',
-                                  }}
-                                >
-                                  {variant?.node?.price?.currencyCode}{' '}
-                                  {item?.dealBarType !== 'bxgy'
-                                    ? formatPrice(
-                                      Number(
-                                        item?.discountValue
-                                          ? item?.discountValue
-                                          : variant?.node?.price?.amount,
-                                      ),
+                                </View>
+                                <View style={{ justifyContent: 'center' }}>
+                                  {deals?.mostPopularDealBarId &&
+                                    deals?.mostPopularDealBarId == item?.id && (
+                                      <Text
+                                        style={{
+                                          color: 'white',
+                                          backgroundColor: 'red',
+                                          paddingLeft: 6,
+                                          paddingRight: 6,
+                                          fontSize: 10,
+                                          paddingTop: 3,
+                                          paddingBottom: 3,
+                                          borderRadius: 6,
+                                          fontWeight: '500',
+                                        }}
+                                      >
+                                        {t('most_Popular')}
+                                      </Text>
+                                    )}
+                                  <Text
+                                    style={{
+                                      fontWeight: '600',
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      alignSelf: 'center',
+                                    }}
+                                  >
+                                    {variant?.node?.price?.currencyCode}{' '}
+                                    {item?.dealBarType !== 'bxgy'
+                                      ? formatPrice(
+                                        Number(
+                                          item?.discountValue
+                                            ? item?.discountValue
+                                            : variant?.node?.price?.amount,
+                                        ),
+                                      )
+                                      : formatPrice(
+                                        Number(variant?.node?.price?.amount) *
+                                        item?.buyQuantity,
+                                      )}{' '}
+                                  </Text>
+                                  {item?.dealBarType !== 'bxgy' ? (
+                                    item.discountValue &&
+                                    variant?.node?.price?.amount *
+                                    item?.quantity !=
+                                    item.discountValue && (
+                                      <Text
+                                        style={{
+                                          fontWeight: '400',
+                                          color: 'grey',
+                                          fontSize: 12,
+                                          alignSelf: 'center',
+                                          textDecorationLine: 'line-through',
+                                        }}
+                                      >
+                                        {variant?.node?.price?.currencyCode}{' '}
+                                        {formatPrice(
+                                          Number(
+                                            variant?.node?.price?.amount *
+                                            item?.quantity,
+                                          ),
+                                        )}
+                                      </Text>
                                     )
-                                    : formatPrice(
-                                      Number(variant?.node?.price?.amount) *
-                                      item?.buyQuantity,
-                                    )}{' '}
-                                </Text>
-                                {item?.dealBarType !== 'bxgy' ? (
-                                  item.discountValue &&
-                                  variant?.node?.price?.amount *
-                                  item?.quantity !=
-                                  item.discountValue && (
+                                  ) : (
                                     <Text
                                       style={{
                                         fontWeight: '400',
@@ -5658,54 +5678,35 @@ const ProductDetails = ({ route, navigation }: any) => {
                                         textDecorationLine: 'line-through',
                                       }}
                                     >
+                                      {' '}
                                       {variant?.node?.price?.currencyCode}{' '}
                                       {formatPrice(
                                         Number(
                                           variant?.node?.price?.amount *
-                                          item?.quantity,
+                                          item?.getQuantity *
+                                          2,
                                         ),
                                       )}
                                     </Text>
-                                  )
-                                ) : (
-                                  <Text
-                                    style={{
-                                      fontWeight: '400',
-                                      color: 'grey',
-                                      fontSize: 12,
-                                      alignSelf: 'center',
-                                      textDecorationLine: 'line-through',
-                                    }}
-                                  >
-                                    {' '}
-                                    {variant?.node?.price?.currencyCode}{' '}
-                                    {formatPrice(
-                                      Number(
-                                        variant?.node?.price?.amount *
-                                        item?.getQuantity *
-                                        2,
-                                      ),
-                                    )}
-                                  </Text>
-                                )}
-                              </View>
-                            </TouchableOpacity>
-                          )}
-                          keyExtractor={item => item.id}
-                        />
+                                  )}
+                                </View>
+                              </TouchableOpacity>
+                            )}
+                            keyExtractor={item => item.id}
+                          />
+                        </View>
                       </View>
-                    </View>
-                  )}
-                  <Text
-                    style={[
-                      styles.subTitle,
-                      { marginTop: 16, marginBottom: 16 },
-                    ]}
-                  >
-                    {t('description')}
-                  </Text>
+                    )}
+                    <Text
+                      style={[
+                        styles.subTitle,
+                        { marginTop: 16, marginBottom: 16 },
+                      ]}
+                    >
+                      {t('description')}
+                    </Text>
 
-                  {/* {productImages && (
+                    {/* {productImages && (
                 <Image
                   resizeMode="stretch"
                   style={styles.imageContainer}
@@ -5716,7 +5717,7 @@ const ProductDetails = ({ route, navigation }: any) => {
                 />
               )} */}
 
-                  {/* <Text style={styles.titleTxt}>{productDetails?.description}</Text>
+                    {/* <Text style={styles.titleTxt}>{productDetails?.description}</Text>
 
               <TouchableOpacity
                 onPress={() => {
@@ -5739,236 +5740,304 @@ const ProductDetails = ({ route, navigation }: any) => {
                   More
                 </Text>
               </TouchableOpacity> */}
-                  {productDetails?.descriptionHtml ? (
-                    <View
-                      style={{
-                        minHeight: 150,
-                        width: '95%',
-                        alignSelf: 'center',
-                        marginBottom: 10,
-                      }}
-                    >
-                      <RenderHtml
-                        contentWidth={getWidth(1)}
-                        source={{ html: productDetails?.descriptionHtml }}
-                        baseStyle={{ color: 'black', fontSize: getWidth(25) }}
-                      />
-                    </View>
-                  ) : null}
-
-                  {productVideo?.value ? (
-                    <YoutubePlayer
-                      height={200}
-                      webViewStyle={{ opacity: 0.99, backgroundColor: 'red' }}
-                      // play={playing}
-
-                      videoId={getYouTubeVideoId(productVideo?.value)}
-                    // onChangeState={onStateChange}
-                    />
-                  ) : null}
-                  {/* <Text>Hello {JSON.stringify(productVideo?.value)}</Text> */}
-                  {frequentlyBroughtItem &&
-                    variant?.node?.quantityAvailable > 0 && (
+                    {productDetails?.descriptionHtml ? (
                       <View
                         style={{
-                          flexDirection: 'column',
-                          borderTopWidth: 0.5,
-                          marginTop: 24,
-                          borderColor: 'grey',
+                          minHeight: 150,
+                          width: '95%',
+                          alignSelf: 'center',
+                          marginBottom: 10,
                         }}
                       >
-                        <Text style={[styles.subTitle, { marginTop: 16 }]}>
-                          {t('freq')}
-                        </Text>
+                        <RenderHtml
+                          contentWidth={getWidth(1)}
+                          source={{ html: productDetails?.descriptionHtml }}
+                          baseStyle={{ color: 'black', fontSize: getWidth(25) }}
+                        />
+                      </View>
+                    ) : null}
+
+                    {productVideo?.value ? (
+                      <YoutubePlayer
+                        height={200}
+                        webViewStyle={{ opacity: 0.99, backgroundColor: 'red' }}
+                        // play={playing}
+
+                        videoId={getYouTubeVideoId(productVideo?.value)}
+                      // onChangeState={onStateChange}
+                      />
+                    ) : null}
+                    {/* <Text>Hello {JSON.stringify(productVideo?.value)}</Text> */}
+                    {frequentlyBroughtItem &&
+                      variant?.node?.quantityAvailable > 0 && (
                         <View
                           style={{
-                            borderWidth: 0.5,
-                            borderColor: Colors.primary,
-                            padding: 6,
+                            flexDirection: 'column',
+                            borderTopWidth: 0.5,
                             marginTop: 24,
+                            borderColor: 'grey',
                           }}
                         >
-                          <FlatList
-                            style={{ marginTop: 24 }}
-                            horizontal
-                            nestedScrollEnabled
-                            data={freqItems}
-                            renderItem={({ item, index }) => (
-                              <View
-                                style={{ flexDirection: 'row' }}
-                                key={index}
-                              >
-                                <TouchableOpacity
-                                  onPress={() => {
-                                    console.log(
-                                      'ID : ',
-                                      `gid://shopify/Product/${item.productId}`,
-                                    );
-                                    console.log('Handle : ', item.handle);
-
-                                    navigation.replace(screens.productDetails, {
-                                      id: `gid://shopify/Product/${item.productId}`,
-                                      handle: item.handle,
-                                    });
-                                  }}
+                          <Text style={[styles.subTitle, { marginTop: 16 }]}>
+                            {t('freq')}
+                          </Text>
+                          <View
+                            style={{
+                              borderWidth: 0.5,
+                              borderColor: Colors.primary,
+                              padding: 6,
+                              marginTop: 24,
+                            }}
+                          >
+                            <FlatList
+                              style={{ marginTop: 24 }}
+                              horizontal
+                              nestedScrollEnabled
+                              data={freqItems}
+                              renderItem={({ item, index }) => (
+                                <View
+                                  style={{ flexDirection: 'row' }}
+                                  key={index}
                                 >
-                                  <View
-                                    style={{
-                                      height: 100,
-                                      width: 100,
-                                      borderWidth: 1,
-                                      borderColor: Colors.lightPink,
-                                      borderRadius: 8,
-                                      marginLeft: 8,
-                                      marginRight: 8,
-                                    }}
-                                  >
-                                    <Image
-                                      style={styles.image}
-                                      resizeMode="cover"
-                                      source={{ uri: item?.image }}
-                                    />
-                                  </View>
-                                </TouchableOpacity>
-                                {index != freqItems?.length - 1 && (
-                                  <Text
-                                    style={{
-                                      color: 'grey',
-                                      alignSelf: 'center',
-                                      fontSize: 16,
-                                      fontWeight: '600',
-                                    }}
-                                  >
-                                    +
-                                  </Text>
-                                )}
-                              </View>
-                            )}
-                            keyExtractor={item => item.id}
-                          />
-                          <FlatList
-                            style={{ marginTop: 24 }}
-                            data={freqItems}
-                            renderItem={({ item, index }) => (
-                              <View
-                                key={index}
-                                style={{
-                                  marginLeft: getHeight(86),
-                                  paddingBottom: getHeight(45),
-                                  borderBottomWidth: 0.5,
-                                  borderColor: 'grey',
-                                }}
-                              >
-                                <View style={{ flexDirection: 'row' }}>
                                   <TouchableOpacity
                                     onPress={() => {
-                                      let array = [...freqItems];
-                                      array[index].selected =
-                                        !array[index].selected;
-                                      setFreqItems(array);
-                                    }}
-                                    style={{ justifyContent: 'center' }}
-                                  >
-                                    {item.selected ? (
-                                      <Image
-                                        style={{
-                                          alignSelf: 'center',
-                                          justifyContent: 'center',
-                                          height: 24,
-                                          width: 24,
-                                          marginRight: 16,
-                                        }}
-                                        source={icons.check_box}
-                                      />
-                                    ) : (
-                                      <View
-                                        style={{
-                                          alignSelf: 'center',
-                                          justifyContent: 'center',
-                                          height: 24,
-                                          width: 24,
-                                          borderWidth: 0.5,
-                                          borderColor: Colors.primary,
-                                          marginRight: 16,
-                                          borderRadius: 3,
-                                        }}
-                                      ></View>
-                                    )}
-                                  </TouchableOpacity>
-                                  <View style={{ flex: 1 }}>
-                                    <Text
-                                      numberOfLines={2}
-                                      style={[
-                                        styles.nameText,
-                                        { fontWeight: '400' },
-                                      ]}
-                                    >
-                                      {index == 0 && `${t('thisItem')}: `}
-                                      {item?.name}
-                                    </Text>
+                                      console.log(
+                                        'ID : ',
+                                        `gid://shopify/Product/${item.productId}`,
+                                      );
+                                      console.log('Handle : ', item.handle);
 
-                                    <>
-                                      {index == 0 ? (
-                                        <>
-                                          {variant?.node?.selectedOptions[0]
-                                            ?.value ===
-                                            'Default Title' ? null : (
-                                            <TouchableOpacity
-                                              onPress={() =>
-                                                item?.variants.length > 1 &&
-                                                picker(index, item)
-                                              }
-                                              style={{
-                                                flexDirection: 'row',
-                                                maxWidth:
-                                                  item?.variants.length > 1
-                                                    ? '30%'
-                                                    : '50%',
-                                                height: 30,
-                                                borderWidth:
-                                                  item?.variants.length > 1
-                                                    ? 0.5
-                                                    : 0.0,
-                                                marginTop: 3,
-                                              }}
-                                            >
-                                              <Text
-                                                numberOfLines={1}
-                                                ellipsizeMode={'tail'}
+                                      navigation.replace(screens.productDetails, {
+                                        id: `gid://shopify/Product/${item.productId}`,
+                                        handle: item.handle,
+                                      });
+                                    }}
+                                  >
+                                    <View
+                                      style={{
+                                        height: 100,
+                                        width: 100,
+                                        borderWidth: 1,
+                                        borderColor: Colors.lightPink,
+                                        borderRadius: 8,
+                                        marginLeft: 8,
+                                        marginRight: 8,
+                                      }}
+                                    >
+                                      <Image
+                                        style={styles.image}
+                                        resizeMode="cover"
+                                        source={{ uri: item?.image }}
+                                      />
+                                    </View>
+                                  </TouchableOpacity>
+                                  {index != freqItems?.length - 1 && (
+                                    <Text
+                                      style={{
+                                        color: 'grey',
+                                        alignSelf: 'center',
+                                        fontSize: 16,
+                                        fontWeight: '600',
+                                      }}
+                                    >
+                                      +
+                                    </Text>
+                                  )}
+                                </View>
+                              )}
+                              keyExtractor={item => item.id}
+                            />
+                            <FlatList
+                              style={{ marginTop: 24 }}
+                              data={freqItems}
+                              renderItem={({ item, index }) => (
+                                <View
+                                  key={index}
+                                  style={{
+                                    marginLeft: getHeight(86),
+                                    paddingBottom: getHeight(45),
+                                    borderBottomWidth: 0.5,
+                                    borderColor: 'grey',
+                                  }}
+                                >
+                                  <View style={{ flexDirection: 'row' }}>
+                                    <TouchableOpacity
+                                      onPress={() => {
+                                        let array = [...freqItems];
+                                        array[index].selected =
+                                          !array[index].selected;
+                                        setFreqItems(array);
+                                      }}
+                                      style={{ justifyContent: 'center' }}
+                                    >
+                                      {item.selected ? (
+                                        <Image
+                                          style={{
+                                            alignSelf: 'center',
+                                            justifyContent: 'center',
+                                            height: 24,
+                                            width: 24,
+                                            marginRight: 16,
+                                          }}
+                                          source={icons.check_box}
+                                        />
+                                      ) : (
+                                        <View
+                                          style={{
+                                            alignSelf: 'center',
+                                            justifyContent: 'center',
+                                            height: 24,
+                                            width: 24,
+                                            borderWidth: 0.5,
+                                            borderColor: Colors.primary,
+                                            marginRight: 16,
+                                            borderRadius: 3,
+                                          }}
+                                        ></View>
+                                      )}
+                                    </TouchableOpacity>
+                                    <View style={{ flex: 1 }}>
+                                      <Text
+                                        numberOfLines={2}
+                                        style={[
+                                          styles.nameText,
+                                          { fontWeight: '400' },
+                                        ]}
+                                      >
+                                        {index == 0 && `${t('thisItem')}: `}
+                                        {item?.name}
+                                      </Text>
+
+                                      <>
+                                        {index == 0 ? (
+                                          <>
+                                            {variant?.node?.selectedOptions[0]
+                                              ?.value ===
+                                              'Default Title' ? null : (
+                                              <TouchableOpacity
+                                                onPress={() =>
+                                                  item?.variants.length > 1 &&
+                                                  picker(index, item)
+                                                }
                                                 style={{
-                                                  color: 'black',
-                                                  flex: 1,
-                                                  paddingLeft: 6,
-                                                  paddingRight: 6,
-                                                  paddingTop: 3,
-                                                  paddingBottom: 3,
-                                                  fontSize: 12,
-                                                  fontWeight: '500',
-                                                  alignSelf: 'center',
+                                                  flexDirection: 'row',
+                                                  maxWidth:
+                                                    item?.variants.length > 1
+                                                      ? '30%'
+                                                      : '50%',
+                                                  height: 30,
+                                                  borderWidth:
+                                                    item?.variants.length > 1
+                                                      ? 0.5
+                                                      : 0.0,
+                                                  marginTop: 3,
                                                 }}
                                               >
-                                                {variant?.node?.selectedOptions.map(
-                                                  (item: any) => (
-                                                    <Text
-                                                      style={{
-                                                        color: 'black',
-                                                        flex: 1,
-                                                        paddingLeft: 6,
-                                                        paddingRight: 6,
-                                                        paddingTop: 3,
-                                                        paddingBottom: 3,
-                                                        fontSize: 12,
-                                                        fontWeight: '500',
-                                                        alignSelf: 'center',
-                                                      }}
-                                                    >
-                                                      {item?.value}
-                                                    </Text>
-                                                  ),
-                                                )}
-                                              </Text>
+                                                <Text
+                                                  numberOfLines={1}
+                                                  ellipsizeMode={'tail'}
+                                                  style={{
+                                                    color: 'black',
+                                                    flex: 1,
+                                                    paddingLeft: 6,
+                                                    paddingRight: 6,
+                                                    paddingTop: 3,
+                                                    paddingBottom: 3,
+                                                    fontSize: 12,
+                                                    fontWeight: '500',
+                                                    alignSelf: 'center',
+                                                  }}
+                                                >
+                                                  {variant?.node?.selectedOptions.map(
+                                                    (item: any) => (
+                                                      <Text
+                                                        style={{
+                                                          color: 'black',
+                                                          flex: 1,
+                                                          paddingLeft: 6,
+                                                          paddingRight: 6,
+                                                          paddingTop: 3,
+                                                          paddingBottom: 3,
+                                                          fontSize: 12,
+                                                          fontWeight: '500',
+                                                          alignSelf: 'center',
+                                                        }}
+                                                      >
+                                                        {item?.value}
+                                                      </Text>
+                                                    ),
+                                                  )}
+                                                </Text>
 
-                                              {item?.variants.length > 1 && (
+                                                {item?.variants.length > 1 && (
+                                                  <Text
+                                                    ellipsizeMode={'tail'}
+                                                    style={{
+                                                      color: 'black',
+                                                      paddingTop: 3,
+                                                      paddingBottom: 3,
+                                                      fontSize: 12,
+                                                      paddingRight: 6,
+                                                    }}
+                                                  >
+                                                    ▼
+                                                  </Text>
+                                                )}
+                                              </TouchableOpacity>
+                                            )}
+                                          </>
+                                        ) : (
+                                          <TouchableOpacity
+                                            onPress={() =>
+                                              item?.variants.length > 1 &&
+                                              picker(index, item)
+                                            }
+                                            style={{
+                                              flexDirection: 'row',
+                                              maxWidth:
+                                                item?.variants.length > 1
+                                                  ? '30%'
+                                                  : '100%',
+                                              height: 30,
+                                              borderWidth:
+                                                item?.variants.length > 1
+                                                  ? 0.5
+                                                  : 0,
+                                              marginTop: 3,
+                                            }}
+                                          >
+                                            <Text
+                                              numberOfLines={1}
+                                              ellipsizeMode={'tail'}
+                                              style={{
+                                                color: 'black',
+                                                flex: 1,
+                                                paddingLeft:
+                                                  item?.variants.length > 1
+                                                    ? 6
+                                                    : 0,
+                                                paddingRight: 6,
+                                                paddingTop: 3,
+                                                paddingBottom: 3,
+                                                fontSize: 12,
+                                                fontWeight: '500',
+                                                alignSelf: 'center',
+                                              }}
+                                            >
+                                              {/* frq */}
+                                              {
+                                                item?.variants.filter(
+                                                  (item: any) =>
+                                                    item?.id ==
+                                                    freqItems[index]?.id,
+                                                )[0]?.label
+                                              }
+                                            </Text>
+                                            {item?.variants.filter(
+                                              (item: any) =>
+                                                item?.id == freqItems[index]?.id,
+                                            )[0]?.label &&
+                                              item?.variants.length > 1 && (
                                                 <Text
                                                   ellipsizeMode={'tail'}
                                                   style={{
@@ -5982,636 +6051,570 @@ const ProductDetails = ({ route, navigation }: any) => {
                                                   ▼
                                                 </Text>
                                               )}
-                                            </TouchableOpacity>
-                                          )}
-                                        </>
-                                      ) : (
-                                        <TouchableOpacity
-                                          onPress={() =>
-                                            item?.variants.length > 1 &&
-                                            picker(index, item)
-                                          }
-                                          style={{
-                                            flexDirection: 'row',
-                                            maxWidth:
-                                              item?.variants.length > 1
-                                                ? '30%'
-                                                : '100%',
-                                            height: 30,
-                                            borderWidth:
-                                              item?.variants.length > 1
-                                                ? 0.5
-                                                : 0,
-                                            marginTop: 3,
-                                          }}
-                                        >
-                                          <Text
-                                            numberOfLines={1}
-                                            ellipsizeMode={'tail'}
-                                            style={{
-                                              color: 'black',
-                                              flex: 1,
-                                              paddingLeft:
-                                                item?.variants.length > 1
-                                                  ? 6
-                                                  : 0,
-                                              paddingRight: 6,
-                                              paddingTop: 3,
-                                              paddingBottom: 3,
-                                              fontSize: 12,
-                                              fontWeight: '500',
-                                              alignSelf: 'center',
-                                            }}
-                                          >
-                                            {/* frq */}
-                                            {
-                                              item?.variants.filter(
-                                                (item: any) =>
-                                                  item?.id ==
-                                                  freqItems[index]?.id,
-                                              )[0]?.label
-                                            }
-                                          </Text>
-                                          {item?.variants.filter(
-                                            (item: any) =>
-                                              item?.id == freqItems[index]?.id,
-                                          )[0]?.label &&
-                                            item?.variants.length > 1 && (
-                                              <Text
-                                                ellipsizeMode={'tail'}
-                                                style={{
-                                                  color: 'black',
-                                                  paddingTop: 3,
-                                                  paddingBottom: 3,
-                                                  fontSize: 12,
-                                                  paddingRight: 6,
-                                                }}
-                                              >
-                                                ▼
-                                              </Text>
-                                            )}
-                                        </TouchableOpacity>
-                                      )}
-                                    </>
-                                    <Text style={styles.priceText}>
-                                      {index == 0
-                                        ? `QAR ${formatPrice(
-                                          Number(
-                                            variant?.node?.price?.amount,
-                                          ),
-                                        )}`
-                                        : `QAR ${formatPrice(
-                                          Number(item?.price),
-                                        )}`}
-                                    </Text>
+                                          </TouchableOpacity>
+                                        )}
+                                      </>
+                                      <Text style={styles.priceText}>
+                                        {index == 0
+                                          ? `QAR ${formatPrice(
+                                            Number(
+                                              variant?.node?.price?.amount,
+                                            ),
+                                          )}`
+                                          : `QAR ${formatPrice(
+                                            Number(item?.price),
+                                          )}`}
+                                      </Text>
+                                    </View>
                                   </View>
                                 </View>
-                              </View>
-                            )}
-                            keyExtractor={item => item.id}
-                          />
+                              )}
+                              keyExtractor={item => item.id}
+                            />
 
-                          {
-                            <View>
-                              <Text
-                                style={{
-                                  alignSelf: 'center',
-                                  fontWeight: '800',
-                                  padding: 8,
-                                  color: 'grey',
-                                }}
-                              >
-                                {t('totalPrice')} :{' '}
-                                <Text
-                                  style={{
-                                    color: Colors.primary,
-                                    fontWeight: '800',
-                                  }}
-                                >
-                                  QAR{' '}
-                                  {formatPrice(
-                                    Number(
-                                      getTotalPriceForFrequentlyBoughtItem(),
-                                    ),
-                                  )}
-                                </Text>
-                              </Text>
-                              <TouchableOpacity
-                                onPress={() => {
-                                  if (
-                                    freqItems.filter(
-                                      (item: any) => item.selected == true,
-                                    ).length > 0
-                                  ) {
-                                    addSelectedItemsToCart();
-                                  } else {
-                                    Toast.show({
-                                      type: 'warning',
-                                      text1: `${t('cartEmptyWarning')}`,
-                                      position: 'bottom',
-                                    });
-                                  }
-                                }}
-                              >
+                            {
+                              <View>
                                 <Text
                                   style={{
                                     alignSelf: 'center',
-                                    backgroundColor: Colors.primary,
-                                    paddingLeft: 16,
-                                    paddingRight: 16,
-                                    paddingTop: 8,
-                                    paddingBottom: 8,
-                                    color: 'white',
-                                    fontWeight: '600',
-                                    borderRadius: 100,
+                                    fontWeight: '800',
+                                    padding: 8,
+                                    color: 'grey',
                                   }}
                                 >
-                                  {t('addSelectedToCart')}
+                                  {t('totalPrice')} :{' '}
+                                  <Text
+                                    style={{
+                                      color: Colors.primary,
+                                      fontWeight: '800',
+                                    }}
+                                  >
+                                    QAR{' '}
+                                    {formatPrice(
+                                      Number(
+                                        getTotalPriceForFrequentlyBoughtItem(),
+                                      ),
+                                    )}
+                                  </Text>
                                 </Text>
-                              </TouchableOpacity>
-                            </View>
-                          }
+                                <TouchableOpacity
+                                  onPress={() => {
+                                    if (
+                                      freqItems.filter(
+                                        (item: any) => item.selected == true,
+                                      ).length > 0
+                                    ) {
+                                      addSelectedItemsToCart();
+                                    } else {
+                                      Toast.show({
+                                        type: 'warning',
+                                        text1: `${t('cartEmptyWarning')}`,
+                                        position: 'bottom',
+                                      });
+                                    }
+                                  }}
+                                >
+                                  <Text
+                                    style={{
+                                      alignSelf: 'center',
+                                      backgroundColor: Colors.primary,
+                                      paddingLeft: 16,
+                                      paddingRight: 16,
+                                      paddingTop: 8,
+                                      paddingBottom: 8,
+                                      color: 'white',
+                                      fontWeight: '600',
+                                      borderRadius: 100,
+                                    }}
+                                  >
+                                    {t('addSelectedToCart')}
+                                  </Text>
+                                </TouchableOpacity>
+                              </View>
+                            }
+                          </View>
+                          <View>
+                            <SectionView
+                              viewAllPress={() => { }}
+                              items={relatedProducts}
+                              title={t('youMayAlosLike')}
+                              page={''}
+                              offerList={[]}
+                              category={''}
+                            />
+                          </View>
                         </View>
-                        <View>
-                          <SectionView
-                            viewAllPress={() => { }}
-                            items={relatedProducts}
-                            title={t('youMayAlosLike')}
-                            page={''}
-                            offerList={[]}
-                            category={''}
-                          />
-                        </View>
-                      </View>
-                    )}
-                </ScrollView>
-              ) : (
-                <DeatailsSkeleton />
-              )}
+                      )}
+                  </ScrollView>
+                ) : (
+                  <DeatailsSkeleton />
+                )}
 
-              {variant?.node?.quantityAvailable > 0 ? (
-                <View style={styles.btnContainer}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      orderByWhatsapp(
-                        `I want to buy ✨:\n\n${productDetails?.title}\n${productDetails?.onlineStoreUrl}`,
-                      );
-                    }}
-                    style={[
-                      styles.btnStyle,
-                      { backgroundColor: Colors.green, flexDirection: 'row' },
-                    ]}
+                {variant?.node?.quantityAvailable > 0 ? (
+                  <View style={styles.btnContainer}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        orderByWhatsapp(
+                          `I want to buy ✨:\n\n${productDetails?.title}\n${productDetails?.onlineStoreUrl}`,
+                        );
+                      }}
+                      style={[
+                        styles.btnStyle,
+                        { backgroundColor: Colors.green, flexDirection: 'row' },
+                      ]}
+                    >
+                      <Image
+                        style={{ height: 22, width: 22 }}
+                        source={images.whatsapp}
+                      ></Image>
+                      <Text style={styles.btnText}>
+                        {' '}
+                        {t('orderBy')}
+                        {/* <Text style={{ fontSize: getHeight(75) }}> </Text> */}
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      onPress={() => {
+                        handlePresentModalPress(productDetails?.title);
+
+                        addOnList.length > 0 && addOnList[0] != null
+                          ? addToCartWithAddOn()
+                          : addToCartFb(variant?.node?.id, checkoutId, quantity);
+                      }}
+                      style={[
+                        styles.btnStyle,
+                        { backgroundColor: Colors.primary, flexDirection: 'row' },
+                      ]}
+                    >
+                      <SvgIcon.CartIcon
+                        height={25}
+                        width={25}
+                        fill={Colors.white.toString()}
+                      />
+
+                      <Text style={styles.btnText}>{` ${t('addToCart')}`}</Text>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <View
+                    style={[styles.btnContainer, { justifyContent: 'center' }]}
                   >
-                    <Image
-                      style={{ height: 22, width: 22 }}
-                      source={images.whatsapp}
-                    ></Image>
-                    <Text style={styles.btnText}>
-                      {' '}
-                      {t('orderBy')}
-                      {/* <Text style={{ fontSize: getHeight(75) }}> </Text> */}
-                    </Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => setNotifyModalOpen(true)}
+                      style={[
+                        styles.btnStyle,
+                        { backgroundColor: Colors.primary, alignSelf: 'center' },
+                      ]}
+                    >
+                      <Text style={styles.btnText}>{t('notify')}</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </>
+            )}
+          </View>
 
-                  <TouchableOpacity
-                    onPress={() => {
-                      handlePresentModalPress(productDetails?.title);
-
-                      addOnList.length > 0 && addOnList[0] != null
-                        ? addToCartWithAddOn()
-                        : addToCartFb(variant?.node?.id, checkoutId, quantity);
-                    }}
-                    style={[
-                      styles.btnStyle,
-                      { backgroundColor: Colors.primary, flexDirection: 'row' },
-                    ]}
-                  >
-                    <SvgIcon.CartIcon
-                      height={25}
-                      width={25}
-                      fill={Colors.white.toString()}
-                    />
-
-                    <Text style={styles.btnText}>{` ${t('addToCart')}`}</Text>
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <View
-                  style={[styles.btnContainer, { justifyContent: 'center' }]}
-                >
-                  <TouchableOpacity
-                    onPress={() => setNotifyModalOpen(true)}
-                    style={[
-                      styles.btnStyle,
-                      { backgroundColor: Colors.primary, alignSelf: 'center' },
-                    ]}
-                  >
-                    <Text style={styles.btnText}>{t('notify')}</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-            </>
-          )}
-        </View>
-
-        <QuantityModal
-          maxValue={variant?.node?.quantityAvailable}
-          onSubmit={(value: any) => {
-            if (value > variant?.node?.quantityAvailable) {
-              Vibration.vibrate(100);
-              Toast.show({
-                type: 'error',
-                text1: 'Invalid Quantity',
-                text2: `Only ${variant?.node?.quantityAvailable} items available in stock`,
-                position: 'bottom',
-              });
-              return;
-            }
-            setQuantity(value);
-            setModalOpen(false);
-          }}
-          onClose={() => setModalOpen(false)}
-          isOpen={quantityModal}
-          value={quantity}
-        />
-        <QuantityModal
-          maxValue={100}
-          onSubmit={(value: any) => {
-            setQuantityAddOn(value);
-            setAddOnModalOpen(false);
-          }}
-          onClose={() => setAddOnModalOpen(false)}
-          isOpen={quantityAddOnModal}
-          value={quantityAddOn}
-        />
-        <NotifyMeModal
-          isOpen={notifyModalOpen}
-          onClose={() => setNotifyModalOpen(false)}
-          onSubmit={() => {
-            if (phone.trim() != '') {
-              const currentDate = new Date();
-              const utcOffsetInSeconds = currentDate.getTimezoneOffset() * 60;
-              notify(
-                email,
-                phone,
-                getNoFromId(productDetails?.id),
-                utcOffsetInSeconds,
-                encodeURIComponent(productDetails?.title),
-                handle,
-                variant?.node?.id,
-                encodeURIComponent(variant?.node?.title),
-                variant?.node?.sku,
-              );
-            } else {
-              Vibration.vibrate(100);
-              Toast.show({
-                type: 'warning',
-                text1: `${t('notifyWarning')}`,
-                position: 'bottom',
-              });
-            }
-          }}
-          onEmailChanged={(text: string) => setEmail(text)}
-          email={email}
-          phone={phone}
-          onPhoneChanged={(text: string) => setPhone(text)}
-        />
-        <Modal
-          visible={freqItemVariantModalOpen}
-          transparent
-          onRequestClose={() => setFreqItemVariantModalOpen(false)}
-        >
-          <View
-            style={{
-              backgroundColor: Colors.transparentBlack,
-              flex: 1,
-              justifyContent: 'center',
+          <QuantityModal
+            maxValue={variant?.node?.quantityAvailable}
+            onSubmit={(value: any) => {
+              if (value > variant?.node?.quantityAvailable) {
+                Vibration.vibrate(100);
+                Toast.show({
+                  type: 'error',
+                  text1: 'Invalid Quantity',
+                  text2: `Only ${variant?.node?.quantityAvailable} items available in stock`,
+                  position: 'bottom',
+                });
+                return;
+              }
+              setQuantity(value);
+              setModalOpen(false);
             }}
+            onClose={() => setModalOpen(false)}
+            isOpen={quantityModal}
+            value={quantity}
+          />
+          <QuantityModal
+            maxValue={100}
+            onSubmit={(value: any) => {
+              setQuantityAddOn(value);
+              setAddOnModalOpen(false);
+            }}
+            onClose={() => setAddOnModalOpen(false)}
+            isOpen={quantityAddOnModal}
+            value={quantityAddOn}
+          />
+          <NotifyMeModal
+            isOpen={notifyModalOpen}
+            onClose={() => setNotifyModalOpen(false)}
+            onSubmit={() => {
+              if (phone.trim() != '') {
+                const currentDate = new Date();
+                const utcOffsetInSeconds = currentDate.getTimezoneOffset() * 60;
+                notify(
+                  email,
+                  phone,
+                  getNoFromId(productDetails?.id),
+                  utcOffsetInSeconds,
+                  encodeURIComponent(productDetails?.title),
+                  handle,
+                  variant?.node?.id,
+                  encodeURIComponent(variant?.node?.title),
+                  variant?.node?.sku,
+                );
+              } else {
+                Vibration.vibrate(100);
+                Toast.show({
+                  type: 'warning',
+                  text1: `${t('notifyWarning')}`,
+                  position: 'bottom',
+                });
+              }
+            }}
+            onEmailChanged={(text: string) => setEmail(text)}
+            email={email}
+            phone={phone}
+            onPhoneChanged={(text: string) => setPhone(text)}
+          />
+          <Modal
+            visible={freqItemVariantModalOpen}
+            transparent
+            onRequestClose={() => setFreqItemVariantModalOpen(false)}
           >
             <View
               style={{
-                backgroundColor: 'white',
+                backgroundColor: Colors.transparentBlack,
+                flex: 1,
                 justifyContent: 'center',
-                width: getWidth(1.5),
-                maxHeight: getHeight(1.5),
-                alignSelf: 'center',
-                borderRadius: 10,
-                paddingBottom: 16,
-              }}
-            >
-              <TouchableOpacity
-                onPress={() => setFreqItemVariantModalOpen(false)}
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'flex-end',
-                  padding: 16,
-                }}
-              >
-                <Image
-                  style={{
-                    height: getHeight(55),
-                    width: getHeight(55),
-                  }}
-                  source={icons.close}
-                />
-              </TouchableOpacity>
-              {freqIndex == 0
-                ? freqItem?.variants &&
-                freqItem?.variants.length >= 1 && (
-                  <FlatList
-                    ref={flatListRef0}
-                    style={{ marginTop: 6 }}
-                    data={freqItem?.variants}
-                    renderItem={({ item }) => (
-                      <>
-                        {item && (
-                          <TouchableOpacity
-                            onPress={() => {
-                              handleVariantCliclFreqItemThisItem(
-                                item,
-                                freqIndex,
-                              );
-                            }}
-                            style={{
-                              borderColor: Colors.primary,
-                              backgroundColor:
-                                freqItems[freqIndex].id ==
-                                  getNoFromId(item?.node?.id)
-                                  ? Colors.accent
-                                  : Colors.white,
-                              paddingLeft: 16,
-                              paddingRight: 16,
-                              paddingTop: 6,
-                              paddingBottom: 6,
-                              borderWidth: 0.5,
-                              width: getWidth(1.5),
-                              alignSelf: 'center',
-                            }}
-                          >
-                            {item?.node?.selectedOptions.map((item: any) => (
-                              <Text
-                                numberOfLines={1}
-                                style={{
-                                  color: Colors.black,
-                                  fontWeight: '500',
-                                }}
-                              >
-                                {item?.value}
-                              </Text>
-                            ))}
-                          </TouchableOpacity>
-                        )}
-                      </>
-                    )}
-                    keyExtractor={item => item.toString()}
-                  />
-                )
-                : freqItem?.variants &&
-                freqItem?.variants.length >= 1 && (
-                  <FlatList
-                    ref={flatListRef}
-                    style={{ marginTop: 6 }}
-                    data={freqItem?.variants}
-                    renderItem={({ item }) => (
-                      <>
-                        {item && (
-                          <TouchableOpacity
-                            onPress={async () => {
-                              await handleVariantCliclFreqItem(
-                                item,
-                                freqIndex,
-                              );
-                            }}
-                            style={{
-                              borderColor: Colors.primary,
-                              backgroundColor:
-                                freqItems[freqIndex].id == item.id
-                                  ? Colors.accent
-                                  : Colors.white,
-                              paddingLeft: 16,
-                              paddingRight: 16,
-                              paddingTop: 6,
-                              paddingBottom: 6,
-                              borderWidth: 0.5,
-                              justifyContent: 'center',
-                              width: getWidth(1.5),
-                              alignSelf: 'center',
-
-                              //width: getItemWidth(item.label.length),
-                            }}
-                          >
-                            <Text
-                              style={{
-                                color: Colors.black,
-                                fontWeight: '500',
-                                alignSelf: 'center',
-                                textAlign: 'left',
-                              }}
-                            >
-                              {item?.label}
-                            </Text>
-                          </TouchableOpacity>
-                        )}
-                      </>
-                    )}
-                    keyExtractor={item => item.toString()}
-                  />
-                )}
-            </View>
-          </View>
-        </Modal>
-
-        {/* //test bundle Modal */}
-
-        <Modal
-          visible={bundleModal}
-          transparent
-          onRequestClose={() => setBundleModal(false)}
-        >
-          <View
-            style={{
-              backgroundColor: Colors.transparentBlack,
-              flex: 1,
-              justifyContent: 'center',
-            }}
-          >
-            <View
-              style={{
-                backgroundColor: 'white',
-                justifyContent: 'center',
-                width: getWidth(1.5),
-                maxHeight: getHeight(1.5),
-                alignSelf: 'center',
-                borderRadius: 10,
-                paddingBottom: 16,
-              }}
-            >
-              <TouchableOpacity
-                onPress={() => setBundleModal(false)}
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'flex-end',
-                  padding: 16,
-                }}
-              >
-                <Image
-                  style={{
-                    height: getHeight(55),
-                    width: getHeight(55),
-                  }}
-                  source={icons.close}
-                />
-              </TouchableOpacity>
-
-              <FlatList
-                // ref={flatListRef0}
-                style={{ marginTop: 6 }}
-                data={variantList}
-                renderItem={({ item }) => (
-                  <>
-                    {item && item?.node.quantityAvailable >= 2 && (
-                      <TouchableOpacity
-                        onPress={() => {
-                          handleVariantClicksBundle(item, dealIndex);
-                        }}
-                        style={{
-                          borderColor: Colors.primary,
-                          backgroundColor:
-                            bundleDeals[dealIndex]?.id ==
-                              getNoFromId(item?.node?.id)
-                              ? Colors.accent
-                              : Colors.white,
-                          paddingLeft: 16,
-                          paddingRight: 16,
-                          paddingTop: 6,
-                          paddingBottom: 6,
-                          borderWidth: 0.5,
-                          width: getWidth(1.5),
-                          alignSelf: 'center',
-                        }}
-                      >
-                        {item?.node?.selectedOptions.map((item: any) => (
-                          <Text
-                            numberOfLines={1}
-                            style={{
-                              color: Colors.black,
-                              fontWeight: '500',
-                            }}
-                          >
-                            {item?.value}
-                          </Text>
-                        ))}
-                      </TouchableOpacity>
-                    )}
-                  </>
-                )}
-                keyExtractor={item => item.toString()}
-              />
-            </View>
-          </View>
-        </Modal>
-
-        {/* <BottomSheet /> */}
-
-        {/* <View style={styles.container}> */}
-        {/* <Button
-          onPress={handlePresentModalPress}
-          title="Present Modal"
-          color="black"
-        /> */}
-        <BottomSheetModal
-          ref={bottomSheetModalRef}
-          index={1}
-          snapPoints={snapPoints}
-          onChange={handleSheetChanges}
-        >
-          <BottomSheetView style={styles.contentContainer}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                // backgroundColor:"red"
               }}
             >
               <View
                 style={{
-                  flex: 1,
-                  marginTop: getHeight(90),
-                  // width: getWidth(90),
-                  // height: getHeight(20),
-                  // backgroundColor: "red",
-                  // justifyContent: "flex-start",
+                  backgroundColor: 'white',
+                  justifyContent: 'center',
+                  width: getWidth(1.5),
+                  maxHeight: getHeight(1.5),
+                  alignSelf: 'center',
+                  borderRadius: 10,
+                  paddingBottom: 16,
                 }}
               >
-                <AnimatedLottieView
-                  source={require('../../../assets/Animations/cartAnimation.json')}
-                  style={{ width: getWidth(9), marginLeft: getWidth(90) }}
-                  autoPlay={isPlaying}
-                  loop={false}
-                  onAnimationFinish={() => setIsPlaying(false)}
-                />
-              </View>
-              <View style={{ width: getWidth(1.2) }}>
-                <Text
-                  style={styles.titleTxt}
-                  numberOfLines={1}
-                  ellipsizeMode={'tail'}
+                <TouchableOpacity
+                  onPress={() => setFreqItemVariantModalOpen(false)}
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'flex-end',
+                    padding: 16,
+                  }}
                 >
-                  {productDetails?.title}
-                </Text>
+                  <Image
+                    style={{
+                      height: getHeight(55),
+                      width: getHeight(55),
+                    }}
+                    source={icons.close}
+                  />
+                </TouchableOpacity>
+                {freqIndex == 0
+                  ? freqItem?.variants &&
+                  freqItem?.variants.length >= 1 && (
+                    <FlatList
+                      ref={flatListRef0}
+                      style={{ marginTop: 6 }}
+                      data={freqItem?.variants}
+                      renderItem={({ item }) => (
+                        <>
+                          {item && (
+                            <TouchableOpacity
+                              onPress={() => {
+                                handleVariantCliclFreqItemThisItem(
+                                  item,
+                                  freqIndex,
+                                );
+                              }}
+                              style={{
+                                borderColor: Colors.primary,
+                                backgroundColor:
+                                  freqItems[freqIndex].id ==
+                                    getNoFromId(item?.node?.id)
+                                    ? Colors.accent
+                                    : Colors.white,
+                                paddingLeft: 16,
+                                paddingRight: 16,
+                                paddingTop: 6,
+                                paddingBottom: 6,
+                                borderWidth: 0.5,
+                                width: getWidth(1.5),
+                                alignSelf: 'center',
+                              }}
+                            >
+                              {item?.node?.selectedOptions.map((item: any) => (
+                                <Text
+                                  numberOfLines={1}
+                                  style={{
+                                    color: Colors.black,
+                                    fontWeight: '500',
+                                  }}
+                                >
+                                  {item?.value}
+                                </Text>
+                              ))}
+                            </TouchableOpacity>
+                          )}
+                        </>
+                      )}
+                      keyExtractor={item => item.toString()}
+                    />
+                  )
+                  : freqItem?.variants &&
+                  freqItem?.variants.length >= 1 && (
+                    <FlatList
+                      ref={flatListRef}
+                      style={{ marginTop: 6 }}
+                      data={freqItem?.variants}
+                      renderItem={({ item }) => (
+                        <>
+                          {item && (
+                            <TouchableOpacity
+                              onPress={async () => {
+                                await handleVariantCliclFreqItem(
+                                  item,
+                                  freqIndex,
+                                );
+                              }}
+                              style={{
+                                borderColor: Colors.primary,
+                                backgroundColor:
+                                  freqItems[freqIndex].id == item.id
+                                    ? Colors.accent
+                                    : Colors.white,
+                                paddingLeft: 16,
+                                paddingRight: 16,
+                                paddingTop: 6,
+                                paddingBottom: 6,
+                                borderWidth: 0.5,
+                                justifyContent: 'center',
+                                width: getWidth(1.5),
+                                alignSelf: 'center',
+
+                                //width: getItemWidth(item.label.length),
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  color: Colors.black,
+                                  fontWeight: '500',
+                                  alignSelf: 'center',
+                                  textAlign: 'left',
+                                }}
+                              >
+                                {item?.label}
+                              </Text>
+                            </TouchableOpacity>
+                          )}
+                        </>
+                      )}
+                      keyExtractor={item => item.toString()}
+                    />
+                  )}
               </View>
             </View>
+          </Modal>
+
+          {/* //test bundle Modal */}
+
+          <Modal
+            visible={bundleModal}
+            transparent
+            onRequestClose={() => setBundleModal(false)}
+          >
             <View
               style={{
+                backgroundColor: Colors.transparentBlack,
                 flex: 1,
-                alignItems: 'center',
-                gap: 20,
-                marginTop: getHeight(90),
+                justifyContent: 'center',
               }}
             >
-              {/* <View>
+              <View
+                style={{
+                  backgroundColor: 'white',
+                  justifyContent: 'center',
+                  width: getWidth(1.5),
+                  maxHeight: getHeight(1.5),
+                  alignSelf: 'center',
+                  borderRadius: 10,
+                  paddingBottom: 16,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => setBundleModal(false)}
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'flex-end',
+                    padding: 16,
+                  }}
+                >
+                  <Image
+                    style={{
+                      height: getHeight(55),
+                      width: getHeight(55),
+                    }}
+                    source={icons.close}
+                  />
+                </TouchableOpacity>
+
+                <FlatList
+                  // ref={flatListRef0}
+                  style={{ marginTop: 6 }}
+                  data={variantList}
+                  renderItem={({ item }) => (
+                    <>
+                      {item && item?.node.quantityAvailable >= 2 && (
+                        <TouchableOpacity
+                          onPress={() => {
+                            handleVariantClicksBundle(item, dealIndex);
+                          }}
+                          style={{
+                            borderColor: Colors.primary,
+                            backgroundColor:
+                              bundleDeals[dealIndex]?.id ==
+                                getNoFromId(item?.node?.id)
+                                ? Colors.accent
+                                : Colors.white,
+                            paddingLeft: 16,
+                            paddingRight: 16,
+                            paddingTop: 6,
+                            paddingBottom: 6,
+                            borderWidth: 0.5,
+                            width: getWidth(1.5),
+                            alignSelf: 'center',
+                          }}
+                        >
+                          {item?.node?.selectedOptions.map((item: any) => (
+                            <Text
+                              numberOfLines={1}
+                              style={{
+                                color: Colors.black,
+                                fontWeight: '500',
+                              }}
+                            >
+                              {item?.value}
+                            </Text>
+                          ))}
+                        </TouchableOpacity>
+                      )}
+                    </>
+                  )}
+                  keyExtractor={item => item.toString()}
+                />
+              </View>
+            </View>
+          </Modal>
+
+          {/* <BottomSheet /> */}
+
+          {/* <View style={styles.container}> */}
+          {/* <Button
+          onPress={handlePresentModalPress}
+          title="Present Modal"
+          color="black"
+        /> */}
+        <SafeAreaView  edges={ Platform.OS === 'android' ? ['left','right','bottom'] : []} >
+          <BottomSheetModal
+            ref={bottomSheetModalRef}
+            index={1}
+            snapPoints={snapPoints}
+            onChange={handleSheetChanges}
+          >
+            <BottomSheetView style={styles.contentContainer}>
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  // backgroundColor:"red"
+                }}
+              >
+                <View
+                  style={{
+                    flex: 1,
+                    marginTop: getHeight(90),
+                    // width: getWidth(90),
+                    // height: getHeight(20),
+                    // backgroundColor: "red",
+                    // justifyContent: "flex-start",
+                  }}
+                >
+                  <AnimatedLottieView
+                    source={require('../../../assets/Animations/cartAnimation.json')}
+                    style={{ width: getWidth(9), marginLeft: getWidth(90) }}
+                    autoPlay={isPlaying}
+                    loop={false}
+                    onAnimationFinish={() => setIsPlaying(false)}
+                  />
+                </View>
+                <View style={{ width: getWidth(1.2) }}>
+                  <Text
+                    style={styles.titleTxt}
+                    numberOfLines={1}
+                    ellipsizeMode={'tail'}
+                  >
+                    {productDetails?.title}
+                  </Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                  gap: 20,
+                  marginTop: getHeight(90),
+                }}
+              >
+                {/* <View>
                 <Text>jiu</Text>
                 <Text>87</Text>
               </View> */}
-              <TouchableOpacity
-                style={{
-                  width: getWidth(1.1),
-                  // backgroundColor: "red",
-                  display: 'flex',
-                  alignItems: 'center',
-                  height: getHeight(15),
-                  justifyContent: 'center',
-                  borderColor: Colors.primary,
-                  borderWidth: 2,
-                  borderRadius: 10,
-                }}
-                onPress={handleContinueShopping}
-              >
-                <Text style={{ color: Colors.primary, fontWeight: 'bold' }}>
-                  <Translation textKey={strings.CONTINUESHOPPING} />
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={{
-                  width: getWidth(1.1),
-                  backgroundColor: Colors.primary,
-                  display: 'flex',
-                  alignItems: 'center',
-                  height: getHeight(15),
-                  justifyContent: 'center',
-                  borderRadius: 10,
-                }}
-                onPress={() => navigation.navigate(screens.cart)}
-              >
-                <Text style={{ color: Colors.white, fontWeight: 'bold' }}>
-                  <Translation textKey={strings.ViewCart} />
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </BottomSheetView>
-        </BottomSheetModal>
-      </SafeAreaView>
-    </BottomSheetModalProvider>
+                <TouchableOpacity
+                  style={{
+                    width: getWidth(1.1),
+                    // backgroundColor: "red",
+                    display: 'flex',
+                    alignItems: 'center',
+                    height: getHeight(15),
+                    justifyContent: 'center',
+                    borderColor: Colors.primary,
+                    borderWidth: 2,
+                    borderRadius: 10,
+                  }}
+                  onPress={handleContinueShopping}
+                >
+                  <Text style={{ color: Colors.primary, fontWeight: 'bold' }}>
+                    <Translation textKey={strings.CONTINUESHOPPING} />
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    width: getWidth(1.1),
+                    backgroundColor: Colors.primary,
+                    display: 'flex',
+                    alignItems: 'center',
+                    height: getHeight(15),
+                    justifyContent: 'center',
+                    borderRadius: 10,
+                  }}
+                  onPress={() => navigation.navigate(screens.cart)}
+                >
+                  <Text style={{ color: Colors.white, fontWeight: 'bold' }}>
+                    <Translation textKey={strings.ViewCart} />
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </BottomSheetView>
+          </BottomSheetModal>
+          </SafeAreaView>
+        </SafeAreaView>
+      </BottomSheetModalProvider>
   );
 };
 

@@ -84,7 +84,7 @@ const HomeTabs = () => {
     <>
       <SafeAreaView
        style={styles.container}
-       edges={['left','right','bottom']}
+       edges={ Platform.OS === 'android' ? ['left','right','bottom'] : []}
        >
         {/* Transparent StatusBar */}
         <StatusBar

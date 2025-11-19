@@ -1,6 +1,6 @@
 {
   "name": "Qsales",
-  "version": "6.1.4",
+  "version": "6.1.6",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
